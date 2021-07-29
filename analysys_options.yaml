@@ -1,5 +1,1 @@
 include: package:flutter_lints/flutter.yaml
-
-linter:
-  rules:
-    # 追加したいルールを追記

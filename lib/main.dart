@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
+import 'ui/onboarding/onboarding_screen.dart';
+
 Future<void> main() async {
   await SentryFlutter.init(
     (options) {
@@ -19,21 +21,8 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'konoyubi',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: HomePage(),
+      home: OnboardingScreen(),
       debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text('hello'),
-      ),
     );
   }
 }
