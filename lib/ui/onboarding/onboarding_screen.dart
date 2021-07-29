@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:konoyubi/ui/home/home_screen.dart';
+import 'package:konoyubi/app.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
 import 'onboarding_carousel.dart';
 import 'sign_in_icons.dart';
@@ -20,10 +20,11 @@ class OnboardingScreen extends StatelessWidget {
           SignInIcons(),
           Spacer(flex: 3),
           TextButton(
-              onPressed: () {
-                pageTransition(context: context, to: HomeScreen());
-              },
-              child: Text('Skip now')),
+            onPressed: () {
+              pageTransition(context: context, to: ScreenContainer());
+            },
+            child: Text('Skip now'),
+          ),
           Spacer(flex: 6),
         ],
       ),
