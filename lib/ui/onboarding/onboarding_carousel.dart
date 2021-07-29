@@ -1,28 +1,22 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class OnboardingCarousel extends StatefulWidget {
-  const OnboardingCarousel({Key? key}) : super(key: key);
-
-  @override
-  _OnboardingCarouselState createState() => _OnboardingCarouselState();
-}
-
-class _OnboardingCarouselState extends State<OnboardingCarousel> {
-  int _current = 0;
+class OnboardingCarousel extends HookWidget {
   @override
   Widget build(BuildContext context) {
+    final _current = useState(0);
+
     return Column(
       children: [
         CarouselSlider(
           options: CarouselOptions(
-              enableInfiniteScroll: false,
-              height: 320,
-              onPageChanged: (index, reason) {
-                setState(() {
-                  _current = index;
-                });
-              }),
+            enableInfiniteScroll: false,
+            height: 320,
+            onPageChanged: (index, reason) {
+              _current.value = index;
+            },
+          ),
           items: [1, 2, 3].map((i) {
             return Builder(
               builder: (BuildContext context) {
@@ -53,7 +47,7 @@ class _OnboardingCarouselState extends State<OnboardingCarousel> {
                   color: (Theme.of(context).brightness == Brightness.dark
                           ? Colors.white
                           : Colors.black)
-                      .withOpacity(_current == entry.key ? 0.9 : 0.4),
+                      .withOpacity(_current.value == entry.key ? 0.9 : 0.4),
                 ),
               ),
             );
