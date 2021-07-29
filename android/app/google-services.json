@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "956853819621",
+    "project_id": "konoyubi-c1839",
+    "storage_bucket": "konoyubi-c1839.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956853819621:android:bd4d1e9fc0c82c6556dc0c",
+        "android_client_info": {
+          "package_name": "com.example.konoyubi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "956853819621-e3ddp997bjb5tia91cabgne4qo2e4pum.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNqQqWheMq8jpxKAVc53UAeS2ZAX9GCms"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "956853819621-e3ddp997bjb5tia91cabgne4qo2e4pum.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "956853819621-ru0i9cb5njjpdv46k7orr8157fp270u7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.konoyubi"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

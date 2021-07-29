@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'app.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await SentryFlutter.init(
     (options) {
       options.dsn =
@@ -12,6 +15,4 @@ Future<void> main() async {
     },
     appRunner: () => runApp(ProviderScope(child: App())),
   );
-
-  // or define SENTRY_DSN via Dart environment variable (--dart-define)
 }
