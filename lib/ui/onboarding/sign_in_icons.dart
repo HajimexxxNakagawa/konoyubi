@@ -12,18 +12,11 @@ class SignInIcons extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ElevatedButton(
-          onPressed: () {},
-          child: Text('T'),
-          style: ElevatedButton.styleFrom(
-            shape: CircleBorder(),
-          ),
-        ),
-        ElevatedButton(
           onPressed: () async {
             await signInWithFacebook();
             await completeSignin(context: context);
           },
-          child: Icon(Icons.facebook),
+          child: Icon(Icons.apps_outlined),
           style: ElevatedButton.styleFrom(
             shape: CircleBorder(),
           ),
