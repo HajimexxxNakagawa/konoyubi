@@ -16,9 +16,9 @@ class SignInIcons extends StatelessWidget {
             await signInWithFacebook();
             await completeSignin(context: context);
           },
-          child: Icon(Icons.apps_outlined),
+          child: const Icon(Icons.apps_outlined),
           style: ElevatedButton.styleFrom(
-            shape: CircleBorder(),
+            shape: const CircleBorder(),
           ),
         ),
         ElevatedButton(
@@ -26,9 +26,9 @@ class SignInIcons extends StatelessWidget {
             await signInWithGoogle();
             await completeSignin(context: context);
           },
-          child: Icon(Icons.g_mobiledata),
+          child: const Icon(Icons.g_mobiledata),
           style: ElevatedButton.styleFrom(
-            shape: CircleBorder(),
+            shape: const CircleBorder(),
           ),
         )
       ],

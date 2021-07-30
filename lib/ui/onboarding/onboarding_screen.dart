@@ -12,20 +12,20 @@ class OnboardingScreen extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          Spacer(flex: 4),
-          OnboardingCarousel(),
-          Spacer(flex: 3),
-          Text('Create your account'),
-          Spacer(flex: 1),
-          SignInIcons(),
-          Spacer(flex: 3),
+          const Spacer(flex: 4),
+          const OnboardingCarousel(),
+          const Spacer(flex: 3),
+          const Text('Create your account'),
+          const Spacer(flex: 1),
+          const SignInIcons(),
+          const Spacer(flex: 3),
           TextButton(
             onPressed: () {
-              pageTransition(context: context, to: ScreenContainer());
+              pageTransition(context: context, to: const ScreenContainer());
             },
-            child: Text('Skip now'),
+            child: const Text('Skip now'),
           ),
-          Spacer(flex: 6),
+          const Spacer(flex: 6),
         ],
       ),
     );

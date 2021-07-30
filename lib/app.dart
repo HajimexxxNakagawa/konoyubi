@@ -10,12 +10,14 @@ enum TabType { home, map, profile }
 final tabTypeProvider = StateProvider<TabType>((ref) => TabType.home);
 
 class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'konoyubi',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: OnboardingScreen(),
+      home: const OnboardingScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -28,9 +30,9 @@ class ScreenContainer extends HookWidget {
   Widget build(BuildContext context) {
     final tabType = useProvider(tabTypeProvider);
     final _views = [
-      HomeScreen(),
-      MapScreen(),
-      ProfileScreen(),
+      const HomeScreen(),
+      const MapScreen(),
+      const ProfileScreen(),
     ];
 
     return Scaffold(
@@ -42,7 +44,7 @@ class ScreenContainer extends HookWidget {
         },
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'home',

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class OnboardingCarousel extends HookWidget {
+  const OnboardingCarousel({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final _current = useState(0);
@@ -22,11 +24,11 @@ class OnboardingCarousel extends HookWidget {
               builder: (BuildContext context) {
                 return Container(
                   width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: Center(
                     child: Text(
                       'onboarding $i',
-                      style: TextStyle(fontSize: 16.0),
+                      style: const TextStyle(fontSize: 16.0),
                     ),
                   ),
                 );
@@ -41,7 +43,8 @@ class OnboardingCarousel extends HookWidget {
               child: Container(
                 width: 12.0,
                 height: 12.0,
-                margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                margin:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: (Theme.of(context).brightness == Brightness.dark

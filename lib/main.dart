@@ -13,6 +13,6 @@ Future<void> main() async {
       options.dsn =
           'https://8ca720ad4ee548de839aebe3214c65da@o933562.ingest.sentry.io/5882678';
     },
-    appRunner: () => runApp(ProviderScope(child: App())),
+    appRunner: () => runApp(const ProviderScope(child: App())),
   );
 }
