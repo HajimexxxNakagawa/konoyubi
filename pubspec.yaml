@@ -23,9 +23,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_facebook_auth: ^3.5.0
   flutter_hooks: ^0.17.0
   carousel_slider: ^4.0.0
   cupertino_icons: ^1.0.2
+  google_sign_in: ^5.0.5
   hooks_riverpod: ^0.14.0+4
   sentry_flutter: ^5.1.0
 

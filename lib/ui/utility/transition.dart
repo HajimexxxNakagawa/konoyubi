@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:konoyubi/ui/home/home_screen.dart';
+import 'package:konoyubi/app.dart';
 
-void completeSignin({required BuildContext context}) {
+Future<void> completeSignin({required BuildContext context}) async {
   Navigator.pushReplacement<void, void>(
     context,
     MaterialPageRoute<void>(
-      builder: (BuildContext context) => const HomeScreen(),
+      builder: (BuildContext context) => const ScreenContainer(),
     ),
   );
 }
