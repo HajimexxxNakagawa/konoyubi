@@ -7,9 +7,6 @@ class MapScreen extends HookWidget {
   const MapScreen({Key? key}) : super(key: key);
 
   static const shibuya109 = LatLng(35.659825668409056, 139.6987449178721);
-  static const ministop = LatLng(35.65896623805526, 139.69846750934397);
-  static const ikea = LatLng(35.660526600247756, 139.69971205423914);
-
   static const CameraPosition _initialPosition = CameraPosition(
     target: shibuya109,
     zoom: 15,
@@ -22,7 +19,8 @@ class MapScreen extends HookWidget {
     final snapshot =
         FirebaseFirestore.instance.collection('asobiList').snapshots();
     final asobiList = useStream(snapshot);
-    Marker buildMarker({
+
+    Marker _buildMarker({
       required String id,
       required LatLng position,
       required String title,
@@ -33,26 +31,7 @@ class MapScreen extends HookWidget {
         position: position,
         infoWindow: InfoWindow(title: title),
         onTap: () {
-          showBottomSheet(
-            context: context,
-            builder: (context) {
-              return Container(
-                height: 200,
-                width: double.infinity,
-                color: Colors.amber,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(description),
-                    ElevatedButton(
-                      child: const Text('Close BottomSheet'),
-                      onPressed: () => Navigator.pop(context),
-                    )
-                  ],
-                ),
-              );
-            },
-          );
+          _showDescription(context: context, description: description);
         },
       );
     }
@@ -61,13 +40,13 @@ class MapScreen extends HookWidget {
       _mapController.value = controller;
       _markers.value.addAll(
         asobiList.data!.docs.map(
-          (e) {
-            final id = e.id;
-            final geoPoint = e['position'] as GeoPoint;
-            final title = e['title'] as String;
-            final description = e['description'] as String;
+          (asobi) {
+            final id = asobi.id;
+            final title = asobi['title'] as String;
+            final description = asobi['description'] as String;
+            final geoPoint = asobi['position'] as GeoPoint;
             final position = LatLng(geoPoint.latitude, geoPoint.longitude);
-            return buildMarker(
+            return _buildMarker(
               id: id,
               position: position,
               title: title,
@@ -79,17 +58,53 @@ class MapScreen extends HookWidget {
     }
 
     if (!asobiList.hasData) {
-      return const Center(
-        child: Text('Sorry, something went wrong...'),
-      );
+      return const MapErrorScreen();
     } else {
       return GoogleMap(
         onMapCreated: _onMapCreated,
-        buildingsEnabled: false,
         markers: _markers.value,
         mapType: MapType.hybrid,
         initialCameraPosition: _initialPosition,
       );
     }
+  }
+
+  _showDescription(
+      {required BuildContext context, required String description}) {
+    showBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+          height: 200,
+          width: double.infinity,
+          color: Colors.white,
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+              Align(alignment: Alignment.center, child: Text(description))
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class MapErrorScreen extends StatelessWidget {
+  const MapErrorScreen({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text('Sorry, something went wrong...'),
+    );
   }
 }
