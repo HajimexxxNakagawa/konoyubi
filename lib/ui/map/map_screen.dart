@@ -16,9 +16,11 @@ class MapScreen extends HookWidget {
   Widget build(BuildContext context) {
     final _markers = useState<Set<Marker>>({});
     final _mapController = useState<GoogleMapController?>(null);
-    final snapshot =
-        FirebaseFirestore.instance.collection('asobiList').snapshots();
-    final asobiList = useStream(snapshot);
+    final asobiList =
+        FirebaseFirestore.instance.collection('asobiList').snapshots;
+    final snapshot = useMemoized(asobiList);
+
+    final list = useStream(snapshot);
 
     Marker _buildMarker({
       required String id,
@@ -39,7 +41,7 @@ class MapScreen extends HookWidget {
     void _onMapCreated(GoogleMapController controller) {
       _mapController.value = controller;
       _markers.value.addAll(
-        asobiList.data!.docs.map(
+        list.data!.docs.map(
           (asobi) {
             final id = asobi.id;
             final title = asobi['title'] as String;
@@ -57,7 +59,7 @@ class MapScreen extends HookWidget {
       );
     }
 
-    if (!asobiList.hasData) {
+    if (!list.hasData) {
       return const MapErrorScreen();
     } else {
       return GoogleMap(

@@ -9,11 +9,12 @@ class ProfileScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-    final snapshot = FirebaseFirestore.instance
+    final userList = FirebaseFirestore.instance
         .collection('userList')
         .doc(user!.uid)
-        .snapshots();
-    final userInfo = useStream(snapshot);
+        .snapshots;
+    final snapshots = useMemoized(userList);
+    final userInfo = useStream(snapshots);
 
     if (!userInfo.hasData) {
       return const ProfileErrorScreen();
