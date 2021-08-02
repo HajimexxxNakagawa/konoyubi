@@ -29,13 +29,27 @@ class ScreenContainer extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final tabType = useProvider(tabTypeProvider);
+
+    final _appBars = [
+      styledAppBar('Home'),
+      styledAppBar('アソビを探す'),
+      styledAppBar('セッテイ'),
+    ];
+
     final _views = [
       const HomeScreen(),
       const MapScreen(),
       const ProfileScreen(),
     ];
 
+    const _navItems = [
+      BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'),
+      BottomNavigationBarItem(icon: Icon(Icons.map), label: 'map'),
+      BottomNavigationBarItem(icon: Icon(Icons.person), label: 'person'),
+    ];
+
     return Scaffold(
+      appBar: _appBars[tabType.state.index],
       body: _views[tabType.state.index],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: tabType.state.index,
@@ -44,21 +58,16 @@ class ScreenContainer extends HookWidget {
         },
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            label: 'map',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'person',
-          ),
-        ],
+        items: _navItems,
       ),
     );
   }
+}
+
+styledAppBar(String title) {
+  return AppBar(
+    title: Text(title, style: const TextStyle(color: Colors.black)),
+    automaticallyImplyLeading: false,
+    backgroundColor: Colors.white,
+  );
 }
