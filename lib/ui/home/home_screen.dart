@@ -24,7 +24,6 @@ class HomeScreen extends HookWidget {
 
       return HomeScreenVM(
         entries: myAsobiList,
-        add: () {},
       );
     }
   }
@@ -34,11 +33,9 @@ class HomeScreenVM extends StatelessWidget {
   const HomeScreenVM({
     Key? key,
     required this.entries,
-    required this.add,
   }) : super(key: key);
 
   final List<Asobi> entries;
-  final void Function() add;
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -52,6 +49,35 @@ class HomeScreenVM extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class AddButton extends StatelessWidget {
+  const AddButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    CollectionReference asobiList =
+        FirebaseFirestore.instance.collection('asobiList');
+    final user = FirebaseAuth.instance.currentUser;
+
+// mock
+    Future<void> addAsobi() {
+      return asobiList.add({
+        'title': '遊ぶ！',
+        'owner': user!.uid,
+        'description': 'とにかく遊ぶ',
+        'position': GeoPoint(35, 143)
+      }).catchError((error) => print("Failed to add user: $error"));
+    }
+
+    return FloatingActionButton(
+      onPressed: () {
+        addAsobi();
+      },
+      child: const Icon(Icons.add),
+      backgroundColor: Colors.black,
     );
   }
 }

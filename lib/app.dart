@@ -48,9 +48,16 @@ class ScreenContainer extends HookWidget {
       BottomNavigationBarItem(icon: Icon(Icons.person), label: 'person'),
     ];
 
+    final _actionButtons = [
+      const AddButton(),
+      const SizedBox(),
+      const SizedBox(),
+    ];
+
     return Scaffold(
       appBar: _appBars[tabType.state.index],
       body: _views[tabType.state.index],
+      floatingActionButton: _actionButtons[tabType.state.index],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: tabType.state.index,
         onTap: (int selectIndex) {
