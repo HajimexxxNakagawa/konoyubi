@@ -18,7 +18,7 @@ class HomeScreen extends HookWidget {
     final userId = currentUser.data?.value?.uid;
     final asobiList = FirebaseFirestore.instance
         .collection('asobiList')
-        .where('owner', isEqualTo: userId)
+        .where('owner', isEqualTo: userId ?? '')
         .snapshots;
     final snapshot = useMemoized(asobiList);
     final list = useStream(snapshot);
@@ -74,7 +74,7 @@ class CurrentlyOpeningMyAsobi extends StatelessWidget {
   Widget build(BuildContext context) {
     return entries.isEmpty
         ? const Center(
-            child: Text('アソビを作ろ'),
+            child: Text('ないわ。\nアソビを作ろ'),
           )
         : ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
