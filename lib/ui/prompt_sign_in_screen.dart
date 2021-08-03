@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'onboarding/sign_in_icons.dart';
 
 class PromptSignInScreen extends StatelessWidget {
   const PromptSignInScreen({Key? key}) : super(key: key);
@@ -8,7 +9,7 @@ class PromptSignInScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: const Center(
-        child: Text('トウロクしてね'),
+        child: SignInIcons(),
       ),
     );
   }

@@ -19,28 +19,6 @@ void pageTransition({
   }));
 }
 
-void slidePageTransition({
-  required BuildContext context,
-  required Widget to,
-}) {
-  Navigator.of(context).push(
-    PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return to;
-      },
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return SlideTransition(
-          position: animation.drive(
-            Tween(begin: const Offset(1, 0), end: Offset.zero)
-                .chain(CurveTween(curve: Curves.easeInCubic)),
-          ),
-          child: child,
-        );
-      },
-    ),
-  );
-}
-
 showModal({
   required BuildContext context,
   required Widget modal,

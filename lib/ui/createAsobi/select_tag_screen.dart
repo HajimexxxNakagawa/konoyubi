@@ -21,7 +21,7 @@ class SelectAsobiTagScreen extends HookWidget {
           Navigator.pop(context);
         },
         onNext: () {
-          slidePageTransition(
+          pageTransition(
             context: context,
             to: const ConfirmAsobiScreen(),
           );

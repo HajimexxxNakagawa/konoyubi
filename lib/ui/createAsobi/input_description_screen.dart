@@ -21,7 +21,7 @@ class InputAsobiDescriptionScreen extends HookWidget {
           Navigator.pop(context);
         },
         onNext: () {
-          slidePageTransition(
+          pageTransition(
             context: context,
             to: const SelectAsobiPositionScreen(),
           );

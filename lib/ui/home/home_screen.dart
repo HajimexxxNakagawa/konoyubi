@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -26,9 +28,7 @@ class HomeScreen extends HookWidget {
     } else {
       final myAsobiList = toAsobi(list.data!.docs);
 
-      return HomeScreenVM(
-        entries: myAsobiList,
-      );
+      return HomeScreenVM(entries: myAsobiList);
     }
   }
 }
@@ -47,12 +47,37 @@ class HomeScreenVM extends StatelessWidget {
       children: [
         const Padding(
           padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: Text('自分で募集しているアソビ'),
+          child: Text(
+            '自分で募集しているアソビ',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
         ),
         SizedBox(
           height: 400,
           width: double.infinity,
-          child: ListView.builder(
+          child: CurrentlyOpeningMyAsobi(entries: entries),
+        ),
+      ],
+    );
+  }
+}
+
+class CurrentlyOpeningMyAsobi extends StatelessWidget {
+  const CurrentlyOpeningMyAsobi({
+    Key? key,
+    required this.entries,
+  }) : super(key: key);
+
+  final List<Asobi> entries;
+
+  @override
+  Widget build(BuildContext context) {
+    return entries.isEmpty
+        ? const Center(
+            child: Text('アソビを作ろ'),
+          )
+        : ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
             padding: const EdgeInsets.all(8),
             itemCount: entries.length,
             itemBuilder: (BuildContext context, int index) {
@@ -63,10 +88,7 @@ class HomeScreenVM extends StatelessWidget {
                 ),
               );
             },
-          ),
-        ),
-      ],
-    );
+          );
   }
 }
 
