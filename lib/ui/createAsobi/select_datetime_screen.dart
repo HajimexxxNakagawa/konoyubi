@@ -15,7 +15,7 @@ class SelectAsobiDatetimeScreen extends HookWidget {
     return AbsorbPointer(
       absorbing: isAbsorb.state,
       child: CreateAsobiScreenTemplate(
-        body: Center(child: Text('DateTime')),
+        body: const Center(child: Text('DateTime')),
         index: 3,
         onBack: () {
           Navigator.pop(context);

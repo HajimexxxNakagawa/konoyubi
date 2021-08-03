@@ -2,22 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:konoyubi/ui/home/home_screen.dart';
 import 'package:konoyubi/ui/map/map_screen.dart';
-import 'package:konoyubi/ui/profile/profile_screen.dart';
+import 'package:konoyubi/ui/profile/user_screen.dart';
+import 'auth/user.dart';
 import 'ui/onboarding/onboarding_screen.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 enum TabType { home, map, profile }
 final tabTypeProvider = StateProvider<TabType>((ref) => TabType.home);
 
-class App extends StatelessWidget {
+class App extends HookWidget {
   const App({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = useProvider(firebaseAuthProvider);
+    final isSignedIn = currentUser.data?.value != null;
+
     return MaterialApp(
       title: 'konoyubi',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const OnboardingScreen(),
+      home: isSignedIn ? const ScreenContainer() : const OnboardingScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -39,7 +43,7 @@ class ScreenContainer extends HookWidget {
     const _views = [
       HomeScreen(),
       MapScreen(),
-      ProfileScreen(),
+      UserSceen(),
     ];
 
     const _navItems = [

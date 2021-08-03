@@ -30,7 +30,7 @@ class CreateAsobiScreenTemplate extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        title: Text(title, style: TextStyle(color: Colors.black)),
+        title: Text(title, style: const TextStyle(color: Colors.black)),
         bottom: PreferredSize(
           child: Padding(
             padding: const EdgeInsets.only(bottom: 32),
@@ -97,7 +97,7 @@ class BottomNav extends StatelessWidget {
                   )
                 : ElevatedButton(
                     onPressed: onNext,
-                    child: Text('Publish'),
+                    child: const Text('Publish'),
                   ),
           ],
         ),

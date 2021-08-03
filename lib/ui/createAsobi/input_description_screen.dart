@@ -15,7 +15,7 @@ class InputAsobiDescriptionScreen extends HookWidget {
     return AbsorbPointer(
       absorbing: isAbsorb.state,
       child: CreateAsobiScreenTemplate(
-        body: Center(child: Text('セツメイ')),
+        body: const Center(child: Text('セツメイ')),
         index: 1,
         onBack: () {
           Navigator.pop(context);

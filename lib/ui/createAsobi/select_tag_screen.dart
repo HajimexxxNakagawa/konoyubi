@@ -15,7 +15,7 @@ class SelectAsobiTagScreen extends HookWidget {
     return AbsorbPointer(
       absorbing: isAbsorb.state,
       child: CreateAsobiScreenTemplate(
-        body: Center(child: Text('Tag')),
+        body: const Center(child: Text('Tag')),
         index: 4,
         onBack: () {
           Navigator.pop(context);

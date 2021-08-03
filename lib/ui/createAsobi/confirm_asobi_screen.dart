@@ -17,7 +17,8 @@ class ConfirmAsobiScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final isAbsorb = useProvider(absorbStateProvider);
-
+    final currentUser = useProvider(firebaseAuthProvider);
+    final userId = currentUser.data?.value?.uid;
     CollectionReference asobiList =
         FirebaseFirestore.instance.collection('asobiList');
 
@@ -25,7 +26,7 @@ class ConfirmAsobiScreen extends HookWidget {
     Future<void> addAsobi() {
       return asobiList.add({
         'title': '遊ぶ！',
-        'owner': USER_ID,
+        'owner': userId,
         'description': 'とにかく遊ぶ',
         'position': const GeoPoint(35, 143)
       }).catchError((error) => print("Failed to add asobi: $error"));
@@ -34,7 +35,7 @@ class ConfirmAsobiScreen extends HookWidget {
     return AbsorbPointer(
       absorbing: isAbsorb.state,
       child: CreateAsobiScreenTemplate(
-        body: Center(child: Text('confirm')),
+        body: const Center(child: Text('confirm')),
         index: 5,
         onBack: () {
           Navigator.pop(context);

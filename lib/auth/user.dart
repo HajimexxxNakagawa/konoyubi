@@ -1,14 +1,27 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:konoyubi/ui/onboarding/onboarding_screen.dart';
+import 'package:konoyubi/ui/prompt_sign_in_screen.dart';
+import 'package:konoyubi/ui/utility/transition.dart';
 
-// ignore: non_constant_identifier_names
-final USER = FirebaseAuth.instance.currentUser;
-// ignore: non_constant_identifier_names
-final USER_ID = USER!.uid;
+final firebaseAuthProvider = StreamProvider.autoDispose((ref) {
+  return FirebaseAuth.instance.authStateChanges();
+});
 
-loginCheck() {
-  if (USER != null) {
-    return null;
-  } else {
-    // TODO: ログインを促す処理を書く
-  }
+promptSignIn(BuildContext context) {
+  showModal(
+    context: context,
+    modal: const PromptSignInScreen(),
+  );
+}
+
+Future<void> signOut(BuildContext context) async {
+  await FirebaseAuth.instance.signOut();
+  await Navigator.pushReplacement<void, void>(
+    context,
+    MaterialPageRoute<void>(
+      builder: (BuildContext context) => const OnboardingScreen(),
+    ),
+  );
 }

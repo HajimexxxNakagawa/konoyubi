@@ -15,7 +15,7 @@ class SelectAsobiPositionScreen extends HookWidget {
     return AbsorbPointer(
       absorbing: isAbsorb.state,
       child: CreateAsobiScreenTemplate(
-        body: Center(child: Text('Map')),
+        body: const Center(child: Text('Map')),
         index: 2,
         onBack: () {
           Navigator.pop(context);
