@@ -19,6 +19,7 @@ class CreateAsobiScreenTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isFirst = index == 0;
+    final isLast = index == 5;
 
     return Scaffold(
       appBar: AppBar(
@@ -39,36 +40,66 @@ class CreateAsobiScreenTemplate extends StatelessWidget {
         ),
       ),
       body: SafeArea(child: body),
-      bottomNavigationBar: BottomAppBar(
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              isFirst
-                  ? const SizedBox()
-                  : TextButton.icon(
-                      onPressed: onBack,
-                      icon: const Icon(
-                        Icons.arrow_back_ios,
+      bottomNavigationBar: BottomNav(
+        isFirst: isFirst,
+        isLast: isLast,
+        onBack: onBack,
+        onNext: onNext,
+      ),
+    );
+  }
+}
+
+class BottomNav extends StatelessWidget {
+  const BottomNav({
+    Key? key,
+    required this.isFirst,
+    required this.isLast,
+    required this.onBack,
+    required this.onNext,
+  }) : super(key: key);
+
+  final bool isFirst;
+  final bool isLast;
+  final void Function() onBack;
+  final void Function() onNext;
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomAppBar(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            isFirst
+                ? const SizedBox()
+                : TextButton.icon(
+                    onPressed: onBack,
+                    icon: const Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.black,
+                    ),
+                    label: const Text('Back'),
+                  ),
+            !isLast
+                ? Row(
+                    children: [
+                      TextButton(
+                        onPressed: onNext,
+                        child: const Text('Next'),
+                      ),
+                      const Icon(
+                        Icons.arrow_forward_ios,
                         color: Colors.black,
                       ),
-                      label: const Text('Back'),
-                    ),
-              Row(
-                children: [
-                  TextButton(
+                    ],
+                  )
+                : ElevatedButton(
                     onPressed: onNext,
-                    child: const Text('Next'),
+                    child: Text('Publish'),
                   ),
-                  const Icon(
-                    Icons.arrow_forward_ios,
-                    color: Colors.black,
-                  ),
-                ],
-              ),
-            ],
-          ),
+          ],
         ),
       ),
     );
