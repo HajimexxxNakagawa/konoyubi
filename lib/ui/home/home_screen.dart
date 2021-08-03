@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:konoyubi/auth/user.dart';
 import 'package:konoyubi/data/model/asobi.dart';
-import 'package:konoyubi/ui/home/add_asobi_modal.dart';
+import 'package:konoyubi/ui/createAsobi/input_name_screen.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
 
 class HomeScreen extends HookWidget {
@@ -61,7 +61,7 @@ class AddButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
-        showModal(context: context, modal: const AddAsobiModal());
+        showModal(context: context, modal: const InputAsobiNameScreen());
       },
       child: const Icon(Icons.add),
       backgroundColor: Colors.black,

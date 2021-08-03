@@ -65,7 +65,7 @@ class MapScreen extends HookWidget {
       return GoogleMap(
         onMapCreated: _onMapCreated,
         markers: _markers.value,
-        mapType: MapType.hybrid,
+        mapType: MapType.normal,
         initialCameraPosition: _initialPosition,
       );
     }
