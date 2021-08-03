@@ -36,10 +36,10 @@ class ScreenContainer extends HookWidget {
       styledAppBar('セッテイ'),
     ];
 
-    final _views = [
-      const HomeScreen(),
-      const MapScreen(),
-      const ProfileScreen(),
+    const _views = [
+      HomeScreen(),
+      MapScreen(),
+      ProfileScreen(),
     ];
 
     const _navItems = [
@@ -71,7 +71,7 @@ class ScreenContainer extends HookWidget {
   }
 }
 
-styledAppBar(String title) {
+AppBar styledAppBar(String title) {
   return AppBar(
     title: Text(title, style: const TextStyle(color: Colors.black)),
     automaticallyImplyLeading: false,
