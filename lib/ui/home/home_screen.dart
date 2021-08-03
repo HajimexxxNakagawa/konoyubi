@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:konoyubi/auth/user.dart';
 import 'package:konoyubi/data/model/asobi.dart';
 import 'package:konoyubi/ui/home/add_asobi_modal.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
@@ -11,10 +11,9 @@ class HomeScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
     final asobiList = FirebaseFirestore.instance
         .collection('asobiList')
-        .where('owner', isEqualTo: user!.uid)
+        .where('owner', isEqualTo: USER_ID)
         .snapshots;
     final snapshot = useMemoized(asobiList);
     final list = useStream(snapshot);

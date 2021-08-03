@@ -1,17 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:konoyubi/auth/user.dart';
 
 class ProfileScreen extends HookWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
     final userList = FirebaseFirestore.instance
         .collection('userList')
-        .doc(user!.uid)
+        .doc(USER_ID)
         .snapshots;
     final snapshots = useMemoized(userList);
     final userInfo = useStream(snapshots);
