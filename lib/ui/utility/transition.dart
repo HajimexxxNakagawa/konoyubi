@@ -18,3 +18,18 @@ pageTransition({
     return to;
   }));
 }
+
+showModal({
+  required BuildContext context,
+  required Widget modal,
+}) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (BuildContext context) {
+        return modal;
+      },
+      fullscreenDialog: true,
+    ),
+  );
+}

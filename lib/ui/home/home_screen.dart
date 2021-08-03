@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:konoyubi/data/model/asobi.dart';
+import 'package:konoyubi/ui/home/add_asobi_modal.dart';
+import 'package:konoyubi/ui/utility/transition.dart';
 
 class HomeScreen extends HookWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -58,23 +60,9 @@ class AddButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference asobiList =
-        FirebaseFirestore.instance.collection('asobiList');
-    final user = FirebaseAuth.instance.currentUser;
-
-// mock
-    Future<void> addAsobi() {
-      return asobiList.add({
-        'title': '遊ぶ！',
-        'owner': user!.uid,
-        'description': 'とにかく遊ぶ',
-        'position': GeoPoint(35, 143)
-      }).catchError((error) => print("Failed to add user: $error"));
-    }
-
     return FloatingActionButton(
       onPressed: () {
-        addAsobi();
+        showModal(context: context, modal: const AddAsobiModal());
       },
       child: const Icon(Icons.add),
       backgroundColor: Colors.black,
