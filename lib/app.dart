@@ -59,10 +59,10 @@ class ScreenContainer extends HookWidget {
       BottomNavigationBarItem(icon: Icon(Icons.person), label: 'person'),
     ];
 
-    final _actionButtons = [
-      const AddButton(),
-      const SizedBox(),
-      const SizedBox(),
+    const _actionButtons = [
+      AddButton(),
+      SizedBox(),
+      SizedBox(),
     ];
 
     return Scaffold(

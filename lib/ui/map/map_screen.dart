@@ -35,7 +35,8 @@ class MapScreen extends HookWidget {
         markerId: MarkerId(id),
         position: position,
         infoWindow: InfoWindow(title: title),
-        onTap: () {
+        onTap: () async {
+          await reportTapEvent('marker');
           _showDescription(context: context, description: description);
         },
       );
@@ -77,9 +78,8 @@ class MapScreen extends HookWidget {
     }
   }
 
-  _showDescription(
+  void _showDescription(
       {required BuildContext context, required String description}) {
-    reportTapEvent('marker');
     showBottomSheet(
       context: context,
       builder: (context) {
