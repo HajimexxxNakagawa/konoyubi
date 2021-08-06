@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:konoyubi/analytics/analytics.dart';
 import 'package:konoyubi/ui/components/loading.dart';
 import 'package:konoyubi/ui/utility/snapshot_error_handling.dart';
 
@@ -78,6 +79,7 @@ class MapScreen extends HookWidget {
 
   _showDescription(
       {required BuildContext context, required String description}) {
+    reportTapEvent('marker');
     showBottomSheet(
       context: context,
       builder: (context) {

@@ -1,3 +1,5 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:konoyubi/ui/home/home_screen.dart';
@@ -15,6 +17,8 @@ class App extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FirebaseAnalytics analytics = FirebaseAnalytics();
+
     final currentUser = useProvider(firebaseAuthProvider);
     final isSignedIn = currentUser.data?.value != null;
 
@@ -23,6 +27,9 @@ class App extends HookWidget {
       theme: ThemeData(primarySwatch: Colors.blue),
       home: isSignedIn ? const ScreenContainer() : const OnboardingScreen(),
       debugShowCheckedModeBanner: false,
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: analytics),
+      ],
     );
   }
 }
