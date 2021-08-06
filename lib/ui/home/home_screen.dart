@@ -1,12 +1,13 @@
 import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/auth/user.dart';
 import 'package:konoyubi/data/model/asobi.dart';
+import 'package:konoyubi/ui/components/loading.dart';
 import 'package:konoyubi/ui/createAsobi/input_name_screen.dart';
+import 'package:konoyubi/ui/utility/snapshot_error_handling.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
 
 class HomeScreen extends HookWidget {
@@ -23,8 +24,10 @@ class HomeScreen extends HookWidget {
     final snapshot = useMemoized(asobiList);
     final list = useStream(snapshot);
 
+    snapshotErrorHandling(list);
+
     if (!list.hasData) {
-      return const SizedBox();
+      return const Loading();
     } else {
       final myAsobiList = toAsobi(list.data!.docs);
 

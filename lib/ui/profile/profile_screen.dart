@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/auth/user.dart';
+import 'package:konoyubi/ui/components/loading.dart';
+import 'package:konoyubi/ui/utility/snapshot_error_handling.dart';
 
 class ProfileScreen extends HookWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -16,8 +18,10 @@ class ProfileScreen extends HookWidget {
     final snapshots = useMemoized(userList);
     final userInfo = useStream(snapshots);
 
+    snapshotErrorHandling(userInfo);
+
     if (!userInfo.hasData) {
-      return const ProfileErrorScreen();
+      return const Loading();
     } else {
       final name = userInfo.data!['name'] as String;
       return ProfileScreenVM(name: name);
@@ -45,19 +49,6 @@ class ProfileScreenVM extends StatelessWidget {
           )
         ],
       ),
-    );
-  }
-}
-
-class ProfileErrorScreen extends StatelessWidget {
-  const ProfileErrorScreen({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Sorry, something went wrong...'),
     );
   }
 }
