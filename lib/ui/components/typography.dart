@@ -8,15 +8,15 @@ class H1 extends HookWidget {
     this.text, {
     Key? key,
     this.maxLines = 1,
-    this.textAlign = TextAlign.center,
-    this.overflow = TextOverflow.ellipsis,
+    this.textAlign,
+    this.overflow,
     this.color = bodyColor,
   }) : super(key: key);
 
   final String text;
   final int maxLines;
-  final TextAlign textAlign;
-  final TextOverflow overflow;
+  final TextAlign? textAlign;
+  final TextOverflow? overflow;
   final Color color;
 
   @override
@@ -27,7 +27,7 @@ class H1 extends HookWidget {
       text,
       style: TextStyle(
         fontSize: width * 0.05,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.bold,
         color: color,
       ),
       maxLines: 1,
@@ -76,7 +76,7 @@ class ActionText extends HookWidget {
     Key? key,
     required this.onPressed,
     this.maxLines = 1,
-    this.textAlign,
+    this.textAlign = TextAlign.start,
     this.overflow,
   }) : super(key: key);
 
