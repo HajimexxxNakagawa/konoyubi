@@ -6,6 +6,7 @@ import 'package:konoyubi/analytics/analytics.dart';
 import 'package:konoyubi/ui/components/loading.dart';
 import 'package:konoyubi/ui/components/typography.dart';
 import 'package:konoyubi/ui/utility/snapshot_error_handling.dart';
+import 'package:konoyubi/ui/utility/use_firestore.dart';
 
 class MapScreen extends HookWidget {
   const MapScreen({Key? key}) : super(key: key);
@@ -20,11 +21,7 @@ class MapScreen extends HookWidget {
   Widget build(BuildContext context) {
     final _markers = useState<Set<Marker>>({});
     final _mapController = useState<GoogleMapController?>(null);
-    final asobiList =
-        FirebaseFirestore.instance.collection('asobiList').snapshots;
-    final snapshot = useMemoized(asobiList);
-
-    final list = useStream(snapshot);
+    final activeAsobiList = useActiveAsobiList();
 
     Marker _buildMarker({
       required String id,
@@ -46,7 +43,7 @@ class MapScreen extends HookWidget {
     void _onMapCreated(GoogleMapController controller) {
       _mapController.value = controller;
       _markers.value.addAll(
-        list.data!.docs.map(
+        activeAsobiList.data!.docs.map(
           (asobi) {
             final id = asobi.id;
             final title = asobi['title'] as String;
@@ -65,9 +62,9 @@ class MapScreen extends HookWidget {
     }
 
     // ここから実行
-    snapshotErrorHandling(list);
+    snapshotErrorHandling(activeAsobiList);
 
-    if (!list.hasData) {
+    if (!activeAsobiList.hasData) {
       return const Loading();
     } else {
       return GoogleMap(
