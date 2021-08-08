@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:konoyubi/analytics/analytics.dart';
 import 'package:konoyubi/ui/components/loading.dart';
+import 'package:konoyubi/ui/components/typography.dart';
 import 'package:konoyubi/ui/utility/snapshot_error_handling.dart';
 
 class MapScreen extends HookWidget {
@@ -96,7 +97,7 @@ class MapScreen extends HookWidget {
                   onPressed: () => Navigator.pop(context),
                 ),
               ),
-              Align(alignment: Alignment.center, child: Text(description))
+              Align(alignment: Alignment.center, child: Body1(description))
             ],
           ),
         );

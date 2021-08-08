@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/auth/user.dart';
 import 'package:konoyubi/ui/components/loading.dart';
+import 'package:konoyubi/ui/components/typography.dart';
 import 'package:konoyubi/ui/utility/snapshot_error_handling.dart';
 
 class ProfileScreen extends HookWidget {
@@ -41,12 +42,12 @@ class ProfileScreenVM extends StatelessWidget {
         children: [
           const Icon(Icons.person),
           Text(name),
-          TextButton(
+          ActionText(
+            'sign out',
             onPressed: () async {
               await signOut(context);
             },
-            child: const Text('sign out'),
-          )
+          ),
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:konoyubi/auth/user.dart';
+import 'package:konoyubi/ui/components/typography.dart';
 
 class GuestScreen extends StatelessWidget {
   const GuestScreen({Key? key}) : super(key: key);
@@ -12,12 +13,12 @@ class GuestScreen extends StatelessWidget {
         children: [
           const Icon(Icons.person),
           const Text('guest'),
-          TextButton(
+          ActionText(
+            'sign in',
             onPressed: () {
               promptSignIn(context);
             },
-            child: const Text('sign in'),
-          )
+          ),
         ],
       ),
     );
