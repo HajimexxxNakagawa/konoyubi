@@ -4,8 +4,16 @@ import 'package:konoyubi/app.dart';
 Future<void> completeSignin({required BuildContext context}) async {
   Navigator.pushReplacement<void, void>(
     context,
-    MaterialPageRoute<void>(
-      builder: (BuildContext context) => const ScreenContainer(),
+    PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return const ScreenContainer();
+      },
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
     ),
   );
 }
@@ -19,7 +27,7 @@ void pageTransition({
   }));
 }
 
-showModal({
+void showModal({
   required BuildContext context,
   required Widget modal,
 }) {

@@ -20,8 +20,16 @@ Future<void> signOut(BuildContext context) async {
   await FirebaseAuth.instance.signOut();
   await Navigator.pushReplacement<void, void>(
     context,
-    MaterialPageRoute<void>(
-      builder: (BuildContext context) => const OnboardingScreen(),
+    PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return const OnboardingScreen();
+      },
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
     ),
   );
 }
