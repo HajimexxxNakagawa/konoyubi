@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:konoyubi/app.dart';
 import 'package:konoyubi/ui/components/typography.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
 import 'onboarding_carousel.dart';

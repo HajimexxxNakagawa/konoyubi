@@ -8,6 +8,7 @@ import 'package:konoyubi/ui/profile/user_screen.dart';
 import 'auth/user.dart';
 import 'ui/onboarding/onboarding_screen.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/l10n.dart';
 
 class App extends HookWidget {
   const App({Key? key}) : super(key: key);
@@ -27,6 +28,8 @@ class App extends HookWidget {
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics),
       ],
+      localizationsDelegates: L10n.localizationsDelegates,
+      supportedLocales: L10n.supportedLocales,
     );
   }
 }
