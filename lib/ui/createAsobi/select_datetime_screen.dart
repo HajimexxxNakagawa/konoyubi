@@ -15,6 +15,7 @@ class SelectAsobiDatetimeScreen extends HookWidget {
     return AbsorbPointer(
       absorbing: isAbsorb.state,
       child: CreateAsobiScreenTemplate(
+        title: 'ジカンを決める',
         body: const Center(child: Text('DateTime')),
         index: 3,
         onBack: () {
@@ -26,7 +27,6 @@ class SelectAsobiDatetimeScreen extends HookWidget {
             to: const SelectAsobiTagScreen(),
           );
         },
-        title: 'ジカンを決める',
       ),
     );
   }

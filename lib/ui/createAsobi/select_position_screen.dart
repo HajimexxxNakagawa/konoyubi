@@ -15,6 +15,7 @@ class SelectAsobiPositionScreen extends HookWidget {
     return AbsorbPointer(
       absorbing: isAbsorb.state,
       child: CreateAsobiScreenTemplate(
+        title: 'バショを決める',
         body: const Center(child: Text('Map')),
         index: 2,
         onBack: () {
@@ -26,7 +27,6 @@ class SelectAsobiPositionScreen extends HookWidget {
             to: const SelectAsobiDatetimeScreen(),
           );
         },
-        title: 'バショを決める',
       ),
     );
   }

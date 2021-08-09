@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:konoyubi/ui/theme/constants.dart';
-import 'package:konoyubi/ui/theme/height_width.dart';
 
-class H1 extends HookWidget {
+class H1 extends StatelessWidget {
   const H1(
     this.text, {
     Key? key,
@@ -21,7 +19,7 @@ class H1 extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double width = useWidth();
+    final width = MediaQuery.of(context).size.width;
 
     return Text(
       text,
@@ -36,7 +34,7 @@ class H1 extends HookWidget {
   }
 }
 
-class Body1 extends HookWidget {
+class Body1 extends StatelessWidget {
   const Body1(
     this.text, {
     Key? key,
@@ -54,7 +52,7 @@ class Body1 extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double width = useWidth();
+    final width = MediaQuery.of(context).size.width;
 
     return Text(
       text,
@@ -70,7 +68,7 @@ class Body1 extends HookWidget {
   }
 }
 
-class ActionText extends HookWidget {
+class ActionText extends StatelessWidget {
   const ActionText(
     this.text, {
     Key? key,
@@ -88,7 +86,7 @@ class ActionText extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double width = useWidth();
+    final width = MediaQuery.of(context).size.width;
 
     return TextButton(
       onPressed: onPressed,

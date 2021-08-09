@@ -35,6 +35,7 @@ class ConfirmAsobiScreen extends HookWidget {
     return AbsorbPointer(
       absorbing: isAbsorb.state,
       child: CreateAsobiScreenTemplate(
+        title: 'カクニンする',
         body: const Center(child: Text('confirm')),
         index: 5,
         onBack: () {
@@ -43,7 +44,6 @@ class ConfirmAsobiScreen extends HookWidget {
         onNext: () {
           _publish(context);
         },
-        title: 'カクニンする',
       ),
     );
   }

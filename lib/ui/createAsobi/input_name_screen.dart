@@ -15,6 +15,7 @@ class InputAsobiNameScreen extends HookWidget {
     return AbsorbPointer(
       absorbing: isAbsorb.state,
       child: CreateAsobiScreenTemplate(
+        title: 'アソビを作る',
         body: const Center(child: Text('ナマエ')),
         index: 0,
         onBack: () {
@@ -26,7 +27,6 @@ class InputAsobiNameScreen extends HookWidget {
             to: const InputAsobiDescriptionScreen(),
           );
         },
-        title: 'アソビを作る',
       ),
     );
   }

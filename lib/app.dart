@@ -9,9 +9,6 @@ import 'auth/user.dart';
 import 'ui/onboarding/onboarding_screen.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-enum TabType { home, map, profile }
-final tabTypeProvider = StateProvider<TabType>((ref) => TabType.home);
-
 class App extends HookWidget {
   const App({Key? key}) : super(key: key);
 
@@ -33,6 +30,9 @@ class App extends HookWidget {
     );
   }
 }
+
+enum TabType { home, map, profile }
+final tabTypeProvider = StateProvider<TabType>((ref) => TabType.home);
 
 class ScreenContainer extends HookWidget {
   const ScreenContainer({Key? key}) : super(key: key);

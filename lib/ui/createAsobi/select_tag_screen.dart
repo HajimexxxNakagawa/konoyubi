@@ -15,6 +15,7 @@ class SelectAsobiTagScreen extends HookWidget {
     return AbsorbPointer(
       absorbing: isAbsorb.state,
       child: CreateAsobiScreenTemplate(
+        title: 'タグを付ける',
         body: const Center(child: Text('Tag')),
         index: 4,
         onBack: () {
@@ -26,7 +27,6 @@ class SelectAsobiTagScreen extends HookWidget {
             to: const ConfirmAsobiScreen(),
           );
         },
-        title: 'タグを付ける',
       ),
     );
   }
