@@ -20,10 +20,10 @@ List<Asobi> toAsobi(SnapshotList list) {
   return list
       .map(
         (asobi) => Asobi(
-          title: asobi['title'],
-          description: asobi['description'],
-          owner: asobi['owner'],
-          position: asobi['position'],
+          title: asobi['title'] as String,
+          description: asobi['description'] as String,
+          owner: asobi['owner'] as String,
+          position: asobi['position'] as GeoPoint,
         ),
       )
       .toList();

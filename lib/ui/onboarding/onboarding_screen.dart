@@ -23,7 +23,7 @@ class OnboardingScreen extends StatelessWidget {
           ActionText(
             'Skip now',
             onPressed: () {
-              pageTransition(context: context, to: const ScreenContainer());
+              fadeAndReplacePage(context: context);
             },
           ),
           const Spacer(flex: 6),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:konoyubi/app.dart';
 
-Future<void> completeSignin({required BuildContext context}) async {
+Future<void> fadeAndReplacePage({required BuildContext context}) async {
   Navigator.pushReplacement<void, void>(
     context,
     PageRouteBuilder(

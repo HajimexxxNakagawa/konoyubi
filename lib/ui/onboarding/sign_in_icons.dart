@@ -14,7 +14,7 @@ class SignInIcons extends StatelessWidget {
         ElevatedButton(
           onPressed: () async {
             await signInWithFacebook();
-            await completeSignin(context: context);
+            await fadeAndReplacePage(context: context);
           },
           child: const Icon(Icons.apps_outlined),
           style: ElevatedButton.styleFrom(
@@ -24,7 +24,7 @@ class SignInIcons extends StatelessWidget {
         ElevatedButton(
           onPressed: () async {
             await signInWithGoogle();
-            await completeSignin(context: context);
+            await fadeAndReplacePage(context: context);
           },
           child: const Icon(Icons.g_mobiledata),
           style: ElevatedButton.styleFrom(

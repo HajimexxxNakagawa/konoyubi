@@ -8,8 +8,13 @@ import 'app.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  await dotenv.load(fileName: ".env");
+
+  // 順番関係なく実行して良い非同期処理郡は並行処理にしておいたほうが早いらしい
+  await Future.wait([
+    Firebase.initializeApp(),
+    dotenv.load(fileName: ".env"),
+  ]);
+
   await SentryFlutter.init(
     (options) {
       options.dsn = dotenv.env['SENTRY_DSN'];
