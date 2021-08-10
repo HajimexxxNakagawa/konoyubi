@@ -32,12 +32,19 @@ dev_dependencies:
   flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.9.1"
 
 flutter:
   generate: true
   uses-material-design: true
   assets:
     - .env
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/icon_light.png"
+
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
