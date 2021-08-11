@@ -34,6 +34,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: "^0.9.1"
+  flutter_native_splash: ^1.2.1
 
 flutter:
   generate: true
@@ -45,6 +46,14 @@ flutter_icons:
   android: true
   ios: true
   image_path: "assets/icons/icon_light.png"
+
+flutter_native_splash:
+  android: true
+  ios: true
+  color: "#fefefe"
+  image: assets/icons/splash_light.png
+  color_dark: "#1e1e1e"
+  image_dark: assets/icons/splash_dark.png
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
