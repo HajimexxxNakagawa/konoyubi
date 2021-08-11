@@ -18,7 +18,7 @@ class ProfileScreen extends HookWidget {
     if (!userInfo.hasData) {
       return const Loading();
     } else {
-      final name = userInfo.data!['name'];
+      final name = userInfo.data!.data()!['name'];
       return ProfileScreenVM(name: name);
     }
   }

@@ -1,27 +1,32 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/analytics/analytics.dart';
 import 'package:konoyubi/ui/components/loading.dart';
 import 'package:konoyubi/ui/components/typography.dart';
 import 'package:konoyubi/ui/utility/snapshot_error_handling.dart';
 import 'package:konoyubi/ui/utility/use_firestore.dart';
 
+final userLocation = StateProvider<LatLng>(
+    (ref) => const LatLng(35.659825668409056, 139.6987449178721));
+
 class MapScreen extends HookWidget {
   const MapScreen({Key? key}) : super(key: key);
-
-  static const shibuya109 = LatLng(35.659825668409056, 139.6987449178721);
-  static const CameraPosition _initialPosition = CameraPosition(
-    target: shibuya109,
-    zoom: 15,
-  );
 
   @override
   Widget build(BuildContext context) {
     final _markers = useState<Set<Marker>>({});
     final _mapController = useState<GoogleMapController?>(null);
     final activeAsobiList = useActiveAsobiList();
+    final loc = useProvider(userLocation);
+
+    CameraPosition _initialPosition = CameraPosition(
+      target: loc.state,
+      zoom: 15,
+    );
 
     Marker _buildMarker({
       required String id,
@@ -35,6 +40,7 @@ class MapScreen extends HookWidget {
         infoWindow: InfoWindow(title: title),
         onTap: () async {
           await reportTapEvent('marker');
+
           _showDescription(context: context, description: description);
         },
       );
@@ -101,4 +107,13 @@ class MapScreen extends HookWidget {
       },
     );
   }
+}
+
+Future<void> getLocation() async {
+  Position position = await Geolocator.getCurrentPosition(
+    desiredAccuracy: LocationAccuracy.high,
+  );
+  print('position:$position');
+  final user = useProvider(userLocation);
+  user.state = LatLng(position.latitude, position.longitude);
 }
