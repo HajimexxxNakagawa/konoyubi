@@ -41,6 +41,7 @@ flutter:
   uses-material-design: true
   assets:
     - .env
+    - assets/
 
 flutter_icons:
   android: true
