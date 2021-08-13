@@ -16,6 +16,7 @@ dependencies:
   flutter_facebook_auth: ^3.5.0
   flutter_dotenv: ^5.0.0
   flutter_hooks: ^0.17.0
+  font_awesome_flutter: ^9.1.0
   carousel_slider: ^4.0.0
   cupertino_icons: ^1.0.2
   geolocator: ^7.4.0
