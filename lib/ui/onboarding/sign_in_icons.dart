@@ -42,7 +42,7 @@ class SignInIcons extends StatelessWidget {
         FirebaseFirestore.instance.collection('userList');
     return users.doc(user.user?.uid).set({
       'name': user.user?.displayName ?? '', 
-      'avatarURL': "", 
+      'avatarURL': user.user?.photoURL, 
       'description': "",
       'twitter': "",
       'facebook': "", 
