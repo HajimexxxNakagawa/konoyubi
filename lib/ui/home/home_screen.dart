@@ -20,7 +20,7 @@ class HomeScreen extends HookWidget {
     snapshotErrorHandling(list);
 
     if (!list.hasData) {
-      return const Loading();
+      return const Loading(); 
     } else {
       final myAsobiList = toAsobi(list.data!.docs);
 

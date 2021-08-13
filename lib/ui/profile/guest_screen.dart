@@ -16,7 +16,7 @@ class GuestScreen extends HookWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Icon(Icons.person),
-          Text(l10n.signIn),
+          Text(l10n.guest),
           ActionText(
             l10n.signIn,
             onPressed: () {
