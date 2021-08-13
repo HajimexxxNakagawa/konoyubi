@@ -47,7 +47,17 @@ class ProfileScreenView extends StatelessWidget {
           Container(
             width: 150,
             height: 150,
-            child: const Icon(Icons.person),
+            child: user.avatarURL == ''
+                ? const Icon(Icons.person)
+                : CachedNetworkImage(
+                    imageUrl: user.avatarURL,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) =>
+                        const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                  ),
+            clipBehavior: Clip.antiAlias,
             decoration:
                 const BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
           ),

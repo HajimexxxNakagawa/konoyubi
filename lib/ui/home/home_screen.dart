@@ -59,6 +59,7 @@ class HomeScreenView extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButton: const AddButton(),
       bottomNavigationBar: const BottomNav(index: 0),
     );
   }
