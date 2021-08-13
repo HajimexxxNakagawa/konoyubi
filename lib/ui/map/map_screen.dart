@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/analytics/analytics.dart';
+import 'package:konoyubi/ui/components/bottom_navigation.dart';
 import 'package:konoyubi/ui/components/loading.dart';
 import 'package:konoyubi/ui/components/typography.dart';
 import 'package:konoyubi/ui/utility/snapshot_error_handling.dart';
@@ -73,11 +74,16 @@ class MapScreen extends HookWidget {
     if (!activeAsobiList.hasData) {
       return const Loading();
     } else {
-      return GoogleMap(
-        onMapCreated: _onMapCreated,
-        markers: _markers.value,
-        mapType: MapType.normal,
-        initialCameraPosition: _initialPosition,
+      return Scaffold(
+        body: SafeArea(
+          child: GoogleMap(
+            onMapCreated: _onMapCreated,
+            markers: _markers.value,
+            mapType: MapType.normal,
+            initialCameraPosition: _initialPosition,
+          ),
+        ),
+        bottomNavigationBar: const BottomNav(index: 1),
       );
     }
   }

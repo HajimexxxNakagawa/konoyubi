@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/auth/user.dart';
 import 'package:konoyubi/data/model/asobi.dart';
+import 'package:konoyubi/ui/components/bottom_navigation.dart';
 import 'package:konoyubi/ui/components/loading.dart';
 import 'package:konoyubi/ui/components/typography.dart';
 import 'package:konoyubi/ui/createAsobi/input_name_screen.dart';
@@ -20,17 +21,17 @@ class HomeScreen extends HookWidget {
     snapshotErrorHandling(list);
 
     if (!list.hasData) {
-      return const Loading(); 
+      return const Loading();
     } else {
       final myAsobiList = toAsobi(list.data!.docs);
 
-      return HomeScreenVM(entries: myAsobiList);
+      return HomeScreenView(entries: myAsobiList);
     }
   }
 }
 
-class HomeScreenVM extends StatelessWidget {
-  const HomeScreenVM({
+class HomeScreenView extends StatelessWidget {
+  const HomeScreenView({
     Key? key,
     required this.entries,
   }) : super(key: key);
@@ -38,22 +39,27 @@ class HomeScreenVM extends StatelessWidget {
   final List<Asobi> entries;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.fromLTRB(8, 8, 0, 8),
-            child: H1('自分で募集しているアソビ'),
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.fromLTRB(8, 8, 0, 8),
+                child: H1('自分で募集しているアソビ'),
+              ),
+              SizedBox(
+                height: 400,
+                width: double.infinity,
+                child: CurrentlyOpeningMyAsobi(entries: entries),
+              ),
+            ],
           ),
-          SizedBox(
-            height: 400,
-            width: double.infinity,
-            child: CurrentlyOpeningMyAsobi(entries: entries),
-          ),
-        ],
+        ),
       ),
+      bottomNavigationBar: const BottomNav(index: 0),
     );
   }
 }
