@@ -6,7 +6,6 @@ import 'package:konoyubi/ui/components/bottom_navigation.dart';
 import 'package:konoyubi/ui/components/loading.dart';
 import 'package:konoyubi/ui/profile/profile_screen.dart';
 import 'package:konoyubi/ui/theme/constants.dart';
-
 import 'guest_screen.dart';
 import 'setting_drawer.dart';
 
