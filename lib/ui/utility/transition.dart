@@ -27,6 +27,25 @@ void pageTransition({
   }));
 }
 
+void fadePageTransition({
+  required BuildContext context,
+  required Widget to,
+}) {
+  Navigator.of(context).push(
+    PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return to;
+      },
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
+    ),
+  );
+}
+
 void showModal({
   required BuildContext context,
   required Widget modal,
@@ -38,6 +57,26 @@ void showModal({
         return modal;
       },
       fullscreenDialog: true,
+    ),
+  );
+}
+
+void showModalWithFadeAnimation({
+  required BuildContext context,
+  required Widget to,
+}) {
+  Navigator.of(context).push(
+    PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return to;
+      },
+      fullscreenDialog: true,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
     ),
   );
 }
