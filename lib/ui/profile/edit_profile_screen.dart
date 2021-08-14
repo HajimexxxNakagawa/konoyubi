@@ -40,6 +40,7 @@ class EditProfileScreen extends HookWidget {
         backgroundColor: Colors.white,
         iconTheme: const IconThemeData(color: bodyColor),
       ),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
           child: SizedBox(
@@ -51,43 +52,41 @@ class EditProfileScreen extends HookWidget {
                 Stack(
                   alignment: Alignment.bottomCenter,
                   children: [
-                    Align(
-                      child: Container(
-                        width: 150,
-                        height: 150,
-                        child: CachedNetworkImage(
-                          imageUrl:
-                              "https://lh3.googleusercontent.com/a-/AOh14GiobA4jwQETrwF_K2bHqmQmdT9W9L2C7gtcBBivAA=s96-c",
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) =>
-                              const CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                        ),
-                        clipBehavior: Clip.antiAlias,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.grey,
-                        ),
+                    Container(
+                      width: 150,
+                      height: 150,
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            "https://lh3.googleusercontent.com/a-/AOh14GiobA4jwQETrwF_K2bHqmQmdT9W9L2C7gtcBBivAA=s96-c",
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) =>
+                            const CircularProgressIndicator(),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                      ),
+                      clipBehavior: Clip.antiAlias,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey,
                       ),
                     ),
                     Align(
-                      child: Container(
-                        width: 44,
-                        height: 44,
-                        decoration: const BoxDecoration(
-                          color: Colors.grey,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(Icons.camera_alt),
-                      ),
                       alignment: const Alignment(0.32, 1),
+                      child: ElevatedButton(
+                        child: const Icon(Icons.camera_alt, color: bodyColor),
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          shape: const CircleBorder(),
+                          padding: const EdgeInsets.all(12),
+                          primary: Colors.grey[350],
+                        ),
+                      ),
                     )
                   ],
                 ),
                 const Spacer(flex: 2),
                 ProfileForm(
-                  hintText: "Your Name",
+                  hintText: "Name",
                   controller: nameController.state,
                   icon: const Icon(
                     Icons.person,
@@ -97,7 +96,7 @@ class EditProfileScreen extends HookWidget {
                 ),
                 const SizedBox(height: 12),
                 ProfileForm(
-                  hintText: "@abcd",
+                  hintText: "@abcde",
                   controller: twitterController.state,
                   icon: const FaIcon(
                     FontAwesomeIcons.twitter,
@@ -107,7 +106,7 @@ class EditProfileScreen extends HookWidget {
                 ),
                 const SizedBox(height: 12),
                 ProfileForm(
-                  hintText: "@abcd",
+                  hintText: "@abcde",
                   controller: facebookController.state,
                   icon: const FaIcon(
                     FontAwesomeIcons.facebook,

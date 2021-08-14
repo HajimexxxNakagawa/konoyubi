@@ -29,6 +29,7 @@ class UserSceen extends HookWidget {
           ),
           elevation: 0,
         ),
+        backgroundColor: Colors.white,
         body: SafeArea(
           child: isSignedIn ? const ProfileScreen() : const GuestScreen(),
         ),

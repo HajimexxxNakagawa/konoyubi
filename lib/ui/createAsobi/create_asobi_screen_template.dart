@@ -39,6 +39,7 @@ class CreateAsobiScreenTemplate extends StatelessWidget {
           preferredSize: const Size.fromHeight(72),
         ),
       ),
+      backgroundColor: Colors.white,
       body: SafeArea(child: body),
       bottomNavigationBar: BottomNav(
         isFirst: isFirst,

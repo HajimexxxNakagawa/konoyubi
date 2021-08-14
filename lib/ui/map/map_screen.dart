@@ -75,6 +75,7 @@ class MapScreen extends HookWidget {
       return const Loading();
     } else {
       return Scaffold(
+        backgroundColor: Colors.white,
         body: SafeArea(
           child: GoogleMap(
             onMapCreated: _onMapCreated,
