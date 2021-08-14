@@ -26,14 +26,14 @@ class EditProfileScreen extends HookWidget {
     final twitterController = useProvider(twitterControllerProvider);
     final facebookController = useProvider(facebookControllerProvider);
     final biographyController = useProvider(biographyControllerProvider);
+
     useEffect(() {
       nameController.state?.text = "baka";
       return () {
         print("Update FireStore");
       };
-    },
-        // [keys]は空配列でも問題ない
-        const []);
+    }, const []);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -43,15 +43,16 @@ class EditProfileScreen extends HookWidget {
       body: SafeArea(
         child: Center(
           child: SizedBox(
-            width: width * 0.9,
+            width: width * 0.8,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Spacer(flex: 2),
-                Center(
-                  child: Stack(
-                    children: [
-                      Container(
+                Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    Align(
+                      child: Container(
                         width: 150,
                         height: 150,
                         child: CachedNetworkImage(
@@ -65,50 +66,53 @@ class EditProfileScreen extends HookWidget {
                         ),
                         clipBehavior: Clip.antiAlias,
                         decoration: const BoxDecoration(
-                            shape: BoxShape.circle, color: Colors.grey),
-                      ),
-                      Align(
-                        child: Container(
-                          decoration: const BoxDecoration(),
-                          child: const Icon(Icons.camera_alt),
+                          shape: BoxShape.circle,
+                          color: Colors.grey,
                         ),
-                        alignment: Alignment.bottomLeft,
-                      )
-                    ],
-                  ),
+                      ),
+                    ),
+                    Align(
+                      child: Container(
+                        width: 44,
+                        height: 44,
+                        decoration: const BoxDecoration(
+                          color: Colors.grey,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.camera_alt),
+                      ),
+                      alignment: const Alignment(0.32, 1),
+                    )
+                  ],
                 ),
                 const Spacer(flex: 2),
-                ListTile(
-                  leading: const Icon(
+                ProfileForm(
+                  hintText: "Your Name",
+                  controller: nameController.state,
+                  icon: const Icon(
                     Icons.person,
                     color: bodyColor,
                     size: 40,
                   ),
-                  title: ProfileForm(
-                    hintText: "Your Name",
-                    controller: nameController.state,
-                  ),
                 ),
-                ListTile(
-                  leading: const FaIcon(
+                const SizedBox(height: 12),
+                ProfileForm(
+                  hintText: "@abcd",
+                  controller: twitterController.state,
+                  icon: const FaIcon(
                     FontAwesomeIcons.twitter,
                     color: Colors.lightBlue,
-                    size: 36,
-                  ),
-                  title: ProfileForm(
-                    hintText: "@abcd",
-                    controller: twitterController.state,
+                    size: 40,
                   ),
                 ),
-                ListTile(
-                  leading: const FaIcon(
+                const SizedBox(height: 12),
+                ProfileForm(
+                  hintText: "@abcd",
+                  controller: facebookController.state,
+                  icon: const FaIcon(
                     FontAwesomeIcons.facebook,
                     color: Colors.blue,
-                    size: 36,
-                  ),
-                  title: ProfileForm(
-                    hintText: "@abcd",
-                    controller: facebookController.state,
+                    size: 40,
                   ),
                 ),
                 const Spacer(),
@@ -136,11 +140,13 @@ class ProfileForm extends StatelessWidget {
     Key? key,
     this.hintText,
     this.controller,
+    this.icon,
     this.maxLines = 1,
   }) : super(key: key);
 
   final String? hintText;
   final TextEditingController? controller;
+  final Widget? icon;
   final int maxLines;
 
   @override
@@ -149,6 +155,7 @@ class ProfileForm extends StatelessWidget {
       controller: controller,
       maxLines: maxLines,
       decoration: InputDecoration(
+        icon: icon,
         hintText: hintText,
         focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(
