@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:konoyubi/auth/user.dart';
 import 'package:konoyubi/ui/components/typography.dart';
 import 'package:konoyubi/ui/theme/constants.dart';
 import 'package:konoyubi/ui/theme/height_width.dart';
@@ -26,9 +27,14 @@ class EditProfileScreen extends HookWidget {
     final twitterController = useProvider(twitterControllerProvider);
     final facebookController = useProvider(facebookControllerProvider);
     final biographyController = useProvider(biographyControllerProvider);
+    final currentUser = useProvider(currentUserProvider);
 
     useEffect(() {
-      nameController.state?.text = "baka";
+      nameController.state?.text = currentUser.state.name;
+      twitterController.state?.text = currentUser.state.twitter;
+      facebookController.state?.text = currentUser.state.facebook;
+      biographyController.state?.text = currentUser.state.description;
+
       return () {
         print("Update FireStore");
       };

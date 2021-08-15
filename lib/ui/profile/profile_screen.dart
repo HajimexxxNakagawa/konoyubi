@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:konoyubi/auth/user.dart';
 import 'package:konoyubi/data/model/user.dart';
 import 'package:konoyubi/ui/components/loading.dart';
 import 'package:konoyubi/ui/utility/snapshot_error_handling.dart';
@@ -13,7 +15,6 @@ class ProfileScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final userInfo = useUserInfo();
-
     snapshotErrorHandling(userInfo);
 
     if (!userInfo.hasData) {
@@ -27,18 +28,31 @@ class ProfileScreen extends HookWidget {
         twitter: data['twitter'] as String,
         facebook: data['facebook'] as String,
       );
+
       return ProfileScreenView(user: user);
     }
   }
 }
 
-class ProfileScreenView extends StatelessWidget {
+class ProfileScreenView extends HookWidget {
   const ProfileScreenView({Key? key, required this.user}) : super(key: key);
 
   final User user;
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = useProvider(currentUserProvider);
+    // useEffect以外の方法模索した方がいいのでは？
+    // 他にcurrentUserのstateを更新するタイミングはない？
+    useEffect(
+      () {
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+          currentUser.state = user;
+        });
+      },
+      const [],
+    );
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
