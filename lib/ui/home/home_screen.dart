@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:konoyubi/auth/user.dart';
 import 'package:konoyubi/data/model/asobi.dart';
 import 'package:konoyubi/ui/components/bottom_navigation.dart';
 import 'package:konoyubi/ui/components/loading.dart';
 import 'package:konoyubi/ui/components/typography.dart';
+import 'package:konoyubi/ui/createAsobi/input_name_screen.dart';
+import 'package:konoyubi/ui/theme/constants.dart';
+import 'package:konoyubi/ui/theme/height_width.dart';
 import 'package:konoyubi/ui/utility/snapshot_error_handling.dart';
+import 'package:konoyubi/ui/utility/transition.dart';
 import 'package:konoyubi/ui/utility/use_firestore.dart';
 
 import 'asobi_carousel.dart';
@@ -80,13 +86,45 @@ class CurrentlyOpeningMyAsobi extends StatelessWidget {
   }
 }
 
-class AsobiEmptyCard extends StatelessWidget {
+class AsobiEmptyCard extends HookWidget {
   const AsobiEmptyCard({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Body1('ないわ。\nアソビを作ろ'));
+    final currentUser = useProvider(firebaseAuthProvider);
+    final isSignedIn = currentUser.data?.value != null;
+    final width = useWidth();
+    return Card(
+      child: Container(
+        decoration: const BoxDecoration(
+          color: bodyColor,
+          borderRadius: BorderRadius.all(
+            Radius.circular(20),
+          ),
+        ),
+        height: width * 9 / 16,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Body1('募集しているアソビが無いよ！', color: Colors.white),
+            ActionText(
+              'アソビを作ろう！',
+              onPressed: () {
+                if (!isSignedIn) {
+                  promptSignIn(context);
+                } else {
+                  showModal(
+                    context: context,
+                    modal: const InputAsobiNameScreen(),
+                  );
+                }
+              },
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

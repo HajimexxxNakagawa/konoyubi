@@ -35,20 +35,21 @@ class H1 extends StatelessWidget {
 }
 
 class Body1 extends StatelessWidget {
-  const Body1(
-    this.text, {
-    Key? key,
-    this.maxLines,
-    this.textAlign,
-    this.overflow,
-    this.isBold = false,
-  }) : super(key: key);
+  const Body1(this.text,
+      {Key? key,
+      this.maxLines,
+      this.textAlign,
+      this.overflow,
+      this.isBold = false,
+      this.color = bodyColor})
+      : super(key: key);
 
   final String text;
   final int? maxLines;
   final TextAlign? textAlign;
   final TextOverflow? overflow;
   final bool isBold;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +60,7 @@ class Body1 extends StatelessWidget {
       style: TextStyle(
         fontSize: width * 0.036,
         fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-        color: bodyColor,
+        color: color,
       ),
       maxLines: maxLines,
       textAlign: textAlign,
