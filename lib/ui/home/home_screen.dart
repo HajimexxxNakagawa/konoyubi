@@ -11,6 +11,8 @@ import 'package:konoyubi/ui/utility/snapshot_error_handling.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
 import 'package:konoyubi/ui/utility/use_firestore.dart';
 
+import 'asobi_carousel.dart';
+
 class HomeScreen extends HookWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -80,18 +82,7 @@ class CurrentlyOpeningMyAsobi extends StatelessWidget {
       return const AsobiEmptyCard();
     }
 
-    return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: entries.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(entries[index].title),
-          ),
-        );
-      },
-    );
+    return AsobiCarousel(asobiList: entries);
   }
 }
 
