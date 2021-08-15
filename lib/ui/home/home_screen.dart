@@ -35,7 +35,7 @@ class HomeScreen extends HookWidget {
   }
 }
 
-class HomeScreenView extends StatelessWidget {
+class HomeScreenView extends HookWidget {
   const HomeScreenView({
     Key? key,
     required this.entries,
@@ -44,6 +44,23 @@ class HomeScreenView extends StatelessWidget {
   final List<Asobi> entries;
   @override
   Widget build(BuildContext context) {
+    final currentUser = useProvider(firebaseAuthProvider);
+    final isSignedIn = currentUser.data?.value != null;
+    final bundle = ScaffoldMessenger.of(context);
+    final snackbar = SnackBar(
+      content: const Body1('Welcome back!', color: Colors.white),
+      behavior: SnackBarBehavior.floating,
+      width: 300,
+    );
+
+    useEffect(() {
+      if (isSignedIn) {
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+          bundle.showSnackBar(snackbar);
+        });
+      }
+    }, [bundle]);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
