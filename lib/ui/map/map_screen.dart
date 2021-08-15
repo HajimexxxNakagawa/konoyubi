@@ -27,6 +27,7 @@ class MapScreen extends StatelessWidget {
   }
 }
 
+// TODO: データをコンテナ層に移行
 class MapScreenView extends HookWidget {
   const MapScreenView({Key? key}) : super(key: key);
 
