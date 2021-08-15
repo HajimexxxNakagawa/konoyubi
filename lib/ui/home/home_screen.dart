@@ -14,6 +14,7 @@ import 'package:konoyubi/ui/utility/transition.dart';
 import 'package:konoyubi/ui/utility/use_firestore.dart';
 
 import 'asobi_carousel.dart';
+import 'chat_list.dart';
 
 class HomeScreen extends HookWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -58,6 +59,15 @@ class HomeScreenView extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: CurrentlyOpeningMyAsobi(entries: entries),
+              ),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(8, 8, 0, 8),
+                child: H1('最近のカイワ'),
+              ),
+              const SizedBox(
+                height: 400,
+                width: double.infinity,
+                child: ChatList(chatList: [1, 2, 3]),
               ),
             ],
           ),
