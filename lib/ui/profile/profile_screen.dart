@@ -41,6 +41,8 @@ class ProfileScreenView extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasTwitter = user.twitter != '';
+    final hasFacebook = user.facebook != '';
     final currentUser = useProvider(currentUserProvider);
     // useEffect以外の方法模索した方がいいのでは？
     // 他にcurrentUserのstateを更新するタイミングはない？
@@ -78,17 +80,17 @@ class ProfileScreenView extends HookWidget {
           const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               FaIcon(
                 FontAwesomeIcons.twitter,
                 size: 32,
-                color: Colors.grey,
+                color: hasTwitter ? Colors.lightBlue : Colors.grey,
               ),
-              SizedBox(width: 32),
+              const SizedBox(width: 32),
               FaIcon(
                 FontAwesomeIcons.facebook,
                 size: 32,
-                color: Colors.grey,
+                color: hasFacebook ? Colors.blue : Colors.grey,
               ),
             ],
           ),
