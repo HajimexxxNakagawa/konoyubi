@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:konoyubi/data/model/asobi.dart';
 import 'package:konoyubi/ui/theme/height_width.dart';
+import 'package:konoyubi/ui/utility/transition.dart';
+
+import 'asobi_detail_screen.dart';
 
 class AsobiCarousel extends HookWidget {
   const AsobiCarousel({Key? key, required this.asobiList}) : super(key: key);
@@ -27,14 +30,22 @@ class AsobiCarousel extends HookWidget {
           items: asobiList.map((asobi) {
             return Builder(
               builder: (BuildContext context) {
-                return Card(
-                  child: Container(
-                    width: width,
-                    margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                    child: Center(
-                      child: Text(
-                        asobi.title,
-                        style: const TextStyle(fontSize: 16.0),
+                return GestureDetector(
+                  onTap: () {
+                    showModalWithFadeAnimation(
+                      context: context,
+                      to: AsobiDetailScreen(asobi),
+                    );
+                  },
+                  child: Card(
+                    child: Container(
+                      width: width,
+                      margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                      child: Center(
+                        child: Text(
+                          asobi.title,
+                          style: const TextStyle(fontSize: 16.0),
+                        ),
                       ),
                     ),
                   ),
