@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:konoyubi/ui/chat/chat_screen.dart';
+import 'package:konoyubi/ui/utility/transition.dart';
 
 class ChatList extends StatelessWidget {
   const ChatList({Key? key, required this.chatList}) : super(key: key);
@@ -15,7 +17,9 @@ class ChatList extends StatelessWidget {
       itemCount: chatList.length,
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
-          onTap: () {},
+          onTap: () {
+            pageTransition(context: context, to: const ChatScreen());
+          },
           child: Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
