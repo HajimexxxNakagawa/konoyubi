@@ -14,8 +14,21 @@ import 'package:konoyubi/ui/utility/use_firestore.dart';
 final userLocation = StateProvider<LatLng>(
     (ref) => const LatLng(35.659825668409056, 139.6987449178721));
 
-class MapScreen extends HookWidget {
+class MapScreen extends StatelessWidget {
   const MapScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(child: MapScreenView()),
+      bottomNavigationBar: BottomNav(index: 1),
+    );
+  }
+}
+
+class MapScreenView extends HookWidget {
+  const MapScreenView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -74,17 +87,11 @@ class MapScreen extends HookWidget {
     if (!activeAsobiList.hasData) {
       return const Loading();
     } else {
-      return Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: GoogleMap(
-            onMapCreated: _onMapCreated,
-            markers: _markers.value,
-            mapType: MapType.normal,
-            initialCameraPosition: _initialPosition,
-          ),
-        ),
-        bottomNavigationBar: const BottomNav(index: 1),
+      return GoogleMap(
+        onMapCreated: _onMapCreated,
+        markers: _markers.value,
+        mapType: MapType.normal,
+        initialCameraPosition: _initialPosition,
       );
     }
   }
