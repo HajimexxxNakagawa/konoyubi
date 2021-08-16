@@ -7,6 +7,7 @@ import 'package:konoyubi/auth/user.dart';
 import 'package:konoyubi/ui/components/typography.dart';
 import 'package:konoyubi/ui/theme/constants.dart';
 import 'package:konoyubi/ui/theme/height_width.dart';
+import 'package:konoyubi/ui/utility/primary_dialog.dart';
 
 final nameControllerProvider =
     StateProvider<TextEditingController?>((ref) => TextEditingController());
@@ -28,6 +29,8 @@ class EditProfileScreen extends HookWidget {
     final facebookController = useProvider(facebookControllerProvider);
     final biographyController = useProvider(biographyControllerProvider);
     final currentUser = useProvider(currentUserProvider);
+    final bottomSpace = MediaQuery.of(context).viewInsets.bottom;
+    final height = useHeight();
 
     useEffect(() {
       nameController.state?.text = currentUser.state.name;
@@ -40,98 +43,122 @@ class EditProfileScreen extends HookWidget {
       };
     }, const []);
 
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
+    return WillPopScope(
+      onWillPop: () async {
+        final name = nameController.state?.text;
+        final isNotNameEmpty = name != "";
+        final isNameLengthNotOver = name!.length <= 12;
+        final isNameContainsSpace = name.contains(" ") || name.contains("　");
+        final isNameNotOnlySpace = isNameContainsSpace
+            ? isNameContainsSpace && name.trim().isNotEmpty
+            : true;
+        if (!isNotNameEmpty) {
+          showPrimaryDialog(context: context, content: "名前を入力してください");
+        }
+        return isNotNameEmpty && isNameLengthNotOver && isNameNotOnlySpace;
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          iconTheme: const IconThemeData(color: bodyColor),
+        ),
         backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: bodyColor),
-      ),
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Center(
-          child: SizedBox(
-            width: width * 0.8,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Spacer(flex: 2),
-                Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    Container(
-                      width: 150,
-                      height: 150,
-                      child: CachedNetworkImage(
-                        imageUrl:
-                            "https://lh3.googleusercontent.com/a-/AOh14GiobA4jwQETrwF_K2bHqmQmdT9W9L2C7gtcBBivAA=s96-c",
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) =>
-                            const CircularProgressIndicator(),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
+        body: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              reverse: true,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: bottomSpace),
+                child: SizedBox(
+                  width: width * 0.8,
+                  height: height,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Spacer(flex: 2),
+                      Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: [
+                          Container(
+                            width: 150,
+                            height: 150,
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  "https://lh3.googleusercontent.com/a-/AOh14GiobA4jwQETrwF_K2bHqmQmdT9W9L2C7gtcBBivAA=s96-c",
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                            ),
+                            clipBehavior: Clip.antiAlias,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Align(
+                            alignment: const Alignment(0.32, 1),
+                            child: ElevatedButton(
+                              child: const Icon(Icons.camera_alt,
+                                  color: bodyColor),
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                shape: const CircleBorder(),
+                                padding: const EdgeInsets.all(12),
+                                primary: Colors.grey[350],
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                      clipBehavior: Clip.antiAlias,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    Align(
-                      alignment: const Alignment(0.32, 1),
-                      child: ElevatedButton(
-                        child: const Icon(Icons.camera_alt, color: bodyColor),
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          shape: const CircleBorder(),
-                          padding: const EdgeInsets.all(12),
-                          primary: Colors.grey[350],
+                      const Spacer(flex: 2),
+                      ProfileForm(
+                        hintText: "Name",
+                        controller: nameController.state,
+                        icon: const Icon(
+                          Icons.person,
+                          color: bodyColor,
+                          size: 40,
                         ),
                       ),
-                    )
-                  ],
-                ),
-                const Spacer(flex: 2),
-                ProfileForm(
-                  hintText: "Name",
-                  controller: nameController.state,
-                  icon: const Icon(
-                    Icons.person,
-                    color: bodyColor,
-                    size: 40,
+                      const SizedBox(height: 12),
+                      ProfileForm(
+                        hintText: "@abcde",
+                        controller: twitterController.state,
+                        icon: const FaIcon(
+                          FontAwesomeIcons.twitter,
+                          color: Colors.lightBlue,
+                          size: 40,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      ProfileForm(
+                        hintText: "@abcde",
+                        controller: facebookController.state,
+                        icon: const FaIcon(
+                          FontAwesomeIcons.facebook,
+                          color: Colors.blue,
+                          size: 40,
+                        ),
+                      ),
+                      const Spacer(),
+                      const Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Body1("Biography"),
+                      ),
+                      ProfileForm(
+                        hintText: "Tell us about you!",
+                        maxLines: 10,
+                        controller: biographyController.state,
+                      ),
+                      const Spacer(flex: 3),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 12),
-                ProfileForm(
-                  hintText: "@abcde",
-                  controller: twitterController.state,
-                  icon: const FaIcon(
-                    FontAwesomeIcons.twitter,
-                    color: Colors.lightBlue,
-                    size: 40,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                ProfileForm(
-                  hintText: "@abcde",
-                  controller: facebookController.state,
-                  icon: const FaIcon(
-                    FontAwesomeIcons.facebook,
-                    color: Colors.blue,
-                    size: 40,
-                  ),
-                ),
-                const Spacer(),
-                const Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Body1("Biography"),
-                ),
-                ProfileForm(
-                  hintText: "Tell us about you!",
-                  maxLines: 10,
-                  controller: biographyController.state,
-                ),
-                const Spacer(flex: 3),
-              ],
+              ),
             ),
           ),
         ),
@@ -158,6 +185,12 @@ class ProfileForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      onChanged: (text) {
+        controller?.text = text;
+        controller?.selection = TextSelection.fromPosition(
+          TextPosition(offset: controller!.text.length),
+        );
+      },
       maxLines: maxLines,
       decoration: InputDecoration(
         icon: icon,
