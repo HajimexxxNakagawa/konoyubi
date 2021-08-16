@@ -46,16 +46,9 @@ class EditProfileScreen extends HookWidget {
     return WillPopScope(
       onWillPop: () async {
         final name = nameController.state?.text;
-        final isNotNameEmpty = name != "";
-        final isNameLengthNotOver = name!.length <= 12;
-        final isNameContainsSpace = name.contains(" ") || name.contains("　");
-        final isNameNotOnlySpace = isNameContainsSpace
-            ? isNameContainsSpace && name.trim().isNotEmpty
-            : true;
-        if (!isNotNameEmpty) {
-          showPrimaryDialog(context: context, content: "名前を入力してください");
-        }
-        return isNotNameEmpty && isNameLengthNotOver && isNameNotOnlySpace;
+        final isNameValid = nameValidation(context: context, name: name);
+
+        return isNameValid;
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -216,4 +209,20 @@ class ProfileForm extends StatelessWidget {
       cursorColor: bodyColor,
     );
   }
+}
+
+bool nameValidation({
+  required String? name,
+  required BuildContext context,
+}) {
+  final isNotNameEmpty = name != "";
+  final isNameLengthNotOver = name!.length <= 12;
+  final isNameContainsSpace = name.contains(" ") || name.contains("　");
+  final isNameNotOnlySpace = isNameContainsSpace
+      ? isNameContainsSpace && name.trim().isNotEmpty
+      : true;
+  if (!isNotNameEmpty) {
+    showPrimaryDialog(context: context, content: "名前を入力してください");
+  }
+  return isNotNameEmpty && isNameLengthNotOver && isNameNotOnlySpace;
 }
