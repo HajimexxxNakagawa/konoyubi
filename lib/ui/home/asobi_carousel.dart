@@ -38,6 +38,9 @@ class AsobiCarousel extends HookWidget {
                     );
                   },
                   child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                     child: Container(
                       width: width,
                       margin: const EdgeInsets.symmetric(horizontal: 5.0),

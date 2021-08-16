@@ -65,7 +65,7 @@ class HomeScreenView extends HookWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Container(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -77,12 +77,13 @@ class HomeScreenView extends HookWidget {
                 width: double.infinity,
                 child: CurrentlyOpeningMyAsobi(entries: entries),
               ),
+              const SizedBox(height: 20),
               const Padding(
                 padding: EdgeInsets.fromLTRB(8, 8, 0, 8),
                 child: H1('最近のカイワ'),
               ),
               const SizedBox(
-                height: 400,
+                height: 300,
                 width: double.infinity,
                 child: ChatList(chatList: [1, 2, 3]),
               ),
@@ -124,6 +125,9 @@ class AsobiEmptyCard extends HookWidget {
     final isSignedIn = currentUser.data?.value != null;
     final width = useWidth();
     return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Container(
         decoration: const BoxDecoration(
           color: bodyColor,
@@ -131,7 +135,7 @@ class AsobiEmptyCard extends HookWidget {
             Radius.circular(20),
           ),
         ),
-        height: width * 9 / 16,
+        height: width / 2,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
