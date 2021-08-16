@@ -18,6 +18,7 @@ class BottomNav extends HookWidget {
   Widget build(BuildContext context) {
     final tabType = useProvider(tabTypeProvider);
     return BottomNavigationBar(
+      backgroundColor: Colors.white,
       currentIndex: index,
       onTap: (int selectIndex) {
         tabType.state = TabType.values[selectIndex];
