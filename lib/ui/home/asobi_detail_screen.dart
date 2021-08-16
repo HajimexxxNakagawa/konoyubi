@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:konoyubi/auth/user.dart';
 import 'package:konoyubi/data/model/asobi.dart';
 import 'package:konoyubi/ui/components/typography.dart';
 import 'package:konoyubi/ui/createAsobi/input_name_screen.dart';
+import 'package:konoyubi/ui/map/show_asobi_description.dart';
 import 'package:konoyubi/ui/theme/constants.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
 
@@ -15,12 +14,18 @@ class AsobiDetailScreen extends HookWidget {
   final Asobi asobi;
   @override
   Widget build(BuildContext context) {
-    final _markers = useState<Set<Marker>>({});
-    // final _mapController = useState<GoogleMapController?>(null);
-    const CameraPosition _initialPosition = CameraPosition(
-      target: LatLng(35.659825668409056, 139.6987449178721),
+    final Set<Marker> _marker = {
+      Marker(
+        markerId: const MarkerId('unique'),
+        position: LatLng(asobi.position.latitude, asobi.position.longitude),
+        infoWindow: InfoWindow(title: asobi.title),
+      )
+    };
+    final CameraPosition _initialPosition = CameraPosition(
+      target: LatLng(asobi.position.latitude, asobi.position.longitude),
       zoom: 15,
     );
+
     return Scaffold(
       appBar: AppBar(
         title: H1(asobi.title),
@@ -30,35 +35,59 @@ class AsobiDetailScreen extends HookWidget {
         elevation: 0,
       ),
       body: SafeArea(
-        child: GoogleMap(
-          onMapCreated: (_) {},
-          markers: _markers.value,
-          mapType: MapType.normal,
+        child: AsobiDetailScreenView(
+          marker: _marker,
+          description: asobi.description,
           initialCameraPosition: _initialPosition,
         ),
       ),
-      floatingActionButton: const AddButton(),
+      bottomNavigationBar: BottomAppBar(
+        child: SizedBox(
+          height: 60,
+          child: Center(
+            child: ActionText(
+              '新しいアソビを募集する！',
+              onPressed: () {
+                showModal(
+                  context: context,
+                  modal: const InputAsobiNameScreen(),
+                );
+              },
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
 
-class AddButton extends HookWidget {
-  const AddButton({Key? key}) : super(key: key);
+// shoAsobiDescriptionはScaffold依存のため、階層ををScafdoldよりひとつ下にする必要がある
+class AsobiDetailScreenView extends HookWidget {
+  const AsobiDetailScreenView({
+    Key? key,
+    required this.marker,
+    required this.description,
+    required this.initialCameraPosition,
+  }) : super(key: key);
+
+  final Set<Marker> marker;
+  final String description;
+  final CameraPosition initialCameraPosition;
 
   @override
   Widget build(BuildContext context) {
-    final currentUser = useProvider(firebaseAuthProvider);
-    final isSignedIn = currentUser.data?.value != null;
+    final _mapController = useState<GoogleMapController?>(null);
 
-    return FloatingActionButton(
-      onPressed: () {
-        if (!isSignedIn) {
-          promptSignIn(context);
-        }
-        showModal(context: context, modal: const InputAsobiNameScreen());
-      },
-      child: const Icon(Icons.add),
-      backgroundColor: Colors.black,
+    _onMapCreated(GoogleMapController controller) {
+      _mapController.value = controller;
+      showAsobiDescription(context: context, description: description);
+    }
+
+    return GoogleMap(
+      onMapCreated: _onMapCreated,
+      markers: marker,
+      mapType: MapType.normal,
+      initialCameraPosition: initialCameraPosition,
     );
   }
 }

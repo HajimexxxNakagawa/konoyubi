@@ -7,7 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/analytics/analytics.dart';
 import 'package:konoyubi/ui/components/bottom_navigation.dart';
 import 'package:konoyubi/ui/components/loading.dart';
-import 'package:konoyubi/ui/components/typography.dart';
+import 'package:konoyubi/ui/map/show_asobi_description.dart';
 import 'package:konoyubi/ui/utility/snapshot_error_handling.dart';
 import 'package:konoyubi/ui/utility/use_firestore.dart';
 
@@ -56,7 +56,7 @@ class MapScreenView extends HookWidget {
         onTap: () async {
           await reportTapEvent('marker');
 
-          _showDescription(context: context, description: description);
+          showAsobiDescription(context: context, description: description);
         },
       );
     }
@@ -95,39 +95,6 @@ class MapScreenView extends HookWidget {
         initialCameraPosition: _initialPosition,
       );
     }
-  }
-
-  void _showDescription(
-      {required BuildContext context, required String description}) {
-    showBottomSheet(
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      context: context,
-      builder: (context) {
-        return Card(
-          margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Container(
-            height: 280,
-            padding: const EdgeInsets.all(4),
-            child: Stack(
-              children: [
-                Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ),
-                Align(alignment: Alignment.center, child: Body1(description))
-              ],
-            ),
-          ),
-        );
-      },
-    );
   }
 }
 
