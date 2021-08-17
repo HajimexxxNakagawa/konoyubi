@@ -17,6 +17,7 @@ final facebookControllerProvider =
     StateProvider<TextEditingController?>((ref) => TextEditingController());
 final biographyControllerProvider =
     StateProvider<TextEditingController?>((ref) => TextEditingController());
+final avatarURLControllerProvider = StateProvider<String>((ref) => '');
 
 class EditProfileScreen extends HookWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -28,6 +29,7 @@ class EditProfileScreen extends HookWidget {
     final twitterController = useProvider(twitterControllerProvider);
     final facebookController = useProvider(facebookControllerProvider);
     final biographyController = useProvider(biographyControllerProvider);
+    final avatarURLController = useProvider(avatarURLControllerProvider);
     final currentUser = useProvider(currentUserProvider);
     final bottomSpace = MediaQuery.of(context).viewInsets.bottom;
     final height = useHeight();
@@ -37,6 +39,9 @@ class EditProfileScreen extends HookWidget {
       twitterController.state?.text = currentUser.state.twitter;
       facebookController.state?.text = currentUser.state.facebook;
       biographyController.state?.text = currentUser.state.description;
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        avatarURLController.state = currentUser.state.avatarURL;
+      });
 
       return () {
         print("Update FireStore");
@@ -77,15 +82,16 @@ class EditProfileScreen extends HookWidget {
                           Container(
                             width: 150,
                             height: 150,
-                            child: CachedNetworkImage(
-                              imageUrl:
-                                  "https://lh3.googleusercontent.com/a-/AOh14GiobA4jwQETrwF_K2bHqmQmdT9W9L2C7gtcBBivAA=s96-c",
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) =>
-                                  const CircularProgressIndicator(),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                            ),
+                            child: avatarURLController.state == ''
+                                ? const SizedBox()
+                                : CachedNetworkImage(
+                                    imageUrl: avatarURLController.state,
+                                    fit: BoxFit.cover,
+                                    placeholder: (context, url) =>
+                                        const CircularProgressIndicator(),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
+                                  ),
                             clipBehavior: Clip.antiAlias,
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,
