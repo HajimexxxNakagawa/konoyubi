@@ -114,7 +114,7 @@ class EditProfileScreen extends HookWidget {
                         ],
                       ),
                       const Spacer(flex: 2),
-                      ProfileForm(
+                      ProfileField(
                         hintText: "Name",
                         controller: nameController.state,
                         icon: const Icon(
@@ -124,7 +124,7 @@ class EditProfileScreen extends HookWidget {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      ProfileForm(
+                      ProfileField(
                         hintText: "@abcde",
                         controller: twitterController.state,
                         icon: const FaIcon(
@@ -134,7 +134,7 @@ class EditProfileScreen extends HookWidget {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      ProfileForm(
+                      ProfileField(
                         hintText: "@abcde",
                         controller: facebookController.state,
                         icon: const FaIcon(
@@ -148,7 +148,7 @@ class EditProfileScreen extends HookWidget {
                         padding: EdgeInsets.all(8),
                         child: Body1("Biography"),
                       ),
-                      ProfileForm(
+                      ProfileField(
                         hintText: "Tell us about you!",
                         maxLines: 10,
                         controller: biographyController.state,
@@ -166,8 +166,8 @@ class EditProfileScreen extends HookWidget {
   }
 }
 
-class ProfileForm extends StatelessWidget {
-  const ProfileForm({
+class ProfileField extends StatelessWidget {
+  const ProfileField({
     Key? key,
     this.hintText,
     this.controller,
@@ -182,14 +182,8 @@ class ProfileForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return TextField(
       controller: controller,
-      onChanged: (text) {
-        controller?.text = text;
-        controller?.selection = TextSelection.fromPosition(
-          TextPosition(offset: controller!.text.length),
-        );
-      },
       maxLines: maxLines,
       decoration: InputDecoration(
         icon: icon,
