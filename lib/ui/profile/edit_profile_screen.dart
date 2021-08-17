@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/auth/user.dart';
+import 'package:konoyubi/data/model/user.dart';
 import 'package:konoyubi/ui/components/typography.dart';
 import 'package:konoyubi/ui/theme/constants.dart';
 import 'package:konoyubi/ui/theme/height_width.dart';
@@ -30,9 +32,33 @@ class EditProfileScreen extends HookWidget {
     final facebookController = useProvider(facebookControllerProvider);
     final biographyController = useProvider(biographyControllerProvider);
     final avatarURLController = useProvider(avatarURLControllerProvider);
+    final auth = useProvider(firebaseAuthProvider);
     final currentUser = useProvider(currentUserProvider);
     final bottomSpace = MediaQuery.of(context).viewInsets.bottom;
     final height = useHeight();
+
+    Future<void> updateUser() {
+      CollectionReference userList =
+          FirebaseFirestore.instance.collection('userList');
+
+      // TODO: name以外のプロパティもやる
+      return userList.doc(auth.data?.value?.uid).update(
+        {'name': nameController.state?.text},
+      );
+    }
+
+    updateCurrentUserState() {
+      final newName = nameController.state!.text;
+      // TODO: name以外のプロパティもやる
+      currentUser.state = User(
+        name: newName,
+        avatarURL:
+            'https://lh3.googleusercontent.com/a-/AOh14Gi9q4c1_0NgDeWWyGTSpYbDXgSXjkOdehlX4o6K=s96-c',
+        description: '',
+        twitter: '',
+        facebook: '',
+      );
+    }
 
     useEffect(() {
       nameController.state?.text = currentUser.state.name;
@@ -43,7 +69,9 @@ class EditProfileScreen extends HookWidget {
         avatarURLController.state = currentUser.state.avatarURL;
       });
 
-      return () {
+      return () async {
+        await updateUser();
+        updateCurrentUserState();
         print("Update FireStore");
       };
     }, const []);
