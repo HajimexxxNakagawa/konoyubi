@@ -6,6 +6,8 @@ import 'package:konoyubi/ui/utility/transition.dart';
 import 'select_position_screen.dart';
 
 final absorbStateProvider = StateProvider((ref) => false);
+final asobiDescriptionControllerProvider =
+    StateProvider<TextEditingController?>((ref) => TextEditingController());
 
 class InputAsobiDescriptionScreen extends HookWidget {
   const InputAsobiDescriptionScreen({Key? key}) : super(key: key);
@@ -16,7 +18,7 @@ class InputAsobiDescriptionScreen extends HookWidget {
       absorbing: isAbsorb.state,
       child: CreateAsobiScreenTemplate(
         title: 'セツメイを書く',
-        body: const Center(child: Text('セツメイ')),
+        body: const Body(),
         index: 1,
         onBack: () {
           Navigator.pop(context);
@@ -27,6 +29,23 @@ class InputAsobiDescriptionScreen extends HookWidget {
             to: const SelectAsobiPositionScreen(),
           );
         },
+      ),
+    );
+  }
+}
+
+class Body extends HookWidget {
+  const Body({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final asobiDescriptionController =
+        useProvider(asobiDescriptionControllerProvider);
+    return Center(
+      child: TextField(
+        controller: asobiDescriptionController.state,
       ),
     );
   }

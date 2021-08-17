@@ -11,7 +11,7 @@ import 'package:konoyubi/ui/map/show_asobi_description.dart';
 import 'package:konoyubi/ui/utility/snapshot_error_handling.dart';
 import 'package:konoyubi/ui/utility/use_firestore.dart';
 
-final userLocation = StateProvider<LatLng>(
+final userLocationProvider = StateProvider<LatLng>(
     (ref) => const LatLng(35.659825668409056, 139.6987449178721));
 
 class MapScreen extends StatelessWidget {
@@ -36,7 +36,7 @@ class MapScreenView extends HookWidget {
     final _markers = useState<Set<Marker>>({});
     final _mapController = useState<GoogleMapController?>(null);
     final activeAsobiList = useActiveAsobiList();
-    final loc = useProvider(userLocation);
+    final loc = useProvider(userLocationProvider);
 
     CameraPosition _initialPosition = CameraPosition(
       target: loc.state,
@@ -103,6 +103,6 @@ Future<void> getLocation() async {
     desiredAccuracy: LocationAccuracy.high,
   );
   print('position:$position');
-  final user = useProvider(userLocation);
+  final user = useProvider(userLocationProvider);
   user.state = LatLng(position.latitude, position.longitude);
 }
