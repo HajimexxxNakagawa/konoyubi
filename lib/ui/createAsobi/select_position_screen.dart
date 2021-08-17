@@ -3,7 +3,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/ui/createAsobi/create_asobi_screen_template.dart';
-import 'package:konoyubi/ui/map/map_screen.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
 import 'select_datetime_screen.dart';
 
