@@ -1,9 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/auth/user.dart';
 import 'package:konoyubi/ui/createAsobi/create_asobi_screen_template.dart';
+import 'package:konoyubi/ui/createAsobi/input_description_screen.dart';
+import 'package:konoyubi/ui/createAsobi/select_position_screen.dart';
+import 'package:konoyubi/ui/createAsobi/select_tag_screen.dart';
+
+import 'input_name_screen.dart';
 
 final absorbStateProvider = StateProvider((ref) => false);
 
@@ -17,6 +23,12 @@ class ConfirmAsobiScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final isAbsorb = useProvider(absorbStateProvider);
+    final asobiName = useProvider(asobiNameControllerProvider).state?.text;
+    final asobiDescription =
+        useProvider(asobiDescriptionControllerProvider).state?.text;
+    final position = useProvider(asobiMarkerProvider).state.first.position;
+    final selectedTag = useProvider(selectedTagProvider).state;
+
     final currentUser = useProvider(firebaseAuthProvider);
     final userId = currentUser.data?.value?.uid;
     CollectionReference asobiList =
@@ -36,7 +48,12 @@ class ConfirmAsobiScreen extends HookWidget {
       absorbing: isAbsorb.state,
       child: CreateAsobiScreenTemplate(
         title: 'カクニンする',
-        body: const Center(child: Text('confirm')),
+        body: Body(
+          name: asobiName!,
+          description: asobiDescription!,
+          position: position,
+          tags: selectedTag,
+        ),
         index: 5,
         onBack: () {
           Navigator.pop(context);
@@ -44,6 +61,34 @@ class ConfirmAsobiScreen extends HookWidget {
         onNext: () {
           _publish(context);
         },
+      ),
+    );
+  }
+}
+
+class Body extends StatelessWidget {
+  const Body({
+    Key? key,
+    required this.name,
+    required this.description,
+    required this.position,
+    required this.tags,
+  }) : super(key: key);
+
+  final String name;
+  final String description;
+  final LatLng position;
+  final List<String> tags;
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        children: [
+          Text(name),
+          Text(description),
+          Text(position.toString()),
+          Column(children: tags.map((e) => Text(e)).toList())
+        ],
       ),
     );
   }
