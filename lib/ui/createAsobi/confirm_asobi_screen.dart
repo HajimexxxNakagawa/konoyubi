@@ -8,6 +8,7 @@ import 'package:konoyubi/ui/createAsobi/create_asobi_screen_template.dart';
 import 'package:konoyubi/ui/createAsobi/input_description_screen.dart';
 import 'package:konoyubi/ui/createAsobi/select_position_screen.dart';
 import 'package:konoyubi/ui/createAsobi/select_tag_screen.dart';
+import 'package:konoyubi/ui/map/show_asobi_description.dart';
 
 import 'input_name_screen.dart';
 
@@ -16,23 +17,28 @@ final absorbStateProvider = StateProvider((ref) => false);
 class ConfirmAsobiScreen extends HookWidget {
   const ConfirmAsobiScreen({Key? key}) : super(key: key);
 
-  void _publish(BuildContext context) {
-    Navigator.of(context).popUntil((route) => route.isFirst);
-  }
-
   @override
   Widget build(BuildContext context) {
     final isAbsorb = useProvider(absorbStateProvider);
-    final asobiName = useProvider(asobiNameControllerProvider).state?.text;
-    final asobiDescription =
-        useProvider(asobiDescriptionControllerProvider).state?.text;
-    final position = useProvider(asobiMarkerProvider).state.first.position;
-    final selectedTag = useProvider(selectedTagProvider).state;
+    final asobiName = useProvider(asobiNameControllerProvider);
+    final asobiDescription = useProvider(asobiDescriptionControllerProvider);
+    final marker = useProvider(asobiMarkerProvider);
+    final selectedTag = useProvider(selectedTagProvider);
+    final cameraPosition = useProvider(cameraPositionProvider);
 
     final currentUser = useProvider(firebaseAuthProvider);
     final userId = currentUser.data?.value?.uid;
     CollectionReference asobiList =
         FirebaseFirestore.instance.collection('asobiList');
+
+    void _initialize(BuildContext context) {
+      asobiName.state!.text = "";
+      asobiDescription.state!.text = "";
+      marker.state = {initialMarker};
+      selectedTag.state = [];
+      cameraPosition.state = const CameraPosition(target: shibuya, zoom: 15);
+      Navigator.of(context).popUntil((route) => route.isFirst);
+    }
 
     // mock
     Future<void> addAsobi() {
@@ -49,47 +55,54 @@ class ConfirmAsobiScreen extends HookWidget {
       child: CreateAsobiScreenTemplate(
         title: 'カクニンする',
         body: Body(
-          name: asobiName!,
-          description: asobiDescription!,
-          position: position,
-          tags: selectedTag,
+          name: asobiName.state!.text,
+          description: asobiDescription.state!.text,
+          marker: marker.state,
+          cameraPosition: cameraPosition.state,
+          tags: selectedTag.state,
         ),
         index: 5,
         onBack: () {
           Navigator.pop(context);
         },
         onNext: () {
-          _publish(context);
+          _initialize(context);
         },
       ),
     );
   }
 }
 
-class Body extends StatelessWidget {
+class Body extends HookWidget {
   const Body({
     Key? key,
     required this.name,
     required this.description,
-    required this.position,
+    required this.marker,
+    required this.cameraPosition,
     required this.tags,
   }) : super(key: key);
 
   final String name;
   final String description;
-  final LatLng position;
+  final Set<Marker> marker;
+  final CameraPosition cameraPosition;
   final List<String> tags;
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          Text(name),
-          Text(description),
-          Text(position.toString()),
-          Column(children: tags.map((e) => Text(e)).toList())
-        ],
-      ),
+    final _mapController = useState<GoogleMapController?>(null);
+
+    _onMapCreated(GoogleMapController controller) {
+      _mapController.value = controller;
+      showAsobiDescription(context: context, description: description);
+    }
+
+    return GoogleMap(
+      onMapCreated: _onMapCreated,
+      markers: marker,
+      mapType: MapType.normal,
+      initialCameraPosition: cameraPosition,
     );
   }
 }
