@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,6 +11,7 @@ import 'package:konoyubi/ui/components/typography.dart';
 import 'package:konoyubi/ui/theme/constants.dart';
 import 'package:konoyubi/ui/theme/height_width.dart';
 import 'package:konoyubi/ui/utility/primary_dialog.dart';
+import 'package:konoyubi/ui/utility/upload_image.dart';
 
 final nameControllerProvider =
     StateProvider<TextEditingController?>((ref) => TextEditingController());
@@ -52,8 +54,7 @@ class EditProfileScreen extends HookWidget {
       // TODO: name以外のプロパティもやる
       currentUser.state = User(
         name: newName,
-        avatarURL:
-            'https://lh3.googleusercontent.com/a-/AOh14Gi9q4c1_0NgDeWWyGTSpYbDXgSXjkOdehlX4o6K=s96-c',
+        avatarURL: avatarURLController.state,
         description: '',
         twitter: '',
         facebook: '',
@@ -131,7 +132,14 @@ class EditProfileScreen extends HookWidget {
                             child: ElevatedButton(
                               child: const Icon(Icons.camera_alt,
                                   color: bodyColor),
-                              onPressed: () {},
+                              onPressed: () {
+                                uploadImage(
+                                  "profileImage",
+                                  context,
+                                  auth.data!.value!.uid,
+                                  avatarURLController,
+                                );
+                              },
                               style: ElevatedButton.styleFrom(
                                 shape: const CircleBorder(),
                                 padding: const EdgeInsets.all(12),

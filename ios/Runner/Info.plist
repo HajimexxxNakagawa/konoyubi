@@ -90,5 +90,9 @@
 		<string>This app needs access to location when open.</string>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>ライブラリにアクセスするよ</string>
+		<key>NSCameraUsageDescription</key>
+		<string>カメラにアクセスするよ</string>
 	</dict>
 </plist>
