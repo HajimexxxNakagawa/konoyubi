@@ -3,13 +3,15 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/ui/createAsobi/create_asobi_screen_template.dart';
+import 'package:konoyubi/ui/utility/primary_dialog.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
 import 'select_datetime_screen.dart';
 
 const shibuya = LatLng(35.659825668409056, 139.6987449178721);
 final absorbStateProvider = StateProvider((ref) => false);
-final asobiMarkerProvider = StateProvider<Set<Marker>>(
-    (ref) => {const Marker(markerId: MarkerId('unique'))});
+const initialMarker = Marker(markerId: MarkerId('unique'));
+final asobiMarkerProvider =
+    StateProvider<Set<Marker>>((ref) => {initialMarker});
 final cameraPositionProvider = StateProvider<CameraPosition>(
     (ref) => const CameraPosition(target: shibuya, zoom: 15));
 
@@ -18,6 +20,8 @@ class SelectAsobiPositionScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final isAbsorb = useProvider(absorbStateProvider);
+    final marker = useProvider(asobiMarkerProvider);
+
     return AbsorbPointer(
       absorbing: isAbsorb.state,
       child: CreateAsobiScreenTemplate(
@@ -28,10 +32,16 @@ class SelectAsobiPositionScreen extends HookWidget {
           Navigator.pop(context);
         },
         onNext: () {
-          pageTransition(
+          final isValid = asobiPositionValidation(
             context: context,
-            to: const SelectAsobiDatetimeScreen(),
+            marker: marker.state.first,
           );
+          if (isValid) {
+            pageTransition(
+              context: context,
+              to: const SelectAsobiDatetimeScreen(),
+            );
+          }
         },
       ),
     );
@@ -70,4 +80,15 @@ class Body extends HookWidget {
       },
     );
   }
+}
+
+bool asobiPositionValidation({
+  required BuildContext context,
+  required Marker marker,
+}) {
+  final isMarkerUnspecified = marker == initialMarker;
+  if (isMarkerUnspecified) {
+    showPrimaryDialog(context: context, content: 'バショを指定してね！');
+  }
+  return !isMarkerUnspecified;
 }
