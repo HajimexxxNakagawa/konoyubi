@@ -81,7 +81,7 @@ class TagButton extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final selectedTag = useProvider(selectedTagProvider);
-    final isSelected = useState(false);
+    final isSelected = useState(selectedTag.state.contains(tag));
     return OutlinedButton(
       onPressed: () {
         isSelected.value = !isSelected.value;
