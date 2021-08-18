@@ -6,7 +6,6 @@ import 'package:konoyubi/ui/utility/primary_dialog.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
 import 'input_description_screen.dart';
 
-final absorbStateProvider = StateProvider((ref) => false);
 final asobiNameControllerProvider =
     StateProvider<TextEditingController?>((ref) => TextEditingController());
 
@@ -16,28 +15,24 @@ class InputAsobiNameScreen extends HookWidget {
   Widget build(BuildContext context) {
     final asobiNameController = useProvider(asobiNameControllerProvider);
 
-    final isAbsorb = useProvider(absorbStateProvider);
-    return AbsorbPointer(
-      absorbing: isAbsorb.state,
-      child: CreateAsobiScreenTemplate(
-        title: 'アソビを作る',
-        body: Body(
-          controller: asobiNameController.state!,
-        ),
-        index: 0,
-        onBack: () {
-          Navigator.pop(context);
-        },
-        onNext: () {
-          if (asobiNameValidation(
-              name: asobiNameController.state!.text, context: context)) {
-            pageTransition(
-              context: context,
-              to: const InputAsobiDescriptionScreen(),
-            );
-          }
-        },
+    return CreateAsobiScreenTemplate(
+      title: 'アソビを作る',
+      body: Body(
+        controller: asobiNameController.state!,
       ),
+      index: 0,
+      onBack: () {
+        Navigator.pop(context);
+      },
+      onNext: () {
+        if (asobiNameValidation(
+            name: asobiNameController.state!.text, context: context)) {
+          pageTransition(
+            context: context,
+            to: const InputAsobiDescriptionScreen(),
+          );
+        }
+      },
     );
   }
 }

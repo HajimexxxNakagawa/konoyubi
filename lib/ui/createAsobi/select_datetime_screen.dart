@@ -1,16 +1,12 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/ui/createAsobi/create_asobi_screen_template.dart';
-import 'package:konoyubi/ui/utility/primary_dialog.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
 import 'select_tag_screen.dart';
 
 final initialDatetime =
     DateTime(2021, DateTime.now().month, DateTime.now().day, 4, 00);
-final absorbStateProvider = StateProvider((ref) => false);
 final startTimeProvider = StateProvider((ref) => initialDatetime);
 final endTimeProvider = StateProvider((ref) => initialDatetime);
 
@@ -18,29 +14,25 @@ class SelectAsobiDatetimeScreen extends HookWidget {
   const SelectAsobiDatetimeScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final isAbsorb = useProvider(absorbStateProvider);
     final startTime = useProvider(startTimeProvider);
     final endTime = useProvider(endTimeProvider);
 
-    return AbsorbPointer(
-      absorbing: isAbsorb.state,
-      child: CreateAsobiScreenTemplate(
-        title: 'ジカンを決める',
-        body: Body(
-          start: startTime,
-          end: endTime,
-        ),
-        index: 3,
-        onBack: () {
-          Navigator.pop(context);
-        },
-        onNext: () {
-          pageTransition(
-            context: context,
-            to: const SelectAsobiTagScreen(),
-          );
-        },
+    return CreateAsobiScreenTemplate(
+      title: 'ジカンを決める',
+      body: Body(
+        start: startTime,
+        end: endTime,
       ),
+      index: 3,
+      onBack: () {
+        Navigator.pop(context);
+      },
+      onNext: () {
+        pageTransition(
+          context: context,
+          to: const SelectAsobiTagScreen(),
+        );
+      },
     );
   }
 }
