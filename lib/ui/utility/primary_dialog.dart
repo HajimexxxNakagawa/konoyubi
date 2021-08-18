@@ -19,3 +19,18 @@ showPrimaryDialog({required BuildContext context, required String content}) {
     },
   );
 }
+
+Future<void> popUpDialog(
+    {required BuildContext context, required String content}) async {
+  showDialog(
+    context: context,
+    builder: (context) {
+      Future.delayed(const Duration(seconds: 1), () {
+        Navigator.pop(context);
+      });
+      return AlertDialog(
+        title: Text(content),
+      );
+    },
+  );
+}
