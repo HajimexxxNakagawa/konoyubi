@@ -9,8 +9,6 @@ import 'package:konoyubi/ui/utility/transition.dart';
 import 'confirm_asobi_screen.dart';
 
 final selectedTagProvider = StateProvider<List<String>>((ref) => []);
-final asobiTagProvider = StateProvider((ref) => '');
-enum AsobiTag { karaoke, shopping, sports, talk, cafe, meal }
 const List<String> asobiTagList = [
   'カラオケ',
   'カイモノ',
