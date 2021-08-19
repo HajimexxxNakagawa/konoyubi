@@ -49,7 +49,7 @@ class AsobiDetailScreen extends HookWidget {
       body: SafeArea(
         child: AsobiDetailScreenView(
           marker: _marker,
-          description: asobi.description,
+          asobi: asobi,
           initialCameraPosition: _initialPosition,
         ),
       ),
@@ -78,12 +78,12 @@ class AsobiDetailScreenView extends HookWidget {
   const AsobiDetailScreenView({
     Key? key,
     required this.marker,
-    required this.description,
+    required this.asobi,
     required this.initialCameraPosition,
   }) : super(key: key);
 
   final Set<Marker> marker;
-  final String description;
+  final Asobi asobi;
   final CameraPosition initialCameraPosition;
 
   @override
@@ -104,7 +104,7 @@ class AsobiDetailScreenView extends HookWidget {
       ),
       Align(
         alignment: Alignment.bottomCenter,
-        child: AsobiDescriptionCard(description: description, canPop: false),
+        child: AsobiDescriptionCard(asobi: asobi, canPop: false),
       )
     ]);
   }

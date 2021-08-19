@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:konoyubi/data/model/asobi.dart';
 import 'typography.dart';
 
 class AsobiDescriptionCard extends StatelessWidget {
   const AsobiDescriptionCard({
     Key? key,
-    required this.description,
+    required this.asobi,
     this.canPop = true,
   }) : super(key: key);
 
-  final String description;
+  final Asobi asobi;
   final bool canPop;
 
   @override
@@ -19,19 +20,54 @@ class AsobiDescriptionCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: Container(
+        width: MediaQuery.of(context).size.width,
         height: 280,
-        padding: const EdgeInsets.all(4),
-        child: Stack(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (canPop)
-              Align(
-                alignment: Alignment.topRight,
-                child: IconButton(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                H1(asobi.title),
+                IconButton(
                   icon: const Icon(Icons.close),
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () {
+                    if (canPop) {
+                      Navigator.pop(context);
+                    }
+                  },
                 ),
-              ),
-            Align(alignment: Alignment.center, child: Body1(description))
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: asobi.tags
+                  .map((tag) => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 2),
+                        child: Text('#$tag'),
+                      ))
+                  .toList(),
+            ),
+            const SizedBox(height: 8),
+            SizedBox(
+              width: (MediaQuery.of(context).size.width - 40) * 0.8,
+              height: 104,
+              child: Body1(asobi.description),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('ハジマリ：' + asobi.start.toString().substring(0, 16)),
+                    Text('シメキリ：' + asobi.end.toString().substring(0, 16)),
+                  ],
+                ),
+                ActionText('アソビに行く！', onPressed: () {}),
+              ],
+            )
           ],
         ),
       ),

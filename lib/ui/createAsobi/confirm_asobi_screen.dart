@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/auth/user.dart';
+import 'package:konoyubi/data/model/asobi.dart';
 import 'package:konoyubi/ui/components/asobi_description_card.dart';
 import 'package:konoyubi/ui/components/typography.dart';
 import 'package:konoyubi/ui/createAsobi/create_asobi_screen_template.dart';
@@ -81,6 +82,8 @@ class ConfirmAsobiScreen extends HookWidget {
         marker: marker.state,
         cameraPosition: cameraPosition.state,
         tags: selectedTag.state,
+        start: startTime.state,
+        end: endTime.state,
       ),
       index: 5,
       onBack: () {
@@ -129,6 +132,8 @@ class Body extends HookWidget {
     required this.marker,
     required this.cameraPosition,
     required this.tags,
+    required this.start,
+    required this.end,
   }) : super(key: key);
 
   final String name;
@@ -136,10 +141,22 @@ class Body extends HookWidget {
   final Set<Marker> marker;
   final CameraPosition cameraPosition;
   final List<String> tags;
+  final DateTime start;
+  final DateTime end;
 
   @override
   Widget build(BuildContext context) {
     final _mapController = useState<GoogleMapController?>(null);
+    final mockNewAsobi = Asobi(
+        id: '',
+        owner: '',
+        title: name,
+        description: description,
+        position: const GeoPoint(0, 0),
+        start: start,
+        end: end,
+        tags: tags,
+        createdAt: DateTime.now());
 
     _onMapCreated(GoogleMapController controller) {
       _mapController.value = controller;
@@ -155,7 +172,7 @@ class Body extends HookWidget {
       ),
       Align(
         alignment: Alignment.bottomCenter,
-        child: AsobiDescriptionCard(description: description, canPop: false),
+        child: AsobiDescriptionCard(asobi: mockNewAsobi, canPop: false),
       )
     ]);
   }

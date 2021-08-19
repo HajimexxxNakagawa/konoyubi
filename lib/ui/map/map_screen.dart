@@ -1,10 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/analytics/analytics.dart';
+import 'package:konoyubi/data/model/asobi.dart';
 import 'package:konoyubi/ui/components/bottom_navigation.dart';
 import 'package:konoyubi/ui/components/loading.dart';
 import 'package:konoyubi/ui/map/show_asobi_description.dart';
@@ -47,7 +47,7 @@ class MapScreenView extends HookWidget {
       required String id,
       required LatLng position,
       required String title,
-      required String description,
+      required Asobi asobi,
     }) {
       return Marker(
         markerId: MarkerId(id),
@@ -56,26 +56,25 @@ class MapScreenView extends HookWidget {
         onTap: () async {
           await reportTapEvent('marker');
 
-          showAsobiDescription(context: context, description: description);
+          showAsobiDescription(context: context, asobi: asobi);
         },
       );
     }
 
     void _onMapCreated(GoogleMapController controller) {
       _mapController.value = controller;
+      final list = toAsobi(activeAsobiList.data!.docs);
       _markers.value.addAll(
-        activeAsobiList.data!.docs.map(
+        list.map(
           (asobi) {
             final id = asobi.id;
-            final title = asobi['title'] as String;
-            final description = asobi['description'] as String;
-            final geoPoint = asobi['position'] as GeoPoint;
-            final position = LatLng(geoPoint.latitude, geoPoint.longitude);
+            final lat = asobi.position.latitude;
+            final lng = asobi.position.longitude;
             return _buildMarker(
               id: id,
-              position: position,
-              title: title,
-              description: description,
+              position: LatLng(lat, lng),
+              title: asobi.title,
+              asobi: asobi,
             );
           },
         ),
