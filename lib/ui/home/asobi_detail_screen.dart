@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -32,6 +33,17 @@ class AsobiDetailScreen extends HookWidget {
         backgroundColor: Colors.white,
         automaticallyImplyLeading: true,
         iconTheme: const IconThemeData(color: bodyColor),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: InkWell(
+              child: Icon(Icons.delete),
+              onTap: () {
+                showDeleteAsobiDialog(context: context, docId: asobi.id);
+              },
+            ),
+          )
+        ],
         elevation: 0,
       ),
       body: SafeArea(
@@ -90,4 +102,41 @@ class AsobiDetailScreenView extends HookWidget {
       initialCameraPosition: initialCameraPosition,
     );
   }
+}
+
+showDeleteAsobiDialog({
+  required BuildContext context,
+  required String docId,
+}) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        content: const Body1("アソビの募集をやめますか？"),
+        actions: <Widget>[
+          ElevatedButton(
+            child: const Text('Cancel'),
+            onPressed: () => Navigator.pop(context),
+            style: ElevatedButton.styleFrom(primary: Colors.grey),
+          ),
+          ElevatedButton(
+            child: const Text('OK'),
+            onPressed: () async {
+              await deleteAsobi(docId: docId);
+              await Future(() {
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              });
+            },
+            style: ElevatedButton.styleFrom(primary: accentColor),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<void> deleteAsobi({
+  required String docId,
+}) async {
+  return FirebaseFirestore.instance.collection("asobiList").doc(docId).delete();
 }

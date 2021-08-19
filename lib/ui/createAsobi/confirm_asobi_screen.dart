@@ -57,7 +57,7 @@ class ConfirmAsobiScreen extends HookWidget {
         'position': GeoPoint(lat, lng),
         'start': Timestamp.fromDate(startTime.state),
         'end': Timestamp.fromDate(endTime.state),
-        'tag': selectedTag.state,
+        'tags': selectedTag.state,
         'createdAt': Timestamp.fromDate(createdAt),
       }).catchError((error) => print("Failed to add asobi: $error"));
     }

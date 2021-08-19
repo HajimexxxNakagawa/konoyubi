@@ -61,7 +61,7 @@ bool asobiDescriptionValidation({
   required BuildContext context,
 }) {
   final isNotDescriptionEmpty = description != "";
-  final isDescriptionLengthNotOver = description!.length <= 12;
+  final isDescriptionLengthNotOver = description!.length <= 30;
   final isDescriptionContainsSpace =
       description.contains(" ") || description.contains("　");
   final isDescriptionNotOnlySpace = isDescriptionContainsSpace
@@ -71,7 +71,7 @@ bool asobiDescriptionValidation({
     showPrimaryDialog(context: context, content: "セツメイを入力してください");
   }
   if (!isDescriptionLengthNotOver) {
-    showPrimaryDialog(context: context, content: "20文字以内で！");
+    showPrimaryDialog(context: context, content: "30文字以内で！");
   }
   return isNotDescriptionEmpty &&
       isDescriptionLengthNotOver &&
