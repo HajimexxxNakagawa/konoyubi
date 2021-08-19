@@ -8,6 +8,7 @@ import 'package:konoyubi/ui/components/loading.dart';
 import 'package:konoyubi/ui/utility/snapshot_error_handling.dart';
 import 'package:konoyubi/ui/utility/use_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends HookWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -43,6 +44,8 @@ class ProfileScreenView extends HookWidget {
   Widget build(BuildContext context) {
     final hasTwitter = user.twitter != '';
     final hasFacebook = user.facebook != '';
+    final twitterUrl = "https://twitter.com/${user.twitter}";
+    final facebookUrl = "https://facebook.com/${user.facebook}";
     final currentUser = useProvider(currentUserProvider);
     // useEffect以外の方法模索した方がいいのでは？
     // 他にcurrentUserのstateを更新するタイミングはない？
@@ -81,16 +84,30 @@ class ProfileScreenView extends HookWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              FaIcon(
-                FontAwesomeIcons.twitter,
-                size: 32,
-                color: hasTwitter ? Colors.lightBlue : Colors.grey,
+              InkWell(
+                child: FaIcon(
+                  FontAwesomeIcons.twitter,
+                  size: 32,
+                  color: hasTwitter ? Colors.lightBlue : Colors.grey,
+                ),
+                onTap: () {
+                  if (hasTwitter) {
+                    launch(twitterUrl);
+                  }
+                },
               ),
               const SizedBox(width: 32),
-              FaIcon(
-                FontAwesomeIcons.facebook,
-                size: 32,
-                color: hasFacebook ? Colors.blue : Colors.grey,
+              InkWell(
+                child: FaIcon(
+                  FontAwesomeIcons.facebook,
+                  size: 32,
+                  color: hasFacebook ? Colors.blue : Colors.grey,
+                ),
+                onTap: () {
+                  if (hasFacebook) {
+                    launch(facebookUrl);
+                  }
+                },
               ),
             ],
           ),
