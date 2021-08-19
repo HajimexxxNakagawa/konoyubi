@@ -22,7 +22,7 @@ class App extends HookWidget {
 
     return MaterialApp(
       title: 'konoyubi',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(primarySwatch: Colors.orange),
       home: isSignedIn ? const ScreenContainer() : const OnboardingScreen(),
       debugShowCheckedModeBanner: false,
       navigatorObservers: [
