@@ -69,9 +69,31 @@ class HomeScreenView extends HookWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.fromLTRB(8, 8, 0, 8),
-                child: H1('自分で募集しているアソビ'),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const H1('自分で募集しているアソビ'),
+                    InkWell(
+                      child: const Icon(
+                        Icons.add,
+                        color: accentColor,
+                        size: 32,
+                      ),
+                      onTap: () {
+                        if (!isSignedIn) {
+                          promptSignIn(context);
+                        } else {
+                          showModal(
+                            context: context,
+                            modal: const InputAsobiNameScreen(),
+                          );
+                        }
+                      },
+                    )
+                  ],
+                ),
               ),
               SizedBox(
                 width: double.infinity,
