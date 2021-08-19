@@ -3,12 +3,16 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/auth/user.dart';
 import 'package:konoyubi/data/model/asobi.dart';
+import 'package:konoyubi/ui/components/bottom_navigation.dart';
 import 'package:konoyubi/ui/components/loading.dart';
 import 'package:konoyubi/ui/components/typography.dart';
 import 'package:konoyubi/ui/createAsobi/input_name_screen.dart';
+import 'package:konoyubi/ui/theme/constants.dart';
 import 'package:konoyubi/ui/utility/snapshot_error_handling.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
 import 'package:konoyubi/ui/utility/use_firestore.dart';
+import 'asobi_carousel.dart';
+import 'chat_list.dart';
 
 class HomeScreen extends HookWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -24,97 +28,104 @@ class HomeScreen extends HookWidget {
     } else {
       final myAsobiList = toAsobi(list.data!.docs);
 
-      return HomeScreenVM(entries: myAsobiList);
+      return HomeScreenView(entries: myAsobiList);
     }
   }
 }
 
-class HomeScreenVM extends StatelessWidget {
-  const HomeScreenVM({
+class HomeScreenView extends HookWidget {
+  const HomeScreenView({
     Key? key,
     required this.entries,
   }) : super(key: key);
 
   final List<Asobi> entries;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.fromLTRB(8, 8, 0, 8),
-            child: H1('自分で募集しているアソビ'),
-          ),
-          SizedBox(
-            height: 400,
-            width: double.infinity,
-            child: CurrentlyOpeningMyAsobi(entries: entries),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class CurrentlyOpeningMyAsobi extends StatelessWidget {
-  const CurrentlyOpeningMyAsobi({
-    Key? key,
-    required this.entries,
-  }) : super(key: key);
-
-  final List<Asobi> entries;
-
-  @override
-  Widget build(BuildContext context) {
-    if (entries.isEmpty) {
-      return const AsobiEmptyCard();
-    }
-
-    return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: entries.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(entries[index].title),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class AsobiEmptyCard extends StatelessWidget {
-  const AsobiEmptyCard({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Body1('ないわ。\nアソビを作ろ'));
-  }
-}
-
-class AddButton extends HookWidget {
-  const AddButton({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final currentUser = useProvider(firebaseAuthProvider);
     final isSignedIn = currentUser.data?.value != null;
+    final bundle = ScaffoldMessenger.of(context);
+    final snackbar = SnackBar(
+      content: const Body1('Welcome back!', color: Colors.white),
+      behavior: SnackBarBehavior.floating,
+      width: 300,
+    );
 
-    return FloatingActionButton(
-      onPressed: () {
+    useEffect(() {
+      if (isSignedIn) {
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+          bundle.showSnackBar(snackbar);
+        });
+      }
+    }, [bundle]);
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const H1('自分で募集しているアソビ'),
+                    AddAsobiButton(isSignedIn: isSignedIn),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: CurrentlyOpeningMyAsobi(entries: entries),
+              ),
+              const SizedBox(height: 20),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(8, 8, 0, 8),
+                child: H1('最近のカイワ'),
+              ),
+              const SizedBox(
+                height: 300,
+                width: double.infinity,
+                child: ChatList(chatList: [1, 2, 3]),
+              ),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: const BottomNav(index: 0),
+    );
+  }
+}
+
+class AddAsobiButton extends StatelessWidget {
+  const AddAsobiButton({
+    Key? key,
+    required this.isSignedIn,
+  }) : super(key: key);
+
+  final bool isSignedIn;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      child: const Icon(
+        Icons.add,
+        color: accentColor,
+        size: 32,
+      ),
+      onTap: () {
         if (!isSignedIn) {
           promptSignIn(context);
+        } else {
+          showModal(
+            context: context,
+            modal: const InputAsobiNameScreen(),
+          );
         }
-        showModal(context: context, modal: const InputAsobiNameScreen());
       },
-      child: const Icon(Icons.add),
-      backgroundColor: Colors.black,
     );
   }
 }

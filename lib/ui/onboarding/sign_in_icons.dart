@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:konoyubi/auth/google_sign_in.dart';
 import 'package:konoyubi/auth/facebook_sign_in.dart';
@@ -13,7 +15,7 @@ class SignInIcons extends StatelessWidget {
       children: [
         ElevatedButton(
           onPressed: () async {
-            await signInWithFacebook();
+            await signInWithFacebook().then((value) => addUser(value));
             await fadeAndReplacePage(context: context);
           },
           child: const Icon(Icons.apps_outlined),
@@ -23,7 +25,7 @@ class SignInIcons extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () async {
-            await signInWithGoogle();
+            await signInWithGoogle().then((value) => addUser(value));
             await fadeAndReplacePage(context: context);
           },
           child: const Icon(Icons.g_mobiledata),
@@ -33,5 +35,17 @@ class SignInIcons extends StatelessWidget {
         )
       ],
     );
+  }
+
+  Future<void> addUser(UserCredential user) {
+    CollectionReference users =
+        FirebaseFirestore.instance.collection('userList');
+    return users.doc(user.user?.uid).set({
+      'name': user.user?.displayName ?? '',
+      'avatarURL': user.user?.photoURL,
+      'description': "",
+      'twitter': "",
+      'facebook': "",
+    });
   }
 }

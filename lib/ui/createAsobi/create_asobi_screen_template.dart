@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:konoyubi/ui/components/typography.dart';
+import 'package:konoyubi/ui/theme/constants.dart';
 
 class CreateAsobiScreenTemplate extends StatelessWidget {
   const CreateAsobiScreenTemplate({
@@ -39,6 +41,7 @@ class CreateAsobiScreenTemplate extends StatelessWidget {
           preferredSize: const Size.fromHeight(72),
         ),
       ),
+      backgroundColor: Colors.white,
       body: SafeArea(child: body),
       bottomNavigationBar: BottomNav(
         isFirst: isFirst,
@@ -80,14 +83,14 @@ class BottomNav extends StatelessWidget {
                       Icons.arrow_back_ios,
                       color: Colors.black,
                     ),
-                    label: const Text('Back'),
+                    label: const Body1('Back', color: accentColor),
                   ),
             !isLast
                 ? Row(
                     children: [
                       TextButton(
                         onPressed: onNext,
-                        child: const Text('Next'),
+                        child: const Body1('Next', color: accentColor),
                       ),
                       const Icon(
                         Icons.arrow_forward_ios,
@@ -98,6 +101,7 @@ class BottomNav extends StatelessWidget {
                 : ElevatedButton(
                     onPressed: onNext,
                     child: const Text('Publish'),
+                    style: ElevatedButton.styleFrom(primary: accentColor),
                   ),
           ],
         ),
@@ -117,7 +121,7 @@ class StepIndicator extends StatelessWidget {
     }
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         StepIndicatorItem(isColored: _isColored(0)),
         StepIndicatorItem(isColored: _isColored(1)),
@@ -139,6 +143,7 @@ class StepIndicatorItem extends StatelessWidget {
     return Container(
       width: 16,
       height: 16,
+      margin: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
         color: isColored ? Colors.black : Colors.grey,
         shape: BoxShape.circle,

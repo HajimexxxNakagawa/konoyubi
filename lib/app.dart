@@ -22,7 +22,7 @@ class App extends HookWidget {
 
     return MaterialApp(
       title: 'konoyubi',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(primarySwatch: Colors.orange),
       home: isSignedIn ? const ScreenContainer() : const OnboardingScreen(),
       debugShowCheckedModeBanner: false,
       navigatorObservers: [
@@ -44,51 +44,15 @@ class ScreenContainer extends HookWidget {
   Widget build(BuildContext context) {
     final tabType = useProvider(tabTypeProvider);
 
-    final _appBars = [
-      styledAppBar('Home'),
-      styledAppBar('アソビを探す'),
-      styledAppBar('セッテイ'),
-    ];
-
     const _views = [
       HomeScreen(),
       MapScreen(),
       UserSceen(),
     ];
 
-    const _navItems = [
-      BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'),
-      BottomNavigationBarItem(icon: Icon(Icons.map), label: 'map'),
-      BottomNavigationBarItem(icon: Icon(Icons.person), label: 'person'),
-    ];
-
-    const _actionButtons = [
-      AddButton(),
-      SizedBox(),
-      SizedBox(),
-    ];
-
-    return Scaffold(
-      appBar: _appBars[tabType.state.index],
-      body: _views[tabType.state.index],
-      floatingActionButton: _actionButtons[tabType.state.index],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: tabType.state.index,
-        onTap: (int selectIndex) {
-          tabType.state = TabType.values[selectIndex];
-        },
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        items: _navItems,
-      ),
+    return IndexedStack(
+      index: tabType.state.index,
+      children: _views,
     );
   }
-}
-
-AppBar styledAppBar(String title) {
-  return AppBar(
-    title: Text(title, style: const TextStyle(color: Colors.black)),
-    automaticallyImplyLeading: false,
-    backgroundColor: Colors.white,
-  );
 }
