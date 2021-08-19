@@ -86,18 +86,11 @@ class EditProfileScreen extends HookWidget {
       onWillPop: () async {
         final name = nameController.state?.text;
         final biography = biographyController.state!.text;
-        final isNameValid = nameValidation(
-          name: name,
-          context: context,
-        );
-        final isBiographyValid = biographyValidation(
-          biography: biography,
-          context: context,
-        );
+        final isNameValid = nameValidation(name: name, context: context);
+        final isBiographyValid =
+            biographyValidation(biography: biography, context: context);
 
-        final valid = isNameValid && isBiographyValid;
-
-        return valid;
+        return isNameValid && isBiographyValid;
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -145,8 +138,10 @@ class EditProfileScreen extends HookWidget {
                           Align(
                             alignment: const Alignment(0.32, 1),
                             child: ElevatedButton(
-                              child: const Icon(Icons.camera_alt,
-                                  color: bodyColor),
+                              child: const Icon(
+                                Icons.camera_alt,
+                                color: bodyColor,
+                              ),
                               onPressed: () {
                                 uploadImage(
                                   "profileImage",

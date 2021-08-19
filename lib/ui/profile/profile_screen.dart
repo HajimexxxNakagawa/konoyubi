@@ -84,30 +84,14 @@ class ProfileScreenView extends HookWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              InkWell(
-                child: FaIcon(
-                  FontAwesomeIcons.twitter,
-                  size: 32,
-                  color: hasTwitter ? Colors.lightBlue : Colors.grey,
-                ),
-                onTap: () {
-                  if (hasTwitter) {
-                    launch(twitterUrl);
-                  }
-                },
+              TwitterButton(
+                hasTwitter: hasTwitter,
+                twitterUrl: twitterUrl,
               ),
               const SizedBox(width: 32),
-              InkWell(
-                child: FaIcon(
-                  FontAwesomeIcons.facebook,
-                  size: 32,
-                  color: hasFacebook ? Colors.blue : Colors.grey,
-                ),
-                onTap: () {
-                  if (hasFacebook) {
-                    launch(facebookUrl);
-                  }
-                },
+              FacebookButton(
+                hasFacebook: hasFacebook,
+                facebookUrl: facebookUrl,
               ),
             ],
           ),
@@ -131,6 +115,60 @@ class ProfileScreenView extends HookWidget {
           const Spacer(flex: 3),
         ],
       ),
+    );
+  }
+}
+
+class FacebookButton extends StatelessWidget {
+  const FacebookButton({
+    Key? key,
+    required this.hasFacebook,
+    required this.facebookUrl,
+  }) : super(key: key);
+
+  final bool hasFacebook;
+  final String facebookUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      child: FaIcon(
+        FontAwesomeIcons.facebook,
+        size: 32,
+        color: hasFacebook ? Colors.blue : Colors.grey,
+      ),
+      onTap: () {
+        if (hasFacebook) {
+          launch(facebookUrl);
+        }
+      },
+    );
+  }
+}
+
+class TwitterButton extends StatelessWidget {
+  const TwitterButton({
+    Key? key,
+    required this.hasTwitter,
+    required this.twitterUrl,
+  }) : super(key: key);
+
+  final bool hasTwitter;
+  final String twitterUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      child: FaIcon(
+        FontAwesomeIcons.twitter,
+        size: 32,
+        color: hasTwitter ? Colors.lightBlue : Colors.grey,
+      ),
+      onTap: () {
+        if (hasTwitter) {
+          launch(twitterUrl);
+        }
+      },
     );
   }
 }

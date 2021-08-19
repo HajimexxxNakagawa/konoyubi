@@ -16,7 +16,7 @@ AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>?> useMyActiveAsobiList() {
       .collection('asobiList')
       .where('end', isGreaterThanOrEqualTo: now)
       .snapshots;
-  // TODO: アソビの募集締め切りを設定し、フィルターをかける
+
   final snapshot = useMemoized(myActiveAsobiStream);
   final myActiveAsobiList = useStream(snapshot);
 
