@@ -15,6 +15,8 @@ import 'package:konoyubi/ui/theme/constants.dart';
 
 import 'input_name_screen.dart';
 
+final absorbStateProvider = StateProvider((ref) => false);
+
 class ConfirmAsobiScreen extends HookWidget {
   const ConfirmAsobiScreen({Key? key}) : super(key: key);
 
@@ -29,6 +31,7 @@ class ConfirmAsobiScreen extends HookWidget {
     final endTime = useProvider(endTimeProvider);
     final currentUser = useProvider(firebaseAuthProvider);
     final userId = currentUser.data?.value?.uid;
+    final isAbsorbing = useProvider(absorbStateProvider);
 
     CollectionReference asobiList =
         FirebaseFirestore.instance.collection('asobiList');
@@ -41,6 +44,7 @@ class ConfirmAsobiScreen extends HookWidget {
       cameraPosition.state = const CameraPosition(target: shibuya, zoom: 15);
       startTime.state = initialDateTime;
       endTime.state = initialDateTime;
+      isAbsorbing.state = false;
 
       Navigator.of(context).popUntil((route) => route.isFirst);
     }
@@ -79,23 +83,29 @@ class ConfirmAsobiScreen extends HookWidget {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return AlertDialog(
-              content: const Body1("アソビを募集しますか？"),
-              actions: <Widget>[
-                ElevatedButton(
-                  child: const Text('Cancel'),
-                  onPressed: () => Navigator.pop(context),
-                  style: ElevatedButton.styleFrom(primary: Colors.grey),
-                ),
-                ElevatedButton(
-                  child: const Text('OK'),
-                  onPressed: () async {
-                    await addAsobiToFirestore();
-                    await _initialize(context);
-                  },
-                  style: ElevatedButton.styleFrom(primary: accentColor),
-                ),
-              ],
+            return AbsorbPointer(
+              absorbing: isAbsorbing.state,
+              child: AlertDialog(
+                content: const Body1("アソビを募集しますか？"),
+                actions: <Widget>[
+                  ElevatedButton(
+                    child: const Text('Cancel'),
+                    onPressed: () => Navigator.pop(context),
+                    style: ElevatedButton.styleFrom(primary: Colors.grey),
+                  ),
+                  ElevatedButton(
+                    child: const Text('OK'),
+                    onPressed: () async {
+                      if (!isAbsorbing.state) {
+                        isAbsorbing.state = true;
+                        await addAsobiToFirestore();
+                        await _initialize(context);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(primary: accentColor),
+                  ),
+                ],
+              ),
             );
           },
         );
