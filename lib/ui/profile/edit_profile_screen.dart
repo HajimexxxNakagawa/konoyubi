@@ -8,9 +8,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/auth/user.dart';
 import 'package:konoyubi/data/model/user.dart';
 import 'package:konoyubi/ui/components/typography.dart';
+import 'package:konoyubi/ui/profile/validation.dart';
 import 'package:konoyubi/ui/theme/constants.dart';
 import 'package:konoyubi/ui/theme/height_width.dart';
-import 'package:konoyubi/ui/utility/primary_dialog.dart';
 import 'package:konoyubi/ui/utility/upload_image.dart';
 
 final nameControllerProvider =
@@ -45,7 +45,6 @@ class EditProfileScreen extends HookWidget {
       CollectionReference userList =
           FirebaseFirestore.instance.collection('userList');
 
-      // TODO: name以外のプロパティもやる
       return userList.doc(auth.data?.value?.uid).update(
         {
           'name': nameController.state?.text,
@@ -57,9 +56,8 @@ class EditProfileScreen extends HookWidget {
       );
     }
 
-    updateCurrentUserState() {
+    Future<void> updateCurrentUserState() async {
       final newName = nameController.state!.text;
-      // TODO: name以外のプロパティもやる
       currentUser.state = User(
         name: newName,
         avatarURL: avatarURLController.state,
@@ -80,54 +78,24 @@ class EditProfileScreen extends HookWidget {
 
       return () async {
         await updateUser();
-        updateCurrentUserState();
-        print("Update FireStore");
+        await updateCurrentUserState();
       };
     }, const []);
 
     return WillPopScope(
       onWillPop: () async {
         final name = nameController.state?.text;
-        final twitter = twitterController.state!.text;
-        final facebook = facebookController.state!.text;
-        final description = biographyController.state!.text;
-        final isNameValid = textValidation(
+        final biography = biographyController.state!.text;
+        final isNameValid = nameValidation(
+          name: name,
           context: context,
-          text: name,
-          content: "名前を入力してね！\n",
-          maxLength: 12,
-          textType: "name",
         );
-        final isTwitterValid = textValidation(
+        final isBiographyValid = biographyValidation(
+          biography: biography,
           context: context,
-          text: twitter,
-          content: "Twitterのユーザー名を入力してね！\n",
-          maxLength: 15,
-          textType: "twitter",
-        );
-        final isFacebookValid = textValidation(
-          context: context,
-          text: facebook,
-          content: "Facebookのユーザー名を入力してね！\n",
-          maxLength: 15,
-          textType: "facebook",
-        );
-        final isDescriptionValid = textValidation(
-          context: context,
-          text: description,
-          content: "自己紹介を入力してね！\n",
-          maxLength: 200,
-          textType: "description",
         );
 
-        final valid = isNameValid &&
-            isDescriptionValid &&
-            isTwitterValid &&
-            isFacebookValid;
-
-        if (!valid) {
-          showPrimaryDialog(context: context, content: errorText);
-        }
+        final valid = isNameValid && isBiographyValid;
 
         return valid;
       },
@@ -208,7 +176,7 @@ class EditProfileScreen extends HookWidget {
                       ),
                       const SizedBox(height: 12),
                       ProfileField(
-                        hintText: "@abcde",
+                        hintText: "@はいらないよ！",
                         controller: twitterController.state,
                         icon: const FaIcon(
                           FontAwesomeIcons.twitter,
@@ -218,7 +186,7 @@ class EditProfileScreen extends HookWidget {
                       ),
                       const SizedBox(height: 12),
                       ProfileField(
-                        hintText: "abcde",
+                        hintText: "ユーザーネーム",
                         controller: facebookController.state,
                         icon: const FaIcon(
                           FontAwesomeIcons.facebook,
@@ -292,59 +260,4 @@ class ProfileField extends StatelessWidget {
       cursorColor: bodyColor,
     );
   }
-}
-
-bool textValidation({
-  required String? text,
-  required BuildContext context,
-  required String content,
-  required int maxLength,
-  required String textType,
-}) {
-  const textTypeList = {
-    'name': 1,
-    'twitter': 2,
-    'facebook': 3,
-    'description': 4,
-  };
-  final textTypeNumber = textTypeList[textType];
-  final isNotTextEmpty = text != "";
-  final isTextLengthNotOver = text!.length <= maxLength;
-  final isTextContainsSpace = text.contains(" ") || text.contains("　");
-  final isTextNotOnlySpace = isTextContainsSpace
-      ? isTextContainsSpace && text.trim().isNotEmpty
-      : true;
-  bool isTwitterTextCorrect = true;
-  bool isFacebookTextCorrect = true;
-
-  bool valid = isNotTextEmpty && isTextLengthNotOver && isTextNotOnlySpace;
-
-  switch (textTypeNumber) {
-    case 2:
-      final isTwitterLengthNotShort = text.length >= 5;
-      final isTwitterCorrect = RegExp(r"/^@[a-zA-Z0-9_]+?").hasMatch(text);
-      isTwitterTextCorrect = isTwitterLengthNotShort && isTwitterCorrect;
-      valid = valid && isTwitterLengthNotShort && isTwitterCorrect;
-      break;
-    case 3:
-      final isFacebookLengthNotShort = text.length >= 5;
-      final isFacebookCorrect = RegExp(r"/^[a-zA-Z0-9.]+?").hasMatch(text);
-      isFacebookTextCorrect = isFacebookLengthNotShort && isFacebookCorrect;
-      valid = valid && isFacebookTextCorrect;
-      break;
-  }
-
-  if (!isNotTextEmpty) {
-    errorText += content;
-  } else if (!isTextLengthNotOver) {
-    errorText += "$maxLength文字以下にしてね！\n";
-  } else if (!isTextNotOnlySpace) {
-    errorText += "スペースだけはダメだよ！\n";
-  } else if (!isTwitterTextCorrect) {
-    errorText += "適切なTwitterユーザー名にしてね！\n";
-  } else if (!isFacebookTextCorrect) {
-    errorText += "適切なFacebookユーザー名にしてね！";
-  }
-
-  return valid;
 }
