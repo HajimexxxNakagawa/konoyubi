@@ -21,7 +21,7 @@ class AsobiCarousel extends HookWidget {
       children: [
         CarouselSlider(
           options: CarouselOptions(
-            autoPlay: true,
+            autoPlay: asobiList.length != 1,
             viewportFraction: 1,
             onPageChanged: (index, reason) {
               _current.value = index;
