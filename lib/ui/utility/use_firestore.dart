@@ -25,9 +25,13 @@ AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>?> useMyActiveAsobiList() {
 
 /// 募集締め切りを過ぎていないアソビのリストを取得する
 AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>?> useActiveAsobiList() {
-  final activeAsobiStream =
-      FirebaseFirestore.instance.collection('asobiList').snapshots;
-  // TODO: アソビの募集締め切りを設定し、フィルターをかける
+  final now = Timestamp.now();
+
+  final activeAsobiStream = FirebaseFirestore.instance
+      .collection('asobiList')
+      .where('end', isGreaterThanOrEqualTo: now)
+      .snapshots;
+
   final snapshot = useMemoized(activeAsobiStream);
   final activeAsobiList = useStream(snapshot);
 
