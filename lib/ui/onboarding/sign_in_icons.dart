@@ -41,11 +41,11 @@ class SignInIcons extends StatelessWidget {
     CollectionReference users =
         FirebaseFirestore.instance.collection('userList');
     return users.doc(user.user?.uid).set({
-      'name': user.user?.displayName ?? '', 
-      'avatarURL': user.user?.photoURL, 
+      'name': user.user?.displayName ?? '',
+      'avatarURL': user.user?.photoURL,
       'description': "",
       'twitter': "",
-      'facebook': "", 
-    }).catchError((error) => print("Failed to add user: $error"));
+      'facebook': "",
+    });
   }
 }

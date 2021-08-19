@@ -92,7 +92,7 @@ class Body extends StatelessWidget {
               onPressed: () {
                 dateTimePicker(context: context, timeState: start);
               },
-              child: Text("集合時間を決める")),
+              child: const Text("集合時間を決める")),
           Text(start.state == initialDateTime
               ? "未定"
               : start.state.toString().substring(0, 16)),
@@ -100,7 +100,7 @@ class Body extends StatelessWidget {
               onPressed: () {
                 dateTimePicker(context: context, timeState: end);
               },
-              child: Text("終了時間を決める")),
+              child: const Text("終了時間を決める")),
           Text(end.state == initialDateTime
               ? "未定"
               : end.state.toString().substring(0, 16)),

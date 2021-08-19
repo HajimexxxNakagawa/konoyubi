@@ -37,7 +37,7 @@ class AsobiDetailScreen extends HookWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: InkWell(
-              child: Icon(Icons.delete),
+              child: const Icon(Icons.delete),
               onTap: () {
                 showDeleteAsobiDialog(context: context, docId: asobi.id);
               },

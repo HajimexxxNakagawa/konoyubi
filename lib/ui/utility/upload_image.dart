@@ -75,9 +75,6 @@ Future<void> uploadImage(
       );
     },
   ).then((value) async {
-    print("画像選択");
-    print(value);
-
     switch (value) {
       case 0:
         return await const ImageUpload(ImageSource.camera).getImageFromDevice();
@@ -88,13 +85,9 @@ Future<void> uploadImage(
         break;
     }
   }).then((value) async {
-    print("storeにアップロード");
     if (value == null) {
-      print('nullだよん');
-
       return null;
     } else {
-      print('成功');
       return await FirebaseStorage.instance
           .ref()
           .child('user')
@@ -103,18 +96,12 @@ Future<void> uploadImage(
           .putFile(value);
     }
   }).then((value) async {
-    print("URLを取得");
-    print(value);
-    print(await value?.ref.getDownloadURL());
-
     await FirebaseFirestore.instance
         .collection('userList')
         .doc(uid)
         .update({"avatarURL": await value?.ref.getDownloadURL()});
     return value?.ref.getDownloadURL();
   }).then((value) {
-    print("更新");
-    print(value);
     if (value != null) {
       avatarURLController.state = value;
     }

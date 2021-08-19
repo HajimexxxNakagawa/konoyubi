@@ -102,7 +102,6 @@ Future<void> getLocation() async {
   Position position = await Geolocator.getCurrentPosition(
     desiredAccuracy: LocationAccuracy.high,
   );
-  print('position:$position');
   final user = useProvider(userLocationProvider);
   user.state = LatLng(position.latitude, position.longitude);
 }
