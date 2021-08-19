@@ -33,7 +33,12 @@ class ConfirmAsobiScreen extends HookWidget {
     final userId = currentUser.data?.value?.uid;
     final isAbsorbing = useProvider(absorbStateProvider);
 
-    CollectionReference asobiList =
+    CollectionReference userAsobiList = FirebaseFirestore.instance
+        .collection('userList')
+        .doc(userId)
+        .collection('asobiList');
+
+    CollectionReference generalAsobiList =
         FirebaseFirestore.instance.collection('asobiList');
 
     Future<void> _initialize(BuildContext context) async {
@@ -49,12 +54,11 @@ class ConfirmAsobiScreen extends HookWidget {
       Navigator.of(context).popUntil((route) => route.isFirst);
     }
 
-    // mock
-    Future<void> addAsobiToFirestore() {
+    Future<void> addAsobiToFirestore() async {
       final lat = marker.state.first.position.latitude;
       final lng = marker.state.first.position.longitude;
       final createdAt = DateTime.now();
-      return asobiList.add({
+      final newAsobi = {
         'title': asobiName.state!.text,
         'owner': userId,
         'description': asobiDescription.state!.text,
@@ -63,7 +67,10 @@ class ConfirmAsobiScreen extends HookWidget {
         'end': Timestamp.fromDate(endTime.state),
         'tags': selectedTag.state,
         'createdAt': Timestamp.fromDate(createdAt),
-      }).catchError((error) => print("Failed to add asobi: $error"));
+      };
+
+      generalAsobiList.add(newAsobi);
+      userAsobiList.add(newAsobi);
     }
 
     return CreateAsobiScreenTemplate(

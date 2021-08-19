@@ -16,6 +16,9 @@ class AsobiCarousel extends HookWidget {
     final _current = useState(0);
     final width = useWidth();
 
+    // アソビ開始時間でソート
+    asobiList.sort((a, b) => a.start.compareTo(b.start));
+
     return Column(
       children: [
         CarouselSlider(

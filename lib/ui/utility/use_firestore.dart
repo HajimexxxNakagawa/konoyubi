@@ -9,9 +9,12 @@ import 'package:konoyubi/auth/user.dart';
 AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>?> useMyActiveAsobiList() {
   final currentUser = useProvider(firebaseAuthProvider);
   final userId = currentUser.data?.value?.uid;
+  final now = Timestamp.now();
   final myActiveAsobiStream = FirebaseFirestore.instance
+      .collection('userList')
+      .doc(userId)
       .collection('asobiList')
-      .where('owner', isEqualTo: userId ?? '')
+      .where('end', isGreaterThanOrEqualTo: now)
       .snapshots;
   // TODO: アソビの募集締め切りを設定し、フィルターをかける
   final snapshot = useMemoized(myActiveAsobiStream);
