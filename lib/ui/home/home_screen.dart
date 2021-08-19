@@ -8,11 +8,9 @@ import 'package:konoyubi/ui/components/loading.dart';
 import 'package:konoyubi/ui/components/typography.dart';
 import 'package:konoyubi/ui/createAsobi/input_name_screen.dart';
 import 'package:konoyubi/ui/theme/constants.dart';
-import 'package:konoyubi/ui/theme/height_width.dart';
 import 'package:konoyubi/ui/utility/snapshot_error_handling.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
 import 'package:konoyubi/ui/utility/use_firestore.dart';
-
 import 'asobi_carousel.dart';
 import 'chat_list.dart';
 
@@ -75,23 +73,7 @@ class HomeScreenView extends HookWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const H1('自分で募集しているアソビ'),
-                    InkWell(
-                      child: const Icon(
-                        Icons.add,
-                        color: accentColor,
-                        size: 32,
-                      ),
-                      onTap: () {
-                        if (!isSignedIn) {
-                          promptSignIn(context);
-                        } else {
-                          showModal(
-                            context: context,
-                            modal: const InputAsobiNameScreen(),
-                          );
-                        }
-                      },
-                    )
+                    AddAsobiButton(isSignedIn: isSignedIn),
                   ],
                 ),
               ),
@@ -118,67 +100,32 @@ class HomeScreenView extends HookWidget {
   }
 }
 
-
-class CurrentlyOpeningMyAsobi extends StatelessWidget {
-  const CurrentlyOpeningMyAsobi({
+class AddAsobiButton extends StatelessWidget {
+  const AddAsobiButton({
     Key? key,
-    required this.entries,
+    required this.isSignedIn,
   }) : super(key: key);
 
-  final List<Asobi> entries;
+  final bool isSignedIn;
 
   @override
   Widget build(BuildContext context) {
-    if (entries.isEmpty) {
-      return const AsobiEmptyCard();
-    }
-
-    return AsobiCarousel(asobiList: entries);
-  }
-}
-
-class AsobiEmptyCard extends HookWidget {
-  const AsobiEmptyCard({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final currentUser = useProvider(firebaseAuthProvider);
-    final isSignedIn = currentUser.data?.value != null;
-    final width = useWidth();
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+    return InkWell(
+      child: const Icon(
+        Icons.add,
+        color: accentColor,
+        size: 32,
       ),
-      child: Container(
-        decoration: const BoxDecoration(
-          color: bodyColor,
-          borderRadius: BorderRadius.all(
-            Radius.circular(20),
-          ),
-        ),
-        height: width / 2,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Body1('募集しているアソビが無いよ！', color: Colors.white),
-            ActionText(
-              'アソビを作ろう！',
-              onPressed: () {
-                if (!isSignedIn) {
-                  promptSignIn(context);
-                } else {
-                  showModal(
-                    context: context,
-                    modal: const InputAsobiNameScreen(),
-                  );
-                }
-              },
-            )
-          ],
-        ),
-      ),
+      onTap: () {
+        if (!isSignedIn) {
+          promptSignIn(context);
+        } else {
+          showModal(
+            context: context,
+            modal: const InputAsobiNameScreen(),
+          );
+        }
+      },
     );
   }
 }
