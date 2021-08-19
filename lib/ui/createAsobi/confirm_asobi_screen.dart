@@ -4,13 +4,13 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/auth/user.dart';
+import 'package:konoyubi/ui/components/asobi_description_card.dart';
 import 'package:konoyubi/ui/components/typography.dart';
 import 'package:konoyubi/ui/createAsobi/create_asobi_screen_template.dart';
 import 'package:konoyubi/ui/createAsobi/input_description_screen.dart';
 import 'package:konoyubi/ui/createAsobi/select_datetime_screen.dart';
 import 'package:konoyubi/ui/createAsobi/select_position_screen.dart';
 import 'package:konoyubi/ui/createAsobi/select_tag_screen.dart';
-import 'package:konoyubi/ui/map/show_asobi_description.dart';
 import 'package:konoyubi/ui/theme/constants.dart';
 
 import 'input_name_screen.dart';
@@ -143,15 +143,20 @@ class Body extends HookWidget {
 
     _onMapCreated(GoogleMapController controller) {
       _mapController.value = controller;
-      showAsobiDescription(context: context, description: description);
     }
 
-    return GoogleMap(
-      onMapCreated: _onMapCreated,
-      markers: marker,
-      mapType: MapType.normal,
-      initialCameraPosition: cameraPosition,
-      myLocationButtonEnabled: false,
-    );
+    return Stack(children: [
+      GoogleMap(
+        onMapCreated: _onMapCreated,
+        markers: marker,
+        mapType: MapType.normal,
+        initialCameraPosition: cameraPosition,
+        myLocationButtonEnabled: false,
+      ),
+      Align(
+        alignment: Alignment.bottomCenter,
+        child: AsobiDescriptionCard(description: description, canPop: false),
+      )
+    ]);
   }
 }

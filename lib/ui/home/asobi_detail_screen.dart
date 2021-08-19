@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:konoyubi/data/model/asobi.dart';
+import 'package:konoyubi/ui/components/asobi_description_card.dart';
 import 'package:konoyubi/ui/components/typography.dart';
 import 'package:konoyubi/ui/createAsobi/input_name_screen.dart';
-import 'package:konoyubi/ui/map/show_asobi_description.dart';
 import 'package:konoyubi/ui/theme/constants.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
 
@@ -92,16 +92,21 @@ class AsobiDetailScreenView extends HookWidget {
 
     _onMapCreated(GoogleMapController controller) {
       _mapController.value = controller;
-      showAsobiDescription(context: context, description: description);
     }
 
-    return GoogleMap(
-      onMapCreated: _onMapCreated,
-      markers: marker,
-      mapType: MapType.normal,
-      initialCameraPosition: initialCameraPosition,
-      myLocationButtonEnabled: false,
-    );
+    return Stack(children: [
+      GoogleMap(
+        onMapCreated: _onMapCreated,
+        markers: marker,
+        mapType: MapType.normal,
+        initialCameraPosition: initialCameraPosition,
+        myLocationButtonEnabled: false,
+      ),
+      Align(
+        alignment: Alignment.bottomCenter,
+        child: AsobiDescriptionCard(description: description, canPop: false),
+      )
+    ]);
   }
 }
 
