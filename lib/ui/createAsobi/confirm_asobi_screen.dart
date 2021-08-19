@@ -12,14 +12,11 @@ import 'package:konoyubi/ui/map/show_asobi_description.dart';
 
 import 'input_name_screen.dart';
 
-final absorbStateProvider = StateProvider((ref) => false);
-
 class ConfirmAsobiScreen extends HookWidget {
   const ConfirmAsobiScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final isAbsorb = useProvider(absorbStateProvider);
     final asobiName = useProvider(asobiNameControllerProvider);
     final asobiDescription = useProvider(asobiDescriptionControllerProvider);
     final marker = useProvider(asobiMarkerProvider);
@@ -50,25 +47,22 @@ class ConfirmAsobiScreen extends HookWidget {
       }).catchError((error) => print("Failed to add asobi: $error"));
     }
 
-    return AbsorbPointer(
-      absorbing: isAbsorb.state,
-      child: CreateAsobiScreenTemplate(
-        title: 'カクニンする',
-        body: Body(
-          name: asobiName.state!.text,
-          description: asobiDescription.state!.text,
-          marker: marker.state,
-          cameraPosition: cameraPosition.state,
-          tags: selectedTag.state,
-        ),
-        index: 5,
-        onBack: () {
-          Navigator.pop(context);
-        },
-        onNext: () {
-          _initialize(context);
-        },
+    return CreateAsobiScreenTemplate(
+      title: 'カクニンする',
+      body: Body(
+        name: asobiName.state!.text,
+        description: asobiDescription.state!.text,
+        marker: marker.state,
+        cameraPosition: cameraPosition.state,
+        tags: selectedTag.state,
       ),
+      index: 5,
+      onBack: () {
+        Navigator.pop(context);
+      },
+      onNext: () {
+        _initialize(context);
+      },
     );
   }
 }

@@ -8,10 +8,7 @@ import 'package:konoyubi/ui/utility/primary_dialog.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
 import 'confirm_asobi_screen.dart';
 
-final absorbStateProvider = StateProvider((ref) => false);
 final selectedTagProvider = StateProvider<List<String>>((ref) => []);
-final asobiTagProvider = StateProvider((ref) => '');
-enum AsobiTag { karaoke, shopping, sports, talk, cafe, meal }
 const List<String> asobiTagList = [
   'カラオケ',
   'カイモノ',
@@ -25,31 +22,27 @@ class SelectAsobiTagScreen extends HookWidget {
   const SelectAsobiTagScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final isAbsorb = useProvider(absorbStateProvider);
     final selectedTag = useProvider(selectedTagProvider);
 
-    return AbsorbPointer(
-      absorbing: isAbsorb.state,
-      child: CreateAsobiScreenTemplate(
-        title: 'タグを付ける',
-        body: const Body(),
-        index: 4,
-        onBack: () {
-          Navigator.pop(context);
-        },
-        onNext: () {
-          final isValid = asobiTagValidation(
+    return CreateAsobiScreenTemplate(
+      title: 'タグを付ける',
+      body: const Body(),
+      index: 4,
+      onBack: () {
+        Navigator.pop(context);
+      },
+      onNext: () {
+        final isValid = asobiTagValidation(
+          context: context,
+          selectedTag: selectedTag.state,
+        );
+        if (isValid) {
+          pageTransition(
             context: context,
-            selectedTag: selectedTag.state,
+            to: const ConfirmAsobiScreen(),
           );
-          if (isValid) {
-            pageTransition(
-              context: context,
-              to: const ConfirmAsobiScreen(),
-            );
-          }
-        },
-      ),
+        }
+      },
     );
   }
 }

@@ -8,7 +8,6 @@ import 'package:konoyubi/ui/utility/transition.dart';
 import 'select_datetime_screen.dart';
 
 const shibuya = LatLng(35.659825668409056, 139.6987449178721);
-final absorbStateProvider = StateProvider((ref) => false);
 const initialMarker = Marker(markerId: MarkerId('unique'));
 final asobiMarkerProvider =
     StateProvider<Set<Marker>>((ref) => {initialMarker});
@@ -19,31 +18,27 @@ class SelectAsobiPositionScreen extends HookWidget {
   const SelectAsobiPositionScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final isAbsorb = useProvider(absorbStateProvider);
     final marker = useProvider(asobiMarkerProvider);
 
-    return AbsorbPointer(
-      absorbing: isAbsorb.state,
-      child: CreateAsobiScreenTemplate(
-        title: 'バショを決める',
-        body: const Body(),
-        index: 2,
-        onBack: () {
-          Navigator.pop(context);
-        },
-        onNext: () {
-          final isValid = asobiPositionValidation(
+    return CreateAsobiScreenTemplate(
+      title: 'バショを決める',
+      body: const Body(),
+      index: 2,
+      onBack: () {
+        Navigator.pop(context);
+      },
+      onNext: () {
+        final isValid = asobiPositionValidation(
+          context: context,
+          marker: marker.state.first,
+        );
+        if (isValid) {
+          pageTransition(
             context: context,
-            marker: marker.state.first,
+            to: const SelectAsobiDatetimeScreen(),
           );
-          if (isValid) {
-            pageTransition(
-              context: context,
-              to: const SelectAsobiDatetimeScreen(),
-            );
-          }
-        },
-      ),
+        }
+      },
     );
   }
 }

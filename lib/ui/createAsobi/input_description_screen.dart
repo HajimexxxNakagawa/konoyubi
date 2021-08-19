@@ -6,7 +6,6 @@ import 'package:konoyubi/ui/utility/primary_dialog.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
 import 'select_position_screen.dart';
 
-final absorbStateProvider = StateProvider((ref) => false);
 final asobiDescriptionControllerProvider =
     StateProvider<TextEditingController?>((ref) => TextEditingController());
 
@@ -14,31 +13,27 @@ class InputAsobiDescriptionScreen extends HookWidget {
   const InputAsobiDescriptionScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final isAbsorb = useProvider(absorbStateProvider);
     final asobiDescriptionController =
         useProvider(asobiDescriptionControllerProvider);
-    return AbsorbPointer(
-      absorbing: isAbsorb.state,
-      child: CreateAsobiScreenTemplate(
-        title: 'セツメイを書く',
-        body: Body(
-          controller: asobiDescriptionController.state!,
-        ),
-        index: 1,
-        onBack: () {
-          Navigator.pop(context);
-        },
-        onNext: () {
-          if (asobiDescriptionValidation(
-              description: asobiDescriptionController.state!.text,
-              context: context)) {
-            pageTransition(
-              context: context,
-              to: const SelectAsobiPositionScreen(),
-            );
-          }
-        },
+    return CreateAsobiScreenTemplate(
+      title: 'セツメイを書く',
+      body: Body(
+        controller: asobiDescriptionController.state!,
       ),
+      index: 1,
+      onBack: () {
+        Navigator.pop(context);
+      },
+      onNext: () {
+        if (asobiDescriptionValidation(
+            description: asobiDescriptionController.state!.text,
+            context: context)) {
+          pageTransition(
+            context: context,
+            to: const SelectAsobiPositionScreen(),
+          );
+        }
+      },
     );
   }
 }
