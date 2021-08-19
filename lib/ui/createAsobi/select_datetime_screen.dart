@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/ui/createAsobi/create_asobi_screen_template.dart';
+import 'package:konoyubi/ui/utility/primary_dialog.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
 import 'select_tag_screen.dart';
 
-final initialDatetime =
+final initialDateTime =
     DateTime(2021, DateTime.now().month, DateTime.now().day, 4, 00);
-final startTimeProvider = StateProvider((ref) => initialDatetime);
-final endTimeProvider = StateProvider((ref) => initialDatetime);
+final startTimeProvider = StateProvider((ref) => initialDateTime);
+final endTimeProvider = StateProvider((ref) => initialDateTime);
 
 class SelectAsobiDatetimeScreen extends HookWidget {
   const SelectAsobiDatetimeScreen({Key? key}) : super(key: key);
@@ -28,10 +29,18 @@ class SelectAsobiDatetimeScreen extends HookWidget {
         Navigator.pop(context);
       },
       onNext: () {
-        pageTransition(
+        final isValid = timeValidation(
           context: context,
-          to: const SelectAsobiTagScreen(),
+          start: startTime.state,
+          end: endTime.state,
         );
+
+        if (isValid) {
+          pageTransition(
+            context: context,
+            to: const SelectAsobiTagScreen(),
+          );
+        }
       },
     );
   }
@@ -84,15 +93,39 @@ class Body extends StatelessWidget {
                 dateTimePicker(context: context, timeState: start);
               },
               child: Text("集合時間を決める")),
-          Text(start.state.toString()),
+          Text(start.state == initialDateTime
+              ? "未定"
+              : start.state.toString().substring(0, 16)),
           ElevatedButton(
               onPressed: () {
                 dateTimePicker(context: context, timeState: end);
               },
               child: Text("終了時間を決める")),
-          Text(end.state.toString()),
+          Text(end.state == initialDateTime
+              ? "未定"
+              : end.state.toString().substring(0, 16)),
         ],
       ),
     );
   }
+}
+
+bool timeValidation({
+  required BuildContext context,
+  required DateTime start,
+  required DateTime end,
+}) {
+  final isStartSpecified = start != initialDateTime;
+  final isEndSpecified = end != initialDateTime;
+  final isStartBeforeEnd = start.isBefore(end);
+
+  if (!isStartSpecified) {
+    showPrimaryDialog(context: context, content: "集合時間を入力してね！");
+  } else if (!isEndSpecified) {
+    showPrimaryDialog(context: context, content: "終了時間を入力してね！");
+  } else if (!isStartBeforeEnd) {
+    showPrimaryDialog(context: context, content: "終了時間は集合時間より後にしてね！");
+  }
+
+  return isStartSpecified && isEndSpecified && isStartBeforeEnd;
 }

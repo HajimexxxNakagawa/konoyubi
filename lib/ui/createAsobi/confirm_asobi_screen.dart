@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/auth/user.dart';
 import 'package:konoyubi/ui/createAsobi/create_asobi_screen_template.dart';
 import 'package:konoyubi/ui/createAsobi/input_description_screen.dart';
+import 'package:konoyubi/ui/createAsobi/select_datetime_screen.dart';
 import 'package:konoyubi/ui/createAsobi/select_position_screen.dart';
 import 'package:konoyubi/ui/createAsobi/select_tag_screen.dart';
 import 'package:konoyubi/ui/map/show_asobi_description.dart';
@@ -22,9 +23,11 @@ class ConfirmAsobiScreen extends HookWidget {
     final marker = useProvider(asobiMarkerProvider);
     final selectedTag = useProvider(selectedTagProvider);
     final cameraPosition = useProvider(cameraPositionProvider);
-
+    final startTime = useProvider(startTimeProvider);
+    final endTime = useProvider(endTimeProvider);
     final currentUser = useProvider(firebaseAuthProvider);
     final userId = currentUser.data?.value?.uid;
+
     CollectionReference asobiList =
         FirebaseFirestore.instance.collection('asobiList');
 
@@ -34,6 +37,8 @@ class ConfirmAsobiScreen extends HookWidget {
       marker.state = {initialMarker};
       selectedTag.state = [];
       cameraPosition.state = const CameraPosition(target: shibuya, zoom: 15);
+      startTime.state = initialDateTime;
+      endTime.state = initialDateTime;
       Navigator.of(context).popUntil((route) => route.isFirst);
     }
 
