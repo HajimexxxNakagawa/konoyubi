@@ -4,12 +4,14 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/auth/user.dart';
+import 'package:konoyubi/ui/components/typography.dart';
 import 'package:konoyubi/ui/createAsobi/create_asobi_screen_template.dart';
 import 'package:konoyubi/ui/createAsobi/input_description_screen.dart';
 import 'package:konoyubi/ui/createAsobi/select_datetime_screen.dart';
 import 'package:konoyubi/ui/createAsobi/select_position_screen.dart';
 import 'package:konoyubi/ui/createAsobi/select_tag_screen.dart';
 import 'package:konoyubi/ui/map/show_asobi_description.dart';
+import 'package:konoyubi/ui/theme/constants.dart';
 
 import 'input_name_screen.dart';
 
@@ -31,7 +33,7 @@ class ConfirmAsobiScreen extends HookWidget {
     CollectionReference asobiList =
         FirebaseFirestore.instance.collection('asobiList');
 
-    void _initialize(BuildContext context) {
+    Future<void> _initialize(BuildContext context) async {
       asobiName.state!.text = "";
       asobiDescription.state!.text = "";
       marker.state = {initialMarker};
@@ -39,16 +41,24 @@ class ConfirmAsobiScreen extends HookWidget {
       cameraPosition.state = const CameraPosition(target: shibuya, zoom: 15);
       startTime.state = initialDateTime;
       endTime.state = initialDateTime;
+
       Navigator.of(context).popUntil((route) => route.isFirst);
     }
 
     // mock
-    Future<void> addAsobi() {
+    Future<void> addAsobiToFirestore() {
+      final lat = marker.state.first.position.latitude;
+      final lng = marker.state.first.position.longitude;
+      final createdAt = DateTime.now();
       return asobiList.add({
-        'title': '遊ぶ！',
+        'title': asobiName.state!.text,
         'owner': userId,
-        'description': 'とにかく遊ぶ',
-        'position': const GeoPoint(35, 143)
+        'description': asobiDescription.state!.text,
+        'position': GeoPoint(lat, lng),
+        'start': Timestamp.fromDate(startTime.state),
+        'end': Timestamp.fromDate(endTime.state),
+        'tag': selectedTag.state,
+        'createdAt': Timestamp.fromDate(createdAt),
       }).catchError((error) => print("Failed to add asobi: $error"));
     }
 
@@ -66,7 +76,29 @@ class ConfirmAsobiScreen extends HookWidget {
         Navigator.pop(context);
       },
       onNext: () {
-        _initialize(context);
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: const Body1("アソビを募集しますか？"),
+              actions: <Widget>[
+                ElevatedButton(
+                  child: const Text('Cancel'),
+                  onPressed: () => Navigator.pop(context),
+                  style: ElevatedButton.styleFrom(primary: Colors.grey),
+                ),
+                ElevatedButton(
+                  child: const Text('OK'),
+                  onPressed: () async {
+                    await addAsobiToFirestore();
+                    await _initialize(context);
+                  },
+                  style: ElevatedButton.styleFrom(primary: accentColor),
+                ),
+              ],
+            );
+          },
+        );
       },
     );
   }
