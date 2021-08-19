@@ -100,6 +100,7 @@ class AsobiDetailScreenView extends HookWidget {
       markers: marker,
       mapType: MapType.normal,
       initialCameraPosition: initialCameraPosition,
+      myLocationButtonEnabled: false,
     );
   }
 }

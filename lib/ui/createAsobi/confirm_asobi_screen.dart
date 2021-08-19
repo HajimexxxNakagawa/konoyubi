@@ -144,6 +144,7 @@ class Body extends HookWidget {
       markers: marker,
       mapType: MapType.normal,
       initialCameraPosition: cameraPosition,
+      myLocationButtonEnabled: false,
     );
   }
 }
