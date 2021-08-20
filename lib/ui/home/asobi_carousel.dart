@@ -19,8 +19,6 @@ class AsobiCarousel extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _current = useState(0);
-    final width = useWidth();
-
     // アソビ開始時間でソート
     asobiList.sort((a, b) => a.start.compareTo(b.start));
 
@@ -37,35 +35,59 @@ class AsobiCarousel extends HookWidget {
           items: asobiList.map((asobi) {
             return Builder(
               builder: (BuildContext context) {
-                return GestureDetector(
-                  onTap: () {
-                    showModalWithFadeAnimation(
-                      context: context,
-                      to: AsobiDetailScreen(asobi),
-                    );
-                  },
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Container(
-                      width: width,
-                      margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: Column(children: [
-                        H1(asobi.title),
-                        Body1(asobi.description),
-                        const SizedBox(height: 4),
-                        Body1('' + asobi.start.toString().substring(0, 16)),
-                        Body1('シメキリ' + asobi.end.toString().substring(0, 16)),
-                      ]),
-                    ),
-                  ),
-                );
+                return AsobiCarouselCard(asobi: asobi);
               },
             );
           }).toList(),
         ),
       ],
+    );
+  }
+}
+
+class AsobiCarouselCard extends HookWidget {
+  const AsobiCarouselCard({Key? key, required this.asobi}) : super(key: key);
+
+  final Asobi asobi;
+
+  @override
+  Widget build(BuildContext context) {
+    final start = asobi.start.toString().substring(0, 16);
+    final end = asobi.end.toString().substring(0, 16);
+    final width = useWidth();
+
+    return GestureDetector(
+      onTap: () {
+        showModalWithFadeAnimation(
+          context: context,
+          to: AsobiDetailScreen(asobi),
+        );
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Container(
+          width: width,
+          padding: const EdgeInsets.all(16),
+          margin: const EdgeInsets.symmetric(horizontal: 5.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              H1(asobi.title),
+              Body1(asobi.description),
+              const SizedBox(height: 4),
+              Column(
+                children: [
+                  Body1('ハジマリ：' + start),
+                  Body1('シメキリ：' + end),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

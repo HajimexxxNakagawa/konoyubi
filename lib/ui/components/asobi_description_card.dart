@@ -51,7 +51,6 @@ class AsobiDescriptionCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             SizedBox(
-              width: (MediaQuery.of(context).size.width - 40) * 0.8,
               height: 104,
               child: Body1(asobi.description),
             ),
