@@ -51,12 +51,13 @@ class AsobiCarousel extends HookWidget {
                     child: Container(
                       width: width,
                       margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: Center(
-                        child: Text(
-                          asobi.title,
-                          style: const TextStyle(fontSize: 16.0),
-                        ),
-                      ),
+                      child: Column(children: [
+                        H1(asobi.title),
+                        Body1(asobi.description),
+                        const SizedBox(height: 4),
+                        Body1('' + asobi.start.toString().substring(0, 16)),
+                        Body1('シメキリ' + asobi.end.toString().substring(0, 16)),
+                      ]),
                     ),
                   ),
                 );
