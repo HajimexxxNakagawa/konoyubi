@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:konoyubi/ui/components/typography.dart';
 
 class OnboardingCarousel extends HookWidget {
   const OnboardingCarousel({Key? key}) : super(key: key);
@@ -24,11 +25,16 @@ class OnboardingCarousel extends HookWidget {
               builder: (BuildContext context) {
                 return Container(
                   width: MediaQuery.of(context).size.width,
-                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: Center(
-                    child: Text(
-                      'onboarding $i',
-                      style: const TextStyle(fontSize: 16.0),
+                  height: MediaQuery.of(context).size.height,
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 5.0),
+                  child: Material(
+                    elevation: 10,
+                    borderRadius: BorderRadius.circular(16),
+                    child: Center(
+                      child: OnboardingItem(
+                        itemNumber: i,
+                      ),
                     ),
                   ),
                 );
@@ -58,5 +64,26 @@ class OnboardingCarousel extends HookWidget {
         ),
       ],
     );
+  }
+}
+
+class OnboardingItem extends StatelessWidget {
+  const OnboardingItem({
+    Key? key,
+    required this.itemNumber,
+  }) : super(key: key);
+
+  final int itemNumber;
+
+  @override
+  Widget build(BuildContext context) {
+    switch (itemNumber) {
+      case 1:
+        return H1("アカウントを作成しましょう！");
+      case 2:
+        return H1("アソビを募集しましょう！");
+      default:
+        return H1("オーナーにチャットしましょう！");
+    }
   }
 }
