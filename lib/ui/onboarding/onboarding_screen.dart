@@ -16,7 +16,7 @@ class OnboardingScreen extends StatelessWidget {
           const Spacer(flex: 4),
           const OnboardingCarousel(),
           const Spacer(flex: 3),
-          const Text('Create your account'),
+          const H1('Create your account'),
           const Spacer(flex: 1),
           const SignInIcons(),
           const Spacer(flex: 3),
