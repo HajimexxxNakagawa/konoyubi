@@ -11,8 +11,11 @@ import 'package:konoyubi/ui/theme/constants.dart';
 import 'package:konoyubi/ui/utility/snapshot_error_handling.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
 import 'package:konoyubi/ui/utility/use_firestore.dart';
+import 'package:konoyubi/ui/utility/use_l10n.dart';
 import 'asobi_carousel.dart';
 import 'chat_list.dart';
+
+final l10n = useL10n();
 
 class HomeScreen extends HookWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -72,7 +75,7 @@ class HomeScreenView extends HookWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const H1('自分で募集しているアソビ'),
+                    H1(l10n.yourAsobi),
                     AddAsobiButton(isSignedIn: isSignedIn),
                   ],
                 ),
@@ -82,9 +85,9 @@ class HomeScreenView extends HookWidget {
                 child: CurrentlyOpeningMyAsobi(entries: entries),
               ),
               const SizedBox(height: 20),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.fromLTRB(8, 8, 0, 8),
-                child: H1('最近のカイワ'),
+                child: H1(l10n.recentChat),
               ),
               const SizedBox(
                 height: 300,

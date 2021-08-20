@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:konoyubi/ui/home/asobi_detail_screen.dart';
 import 'package:konoyubi/ui/utility/primary_dialog.dart';
 
 bool nameValidation({
@@ -12,11 +13,11 @@ bool nameValidation({
       ? isNameContainsSpace && name.trim().isNotEmpty
       : true;
   if (!isNotNameEmpty) {
-    showPrimaryDialog(context: context, content: "名前を入力してください");
+    showPrimaryDialog(context: context, content: l10n.inputYourName);
   } else if (!isNameLengthNotOver) {
-    showPrimaryDialog(context: context, content: "名前は12文字以下で！");
+    showPrimaryDialog(context: context, content: l10n.underTwelveLetter);
   } else if (!isNameNotOnlySpace) {
-    showPrimaryDialog(context: context, content: "空白だけの名前はダメだよ！");
+    showPrimaryDialog(context: context, content: l10n.notOnlySpace);
   }
 
   return isNotNameEmpty && isNameLengthNotOver && isNameNotOnlySpace;
@@ -33,7 +34,7 @@ bool biographyValidation({
   final isBiographyTooLong = biography!.length >= 10000;
 
   if (isBiographyTooLong) {
-    showPrimaryDialog(context: context, content: "自己紹介文が長すぎる！");
+    showPrimaryDialog(context: context, content: l10n.tooLongIntroduction);
   }
 
   return !isBiographyTooLong;

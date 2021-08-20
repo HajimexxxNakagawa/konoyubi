@@ -12,6 +12,7 @@ import 'package:konoyubi/ui/profile/validation.dart';
 import 'package:konoyubi/ui/theme/constants.dart';
 import 'package:konoyubi/ui/theme/height_width.dart';
 import 'package:konoyubi/ui/utility/upload_image.dart';
+import 'package:konoyubi/ui/utility/use_l10n.dart';
 
 final nameControllerProvider =
     StateProvider<TextEditingController?>((ref) => TextEditingController());
@@ -30,6 +31,7 @@ class EditProfileScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = useL10n();
     final width = useWidth();
     final nameController = useProvider(nameControllerProvider);
     final twitterController = useProvider(twitterControllerProvider);
@@ -171,7 +173,7 @@ class EditProfileScreen extends HookWidget {
                       ),
                       const SizedBox(height: 12),
                       ProfileField(
-                        hintText: "@はいらないよ！",
+                        hintText: l10n.atUnnecessary,
                         controller: twitterController.state,
                         icon: const FaIcon(
                           FontAwesomeIcons.twitter,
@@ -181,7 +183,7 @@ class EditProfileScreen extends HookWidget {
                       ),
                       const SizedBox(height: 12),
                       ProfileField(
-                        hintText: "ユーザーネーム",
+                        hintText: l10n.userName,
                         controller: facebookController.state,
                         icon: const FaIcon(
                           FontAwesomeIcons.facebook,

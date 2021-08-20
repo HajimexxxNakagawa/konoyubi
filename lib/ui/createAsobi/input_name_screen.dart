@@ -4,19 +4,23 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/ui/createAsobi/create_asobi_screen_template.dart';
 import 'package:konoyubi/ui/utility/primary_dialog.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
+import 'package:konoyubi/ui/utility/use_l10n.dart';
 import 'input_description_screen.dart';
 
 final asobiNameControllerProvider =
     StateProvider<TextEditingController?>((ref) => TextEditingController());
+
+final l10n = useL10n();
 
 class InputAsobiNameScreen extends HookWidget {
   const InputAsobiNameScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final asobiNameController = useProvider(asobiNameControllerProvider);
+    final l10n = useL10n();
 
     return CreateAsobiScreenTemplate(
-      title: 'アソビを作る',
+      title: l10n.createAsobi,
       body: Body(
         controller: asobiNameController.state!,
       ),
@@ -66,10 +70,10 @@ bool asobiNameValidation({
       ? isNameContainsSpace && name.trim().isNotEmpty
       : true;
   if (!isNotNameEmpty) {
-    showPrimaryDialog(context: context, content: "アソビの名前を入力してね");
+    showPrimaryDialog(context: context, content: l10n.inputAsobiName);
   }
   if (!isNameLengthNotOver) {
-    showPrimaryDialog(context: context, content: "20文字以内で！");
+    showPrimaryDialog(context: context, content: l10n.underTwenty);
   }
   return isNotNameEmpty && isNameLengthNotOver && isNameNotOnlySpace;
 }

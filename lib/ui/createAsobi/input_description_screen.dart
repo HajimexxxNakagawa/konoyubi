@@ -4,19 +4,23 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/ui/createAsobi/create_asobi_screen_template.dart';
 import 'package:konoyubi/ui/utility/primary_dialog.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
+import 'package:konoyubi/ui/utility/use_l10n.dart';
 import 'select_position_screen.dart';
 
 final asobiDescriptionControllerProvider =
     StateProvider<TextEditingController?>((ref) => TextEditingController());
 
+final l10n = useL10n();
+
 class InputAsobiDescriptionScreen extends HookWidget {
   const InputAsobiDescriptionScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final l10n = useL10n();
     final asobiDescriptionController =
         useProvider(asobiDescriptionControllerProvider);
     return CreateAsobiScreenTemplate(
-      title: 'セツメイを書く',
+      title: l10n.writeAboutAsobi,
       body: Body(
         controller: asobiDescriptionController.state!,
       ),
@@ -68,10 +72,10 @@ bool asobiDescriptionValidation({
       ? isDescriptionContainsSpace && description.trim().isNotEmpty
       : true;
   if (!isNotDescriptionEmpty) {
-    showPrimaryDialog(context: context, content: "セツメイを入力してください");
+    showPrimaryDialog(context: context, content: l10n.inputDescription);
   }
   if (!isDescriptionLengthNotOver) {
-    showPrimaryDialog(context: context, content: "30文字以内で！");
+    showPrimaryDialog(context: context, content: l10n.underThirty);
   }
   return isNotDescriptionEmpty &&
       isDescriptionLengthNotOver &&

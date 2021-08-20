@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/ui/createAsobi/create_asobi_screen_template.dart';
 import 'package:konoyubi/ui/utility/primary_dialog.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
+import 'package:konoyubi/ui/utility/use_l10n.dart';
 import 'select_datetime_screen.dart';
 
 const shibuya = LatLng(35.659825668409056, 139.6987449178721);
@@ -13,15 +14,17 @@ final asobiMarkerProvider =
     StateProvider<Set<Marker>>((ref) => {initialMarker});
 final cameraPositionProvider = StateProvider<CameraPosition>(
     (ref) => const CameraPosition(target: shibuya, zoom: 15));
+final l10n = useL10n();
 
 class SelectAsobiPositionScreen extends HookWidget {
   const SelectAsobiPositionScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final marker = useProvider(asobiMarkerProvider);
+    final l10n = useL10n();
 
     return CreateAsobiScreenTemplate(
-      title: 'バショを決める',
+      title: l10n.decideVenue,
       body: const Body(),
       index: 2,
       onBack: () {
@@ -83,7 +86,7 @@ bool asobiPositionValidation({
 }) {
   final isMarkerUnspecified = marker == initialMarker;
   if (isMarkerUnspecified) {
-    showPrimaryDialog(context: context, content: 'バショを指定してね！');
+    showPrimaryDialog(context: context, content: l10n.pleaseDecideVenue);
   }
   return !isMarkerUnspecified;
 }

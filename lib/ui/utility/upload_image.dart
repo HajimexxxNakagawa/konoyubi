@@ -8,6 +8,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:konoyubi/ui/components/typography.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:konoyubi/ui/utility/use_l10n.dart';
+
+final l10n = useL10n();
 
 class ImageUpload {
   const ImageUpload(this.source,
@@ -52,19 +55,19 @@ Future<void> uploadImage(
       return CupertinoActionSheet(
         actions: [
           CupertinoActionSheetAction(
-            child: const Body1('カメラで撮影'),
+            child: Body1(l10n.takePicture),
             onPressed: () {
               Navigator.pop(context, 0);
             },
           ),
           CupertinoActionSheetAction(
-            child: const Body1('アルバムから選択'),
+            child: Body1(l10n.selectPhoto),
             onPressed: () {
               Navigator.pop(context, 1);
             },
           ),
           CupertinoActionSheetAction(
-            child: const Body1('キャンセル'),
+            child: Body1(l10n.cancel),
             onPressed: () {
               Navigator.pop(context, 2);
             },

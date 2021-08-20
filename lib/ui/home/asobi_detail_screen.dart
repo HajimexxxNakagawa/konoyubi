@@ -8,6 +8,9 @@ import 'package:konoyubi/ui/components/typography.dart';
 import 'package:konoyubi/ui/createAsobi/input_name_screen.dart';
 import 'package:konoyubi/ui/theme/constants.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
+import 'package:konoyubi/ui/utility/use_l10n.dart';
+
+final l10n = useL10n();
 
 class AsobiDetailScreen extends HookWidget {
   const AsobiDetailScreen(this.asobi, {Key? key}) : super(key: key);
@@ -15,6 +18,7 @@ class AsobiDetailScreen extends HookWidget {
   final Asobi asobi;
   @override
   Widget build(BuildContext context) {
+    final l10n = useL10n();
     final Set<Marker> _marker = {
       Marker(
         markerId: const MarkerId('unique'),
@@ -58,7 +62,7 @@ class AsobiDetailScreen extends HookWidget {
           height: 60,
           child: Center(
             child: ActionText(
-              '新しいアソビを募集する！',
+              l10n.newAsobi,
               onPressed: () {
                 showModal(
                   context: context,
@@ -118,7 +122,7 @@ showDeleteAsobiDialog({
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        content: const Body1("アソビの募集をやめますか？"),
+        content: Body1(l10n.stopAsobi),
         actions: <Widget>[
           ElevatedButton(
             child: const Text('Cancel'),
