@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:konoyubi/ui/components/typography.dart';
+import 'package:konoyubi/ui/theme/height_width.dart';
 
 class OnboardingCarousel extends HookWidget {
   const OnboardingCarousel({Key? key}) : super(key: key);
@@ -9,13 +10,14 @@ class OnboardingCarousel extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _current = useState(0);
+    final height = useHeight();
 
     return Column(
       children: [
         CarouselSlider(
           options: CarouselOptions(
             enableInfiniteScroll: false,
-            height: 320,
+            height: height * 0.7,
             onPageChanged: (index, reason) {
               _current.value = index;
             },
@@ -79,11 +81,11 @@ class OnboardingItem extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (itemNumber) {
       case 1:
-        return H1("アカウントを作成しましょう！");
+        return const H1("アカウントを作成しましょう！");
       case 2:
-        return H1("アソビを募集しましょう！");
+        return const H1("アソビを募集しましょう！");
       default:
-        return H1("オーナーにチャットしましょう！");
+        return const H1("オーナーにチャットしましょう！");
     }
   }
 }
