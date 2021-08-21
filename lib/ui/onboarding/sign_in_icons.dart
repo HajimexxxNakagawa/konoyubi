@@ -65,20 +65,16 @@ class SignInIcons extends StatelessWidget {
     CollectionReference users =
         FirebaseFirestore.instance.collection('userList');
     final userDoc = users.doc(user.user?.uid);
-    userDoc.get().then(
-      (value) {
-        if (value['name'] == null) {
-          return userDoc.set(
-            {
-              'name': user.user?.displayName ?? '',
-              'avatarURL': user.user?.photoURL,
-              'description': "",
-              'twitter': "",
-              'facebook': "",
-            },
-          );
-        }
-      },
-    );
+    userDoc.get().then((value) {
+      if (!value.exists) {
+        userDoc.set({
+          'name': user.user?.displayName ?? '',
+          'avatarURL': user.user?.photoURL,
+          'description': "",
+          'twitter': "",
+          'facebook': "",
+        });
+      }
+    });
   }
 }
