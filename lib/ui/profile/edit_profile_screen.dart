@@ -24,8 +24,6 @@ final biographyControllerProvider =
     StateProvider<TextEditingController?>((ref) => TextEditingController());
 final avatarURLControllerProvider = StateProvider<String>((ref) => '');
 
-String errorText = "";
-
 class EditProfileScreen extends HookWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
 
@@ -88,9 +86,16 @@ class EditProfileScreen extends HookWidget {
       onWillPop: () async {
         final name = nameController.state?.text;
         final biography = biographyController.state!.text;
-        final isNameValid = nameValidation(name: name, context: context);
-        final isBiographyValid =
-            biographyValidation(biography: biography, context: context);
+        final isNameValid = nameValidation(
+          name: name,
+          context: context,
+          l10n: l10n,
+        );
+        final isBiographyValid = biographyValidation(
+          biography: biography,
+          context: context,
+          l10n: l10n,
+        );
 
         return isNameValid && isBiographyValid;
       },
@@ -146,10 +151,11 @@ class EditProfileScreen extends HookWidget {
                               ),
                               onPressed: () {
                                 uploadImage(
-                                  "profileImage",
-                                  context,
-                                  auth.data!.value!.uid,
-                                  avatarURLController,
+                                  uploadTo: "profileImage",
+                                  context: context,
+                                  uid: auth.data!.value!.uid,
+                                  avatarURLController: avatarURLController,
+                                  l10n: l10n,
                                 );
                               },
                               style: ElevatedButton.styleFrom(

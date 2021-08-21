@@ -9,8 +9,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:konoyubi/ui/components/typography.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:konoyubi/ui/utility/use_l10n.dart';
+import 'package:flutter_gen/gen_l10n/l10n.dart';
 
-final l10n = useL10n();
 
 class ImageUpload {
   const ImageUpload(this.source,
@@ -43,12 +43,14 @@ class ImageUpload {
   }
 }
 
-Future<void> uploadImage(
-  String uploadTo,
-  BuildContext context,
-  String uid,
-  StateController<String> avatarURLController,
-) async {
+Future<void> uploadImage({
+  required String uploadTo,
+  required BuildContext context,
+  required String uid,
+  required StateController<String> avatarURLController,
+  required L10n l10n,
+}) async {
+
   showCupertinoModalPopup<int>(
     context: context,
     builder: (BuildContext context) {

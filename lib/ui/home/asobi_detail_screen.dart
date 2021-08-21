@@ -10,8 +10,6 @@ import 'package:konoyubi/ui/theme/constants.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
 import 'package:konoyubi/ui/utility/use_l10n.dart';
 
-final l10n = useL10n();
-
 class AsobiDetailScreen extends HookWidget {
   const AsobiDetailScreen(this.asobi, {Key? key}) : super(key: key);
 
@@ -30,6 +28,37 @@ class AsobiDetailScreen extends HookWidget {
       target: LatLng(asobi.position.latitude, asobi.position.longitude),
       zoom: 15,
     );
+
+    showDeleteAsobiDialog({
+      required BuildContext context,
+      required String docId,
+    }) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Body1(l10n.stopAsobi),
+            actions: <Widget>[
+              ElevatedButton(
+                child: const Text('Cancel'),
+                onPressed: () => Navigator.pop(context),
+                style: ElevatedButton.styleFrom(primary: Colors.grey),
+              ),
+              ElevatedButton(
+                child: const Text('OK'),
+                onPressed: () async {
+                  await deleteAsobi(docId: docId);
+                  await Future(() {
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                  });
+                },
+                style: ElevatedButton.styleFrom(primary: accentColor),
+              ),
+            ],
+          );
+        },
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -112,37 +141,6 @@ class AsobiDetailScreenView extends HookWidget {
       )
     ]);
   }
-}
-
-showDeleteAsobiDialog({
-  required BuildContext context,
-  required String docId,
-}) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        content: Body1(l10n.stopAsobi),
-        actions: <Widget>[
-          ElevatedButton(
-            child: const Text('Cancel'),
-            onPressed: () => Navigator.pop(context),
-            style: ElevatedButton.styleFrom(primary: Colors.grey),
-          ),
-          ElevatedButton(
-            child: const Text('OK'),
-            onPressed: () async {
-              await deleteAsobi(docId: docId);
-              await Future(() {
-                Navigator.of(context).popUntil((route) => route.isFirst);
-              });
-            },
-            style: ElevatedButton.styleFrom(primary: accentColor),
-          ),
-        ],
-      );
-    },
-  );
 }
 
 Future<void> deleteAsobi({

@@ -10,8 +10,6 @@ import 'select_position_screen.dart';
 final asobiDescriptionControllerProvider =
     StateProvider<TextEditingController?>((ref) => TextEditingController());
 
-final l10n = useL10n();
-
 class InputAsobiDescriptionScreen extends HookWidget {
   const InputAsobiDescriptionScreen({Key? key}) : super(key: key);
   @override
@@ -19,6 +17,32 @@ class InputAsobiDescriptionScreen extends HookWidget {
     final l10n = useL10n();
     final asobiDescriptionController =
         useProvider(asobiDescriptionControllerProvider);
+
+    bool asobiDescriptionValidation({
+      required String? description,
+      required BuildContext context,
+    }) {
+      final isNotDescriptionEmpty = description != "";
+      final isDescriptionLengthNotOver = description!.length <= 30;
+      final isDescriptionContainsSpace =
+          description.contains(" ") || description.contains("　");
+      final isDescriptionNotOnlySpace = isDescriptionContainsSpace
+          ? isDescriptionContainsSpace && description.trim().isNotEmpty
+          : true;
+      if (!isNotDescriptionEmpty) {
+        showPrimaryDialog(context: context, content: l10n.inputDescription);
+      }
+      if (!isDescriptionLengthNotOver) {
+        showPrimaryDialog(context: context, content: l10n.underThirty);
+      }
+      if (!isDescriptionNotOnlySpace) {
+        showPrimaryDialog(context: context, content: l10n.notOnlySpace);
+      }
+      return isNotDescriptionEmpty &&
+          isDescriptionLengthNotOver &&
+          isDescriptionNotOnlySpace;
+    }
+
     return CreateAsobiScreenTemplate(
       title: l10n.writeAboutAsobi,
       body: Body(
@@ -58,26 +82,4 @@ class Body extends HookWidget {
       ),
     );
   }
-}
-
-bool asobiDescriptionValidation({
-  required String? description,
-  required BuildContext context,
-}) {
-  final isNotDescriptionEmpty = description != "";
-  final isDescriptionLengthNotOver = description!.length <= 30;
-  final isDescriptionContainsSpace =
-      description.contains(" ") || description.contains("　");
-  final isDescriptionNotOnlySpace = isDescriptionContainsSpace
-      ? isDescriptionContainsSpace && description.trim().isNotEmpty
-      : true;
-  if (!isNotDescriptionEmpty) {
-    showPrimaryDialog(context: context, content: l10n.inputDescription);
-  }
-  if (!isDescriptionLengthNotOver) {
-    showPrimaryDialog(context: context, content: l10n.underThirty);
-  }
-  return isNotDescriptionEmpty &&
-      isDescriptionLengthNotOver &&
-      isDescriptionNotOnlySpace;
 }

@@ -15,8 +15,6 @@ import 'package:konoyubi/ui/utility/use_l10n.dart';
 import 'asobi_carousel.dart';
 import 'chat_list.dart';
 
-final l10n = useL10n();
-
 class HomeScreen extends HookWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -45,6 +43,8 @@ class HomeScreenView extends HookWidget {
   final List<Asobi> entries;
   @override
   Widget build(BuildContext context) {
+    final l10n = useL10n();
+
     final currentUser = useProvider(firebaseAuthProvider);
     final isSignedIn = currentUser.data?.value != null;
     final bundle = ScaffoldMessenger.of(context);
@@ -86,7 +86,7 @@ class HomeScreenView extends HookWidget {
               ),
               const SizedBox(height: 20),
               Padding(
-                padding: EdgeInsets.fromLTRB(8, 8, 0, 8),
+                padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
                 child: H1(l10n.recentChat),
               ),
               const SizedBox(

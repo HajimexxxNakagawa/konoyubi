@@ -14,7 +14,6 @@ final asobiMarkerProvider =
     StateProvider<Set<Marker>>((ref) => {initialMarker});
 final cameraPositionProvider = StateProvider<CameraPosition>(
     (ref) => const CameraPosition(target: shibuya, zoom: 15));
-final l10n = useL10n();
 
 class SelectAsobiPositionScreen extends HookWidget {
   const SelectAsobiPositionScreen({Key? key}) : super(key: key);
@@ -22,6 +21,17 @@ class SelectAsobiPositionScreen extends HookWidget {
   Widget build(BuildContext context) {
     final marker = useProvider(asobiMarkerProvider);
     final l10n = useL10n();
+
+    bool asobiPositionValidation({
+      required BuildContext context,
+      required Marker marker,
+    }) {
+      final isMarkerUnspecified = marker == initialMarker;
+      if (isMarkerUnspecified) {
+        showPrimaryDialog(context: context, content: l10n.pleaseDecideVenue);
+      }
+      return !isMarkerUnspecified;
+    }
 
     return CreateAsobiScreenTemplate(
       title: l10n.decideVenue,
@@ -78,15 +88,4 @@ class Body extends HookWidget {
       },
     );
   }
-}
-
-bool asobiPositionValidation({
-  required BuildContext context,
-  required Marker marker,
-}) {
-  final isMarkerUnspecified = marker == initialMarker;
-  if (isMarkerUnspecified) {
-    showPrimaryDialog(context: context, content: l10n.pleaseDecideVenue);
-  }
-  return !isMarkerUnspecified;
 }

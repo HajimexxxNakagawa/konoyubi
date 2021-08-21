@@ -20,6 +20,26 @@ class SelectAsobiDatetimeScreen extends HookWidget {
     final startTime = useProvider(startTimeProvider);
     final endTime = useProvider(endTimeProvider);
 
+    bool timeValidation({
+      required BuildContext context,
+      required DateTime start,
+      required DateTime end,
+    }) {
+      final isStartSpecified = start != initialDateTime;
+      final isEndSpecified = end != initialDateTime;
+      final isStartBeforeEnd = start.isBefore(end);
+
+      if (!isStartSpecified) {
+        showPrimaryDialog(context: context, content: l10n.inputStart);
+      } else if (!isEndSpecified) {
+        showPrimaryDialog(context: context, content: l10n.inputEnd);
+      } else if (!isStartBeforeEnd) {
+        showPrimaryDialog(context: context, content: l10n.endMustBeAfterStart);
+      }
+
+      return isStartSpecified && isEndSpecified && isStartBeforeEnd;
+    }
+
     return CreateAsobiScreenTemplate(
       title: l10n.decideTime,
       body: Body(
@@ -87,6 +107,7 @@ class Body extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = useL10n();
     return Center(
       child: Column(
         children: [
@@ -110,24 +131,4 @@ class Body extends HookWidget {
       ),
     );
   }
-}
-
-bool timeValidation({
-  required BuildContext context,
-  required DateTime start,
-  required DateTime end,
-}) {
-  final isStartSpecified = start != initialDateTime;
-  final isEndSpecified = end != initialDateTime;
-  final isStartBeforeEnd = start.isBefore(end);
-
-  if (!isStartSpecified) {
-    showPrimaryDialog(context: context, content: l10n.inputStart);
-  } else if (!isEndSpecified) {
-    showPrimaryDialog(context: context, content: l10n.inputEnd);
-  } else if (!isStartBeforeEnd) {
-    showPrimaryDialog(context: context, content: l10n.endMustBeAfterStart);
-  }
-
-  return isStartSpecified && isEndSpecified && isStartBeforeEnd;
 }
