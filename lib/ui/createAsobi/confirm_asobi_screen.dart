@@ -24,7 +24,7 @@ class ConfirmAsobiScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = useL10n();
+    final l10n = useL10n(context);
     final asobiName = useProvider(asobiNameControllerProvider);
     final asobiDescription = useProvider(asobiDescriptionControllerProvider);
     final marker = useProvider(asobiMarkerProvider);

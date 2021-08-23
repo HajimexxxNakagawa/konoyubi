@@ -16,7 +16,7 @@ class InputAsobiDescriptionScreen extends HookWidget {
   const InputAsobiDescriptionScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final l10n = useL10n();
+    final l10n = useL10n(context);
     final asobiDescriptionController =
         useProvider(asobiDescriptionControllerProvider);
 

@@ -17,13 +17,13 @@ class InputAsobiNameScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final asobiNameController = useProvider(asobiNameControllerProvider);
-    final l10n = useL10n();
+    final l10n = useL10n(context);
 
     bool _validation({
       required String? name,
       required BuildContext context,
     }) {
-      // final l10n = useL10n();
+      //final l10n = useL10n(context);
       final isNotNameEmpty = name != "";
       final isNameLengthNotOver = name!.length <= 20;
       final isNameContainsSpace = name.contains(" ") || name.contains("　");

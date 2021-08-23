@@ -121,7 +121,7 @@ class AsobiEmptyCard extends HookWidget {
     final currentUser = useProvider(firebaseAuthProvider);
     final isSignedIn = currentUser.data?.value != null;
     final width = useWidth();
-    final l10n = useL10n();
+    final l10n = useL10n(context);
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),

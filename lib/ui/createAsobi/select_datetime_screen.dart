@@ -16,7 +16,7 @@ class SelectAsobiDatetimeScreen extends HookWidget {
   const SelectAsobiDatetimeScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final l10n = useL10n();
+    final l10n = useL10n(context);
     final startTime = useProvider(startTimeProvider);
     final endTime = useProvider(endTimeProvider);
 
@@ -107,7 +107,7 @@ class Body extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = useL10n();
+    final l10n = useL10n(context);
     final startTime = start.state == initialDateTime
         ? l10n.undecided
         : start.state.toString().substring(0, 16);

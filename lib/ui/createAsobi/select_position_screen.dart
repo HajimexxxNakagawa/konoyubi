@@ -20,7 +20,7 @@ class SelectAsobiPositionScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final marker = useProvider(asobiMarkerProvider);
-    final l10n = useL10n();
+    final l10n = useL10n(context);
 
     bool _validation({
       required BuildContext context,

@@ -5,13 +5,12 @@ import 'package:konoyubi/ui/components/typography.dart';
 import 'package:konoyubi/ui/utility/use_l10n.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-
 class GuestScreen extends HookWidget {
   const GuestScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final l10n = useL10n();
+    final l10n = useL10n(context);
 
     return Center(
       child: Column(

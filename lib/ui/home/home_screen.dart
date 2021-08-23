@@ -41,7 +41,7 @@ class HomeScreenView extends HookWidget {
   }) : super(key: key);
 
   final List<Asobi> entries;
-  
+
   static const snackbar = SnackBar(
     content: Body1('Welcome back!', color: Colors.white),
     behavior: SnackBarBehavior.floating,
@@ -50,7 +50,7 @@ class HomeScreenView extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = useL10n();
+    final l10n = useL10n(context);
 
     final currentUser = useProvider(firebaseAuthProvider);
     final isSignedIn = currentUser.data?.value != null;

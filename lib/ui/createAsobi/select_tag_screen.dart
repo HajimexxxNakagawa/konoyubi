@@ -16,7 +16,7 @@ class SelectAsobiTagScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final selectedTag = useProvider(selectedTagProvider);
-    final l10n = useL10n();
+    final l10n = useL10n(context);
 
     bool _validation({
       required List<String> selectedTag,
@@ -61,7 +61,7 @@ class Body extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = useL10n();
+    final l10n = useL10n(context);
 
     List<String> asobiTagList = [
       l10n.karaoke,

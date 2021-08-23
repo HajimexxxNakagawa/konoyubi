@@ -29,7 +29,7 @@ class EditProfileScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = useL10n();
+    final l10n = useL10n(context);
     final width = useWidth();
     final nameController = useProvider(nameControllerProvider);
     final twitterController = useProvider(twitterControllerProvider);

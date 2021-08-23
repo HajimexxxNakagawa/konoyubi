@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:konoyubi/data/model/asobi.dart';
-import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:konoyubi/ui/utility/use_l10n.dart';
 
 import 'typography.dart';
 
@@ -17,7 +17,7 @@ class AsobiDescriptionCard extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = L10n.of(context)!;
+    final l10n = useL10n(context);
     return Card(
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
       shape: RoundedRectangleBorder(

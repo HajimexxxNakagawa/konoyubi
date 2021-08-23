@@ -17,7 +17,7 @@ class AsobiDetailScreen extends HookWidget {
   final Asobi asobi;
   @override
   Widget build(BuildContext context) {
-    final l10n = useL10n();
+    final l10n = useL10n(context);
     final userId = useUserId();
 
     final Set<Marker> _marker = {
