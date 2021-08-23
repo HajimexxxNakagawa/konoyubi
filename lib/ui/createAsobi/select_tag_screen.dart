@@ -61,18 +61,18 @@ class Body extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = useL10n(context);
-
     List<String> asobiTagList = [
-      l10n.karaoke,
-      l10n.shopping,
-      l10n.sport,
-      l10n.talk,
-      l10n.havingTea,
-      l10n.meal,
+      "カラオケ",
+      "カイモノ",
+      "スポーツ",
+      "オシャベリ",
+      "オチャ",
+      "オショクジ",
+      "その他",
     ];
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Center(
         child: Wrap(
           spacing: 10,
