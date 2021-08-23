@@ -13,6 +13,7 @@ import 'package:konoyubi/ui/createAsobi/select_datetime_screen.dart';
 import 'package:konoyubi/ui/createAsobi/select_position_screen.dart';
 import 'package:konoyubi/ui/createAsobi/select_tag_screen.dart';
 import 'package:konoyubi/ui/theme/constants.dart';
+import 'package:konoyubi/ui/utility/use_l10n.dart';
 
 import 'input_name_screen.dart';
 
@@ -23,6 +24,7 @@ class ConfirmAsobiScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = useL10n();
     final asobiName = useProvider(asobiNameControllerProvider);
     final asobiDescription = useProvider(asobiDescriptionControllerProvider);
     final marker = useProvider(asobiMarkerProvider);
@@ -75,7 +77,7 @@ class ConfirmAsobiScreen extends HookWidget {
     }
 
     return CreateAsobiScreenTemplate(
-      title: 'カクニンする',
+      title: l10n.confirm,
       body: Body(
         name: asobiName.state!.text,
         description: asobiDescription.state!.text,
@@ -96,7 +98,7 @@ class ConfirmAsobiScreen extends HookWidget {
             return AbsorbPointer(
               absorbing: isAbsorbing.state,
               child: AlertDialog(
-                content: const Body1("アソビを募集しますか？"),
+                content: Body1(l10n.startAsobi),
                 actions: <Widget>[
                   ElevatedButton(
                     child: const Text('Cancel'),

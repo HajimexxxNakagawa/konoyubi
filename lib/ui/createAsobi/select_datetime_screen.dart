@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/ui/createAsobi/create_asobi_screen_template.dart';
 import 'package:konoyubi/ui/utility/primary_dialog.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
+import 'package:konoyubi/ui/utility/use_l10n.dart';
 import 'select_tag_screen.dart';
 
 final initialDateTime =
@@ -15,11 +16,32 @@ class SelectAsobiDatetimeScreen extends HookWidget {
   const SelectAsobiDatetimeScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final l10n = useL10n();
     final startTime = useProvider(startTimeProvider);
     final endTime = useProvider(endTimeProvider);
 
+    bool timeValidation({
+      required BuildContext context,
+      required DateTime start,
+      required DateTime end,
+    }) {
+      final isStartSpecified = start != initialDateTime;
+      final isEndSpecified = end != initialDateTime;
+      final isStartBeforeEnd = start.isBefore(end);
+
+      if (!isStartSpecified) {
+        showPrimaryDialog(context: context, content: l10n.inputStart);
+      } else if (!isEndSpecified) {
+        showPrimaryDialog(context: context, content: l10n.inputEnd);
+      } else if (!isStartBeforeEnd) {
+        showPrimaryDialog(context: context, content: l10n.endMustBeAfterStart);
+      }
+
+      return isStartSpecified && isEndSpecified && isStartBeforeEnd;
+    }
+
     return CreateAsobiScreenTemplate(
-      title: 'ジカンを決める',
+      title: l10n.decideTime,
       body: Body(
         start: startTime,
         end: endTime,
@@ -73,7 +95,7 @@ void dateTimePicker({
   );
 }
 
-class Body extends StatelessWidget {
+class Body extends HookWidget {
   const Body({
     Key? key,
     required this.start,
@@ -85,6 +107,7 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = useL10n();
     return Center(
       child: Column(
         children: [
@@ -92,40 +115,20 @@ class Body extends StatelessWidget {
               onPressed: () {
                 dateTimePicker(context: context, timeState: start);
               },
-              child: const Text("集合時間を決める")),
+              child: Text(l10n.decideStart)),
           Text(start.state == initialDateTime
-              ? "未定"
+              ? l10n.undecided
               : start.state.toString().substring(0, 16)),
           ElevatedButton(
               onPressed: () {
                 dateTimePicker(context: context, timeState: end);
               },
-              child: const Text("終了時間を決める")),
+              child: Text(l10n.decideEnd)),
           Text(end.state == initialDateTime
-              ? "未定"
+              ? l10n.undecided
               : end.state.toString().substring(0, 16)),
         ],
       ),
     );
   }
-}
-
-bool timeValidation({
-  required BuildContext context,
-  required DateTime start,
-  required DateTime end,
-}) {
-  final isStartSpecified = start != initialDateTime;
-  final isEndSpecified = end != initialDateTime;
-  final isStartBeforeEnd = start.isBefore(end);
-
-  if (!isStartSpecified) {
-    showPrimaryDialog(context: context, content: "集合時間を入力してね！");
-  } else if (!isEndSpecified) {
-    showPrimaryDialog(context: context, content: "終了時間を入力してね！");
-  } else if (!isStartBeforeEnd) {
-    showPrimaryDialog(context: context, content: "終了時間は集合時間より後にしてね！");
-  }
-
-  return isStartSpecified && isEndSpecified && isStartBeforeEnd;
 }

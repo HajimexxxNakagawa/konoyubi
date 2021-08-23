@@ -8,6 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:konoyubi/ui/components/typography.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:flutter_gen/gen_l10n/l10n.dart';
 
 class ImageUpload {
   const ImageUpload(this.source,
@@ -40,31 +41,32 @@ class ImageUpload {
   }
 }
 
-Future<void> uploadImage(
-  String uploadTo,
-  BuildContext context,
-  String uid,
-  StateController<String> avatarURLController,
-) async {
+Future<void> uploadImage({
+  required String uploadTo,
+  required BuildContext context,
+  required String uid,
+  required StateController<String> avatarURLController,
+  required L10n l10n,
+}) async {
   showCupertinoModalPopup<int>(
     context: context,
     builder: (BuildContext context) {
       return CupertinoActionSheet(
         actions: [
           CupertinoActionSheetAction(
-            child: const Body1('カメラで撮影'),
+            child: Body1(l10n.takePicture),
             onPressed: () {
               Navigator.pop(context, 0);
             },
           ),
           CupertinoActionSheetAction(
-            child: const Body1('アルバムから選択'),
+            child: Body1(l10n.selectPhoto),
             onPressed: () {
               Navigator.pop(context, 1);
             },
           ),
           CupertinoActionSheetAction(
-            child: const Body1('キャンセル'),
+            child: Body1(l10n.cancel),
             onPressed: () {
               Navigator.pop(context, 2);
             },

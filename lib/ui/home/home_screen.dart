@@ -11,6 +11,7 @@ import 'package:konoyubi/ui/theme/constants.dart';
 import 'package:konoyubi/ui/utility/snapshot_error_handling.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
 import 'package:konoyubi/ui/utility/use_firestore.dart';
+import 'package:konoyubi/ui/utility/use_l10n.dart';
 import 'asobi_carousel.dart';
 import 'chat_list.dart';
 
@@ -40,6 +41,7 @@ class HomeScreenView extends HookWidget {
   }) : super(key: key);
 
   final List<Asobi> entries;
+  
   static const snackbar = SnackBar(
     content: Body1('Welcome back!', color: Colors.white),
     behavior: SnackBarBehavior.floating,
@@ -48,6 +50,8 @@ class HomeScreenView extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = useL10n();
+
     final currentUser = useProvider(firebaseAuthProvider);
     final isSignedIn = currentUser.data?.value != null;
     final bundle = ScaffoldMessenger.of(context);
@@ -73,7 +77,7 @@ class HomeScreenView extends HookWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const H1('自分で募集しているアソビ'),
+                    H1(l10n.yourAsobi),
                     AddAsobiButton(isSignedIn: isSignedIn),
                   ],
                 ),
@@ -83,9 +87,9 @@ class HomeScreenView extends HookWidget {
                 child: CurrentlyOpeningMyAsobi(entries: entries),
               ),
               const SizedBox(height: 20),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(8, 8, 0, 8),
-                child: H1('最近のカイワ'),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
+                child: H1(l10n.recentChat),
               ),
               const SizedBox(
                 height: 300,

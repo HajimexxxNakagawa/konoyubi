@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoyubi/ui/createAsobi/create_asobi_screen_template.dart';
 import 'package:konoyubi/ui/utility/primary_dialog.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
+import 'package:konoyubi/ui/utility/use_l10n.dart';
 import 'input_description_screen.dart';
 
 final asobiNameControllerProvider =
@@ -14,9 +15,33 @@ class InputAsobiNameScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final asobiNameController = useProvider(asobiNameControllerProvider);
+    final l10n = useL10n();
+
+    bool _asobiNameValidation({
+      required String? name,
+      required BuildContext context,
+    }) {
+      // final l10n = useL10n();
+      final isNotNameEmpty = name != "";
+      final isNameLengthNotOver = name!.length <= 20;
+      final isNameContainsSpace = name.contains(" ") || name.contains("　");
+      final isNameNotOnlySpace = isNameContainsSpace
+          ? isNameContainsSpace && name.trim().isNotEmpty
+          : true;
+      if (!isNotNameEmpty) {
+        showPrimaryDialog(context: context, content: l10n.inputAsobiName);
+      }
+      if (!isNameLengthNotOver) {
+        showPrimaryDialog(context: context, content: l10n.underTwenty);
+      }
+      if (!isNameNotOnlySpace) {
+        showPrimaryDialog(context: context, content: l10n.notOnlySpace);
+      }
+      return isNotNameEmpty && isNameLengthNotOver && isNameNotOnlySpace;
+    }
 
     return CreateAsobiScreenTemplate(
-      title: 'アソビを作る',
+      title: l10n.createAsobi,
       body: Body(
         controller: asobiNameController.state!,
       ),
@@ -25,8 +50,9 @@ class InputAsobiNameScreen extends HookWidget {
         Navigator.pop(context);
       },
       onNext: () {
-        if (asobiNameValidation(
-            name: asobiNameController.state!.text, context: context)) {
+        final isValid = _asobiNameValidation(
+            name: asobiNameController.state!.text, context: context);
+        if (isValid) {
           pageTransition(
             context: context,
             to: const InputAsobiDescriptionScreen(),
@@ -53,23 +79,4 @@ class Body extends HookWidget {
       ),
     );
   }
-}
-
-bool asobiNameValidation({
-  required String? name,
-  required BuildContext context,
-}) {
-  final isNotNameEmpty = name != "";
-  final isNameLengthNotOver = name!.length <= 20;
-  final isNameContainsSpace = name.contains(" ") || name.contains("　");
-  final isNameNotOnlySpace = isNameContainsSpace
-      ? isNameContainsSpace && name.trim().isNotEmpty
-      : true;
-  if (!isNotNameEmpty) {
-    showPrimaryDialog(context: context, content: "アソビの名前を入力してね");
-  }
-  if (!isNameLengthNotOver) {
-    showPrimaryDialog(context: context, content: "20文字以内で！");
-  }
-  return isNotNameEmpty && isNameLengthNotOver && isNameNotOnlySpace;
 }

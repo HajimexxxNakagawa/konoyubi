@@ -12,6 +12,7 @@ import 'package:konoyubi/ui/profile/validation.dart';
 import 'package:konoyubi/ui/theme/constants.dart';
 import 'package:konoyubi/ui/theme/height_width.dart';
 import 'package:konoyubi/ui/utility/upload_image.dart';
+import 'package:konoyubi/ui/utility/use_l10n.dart';
 
 final nameControllerProvider =
     StateProvider<TextEditingController?>((ref) => TextEditingController());
@@ -23,13 +24,12 @@ final biographyControllerProvider =
     StateProvider<TextEditingController?>((ref) => TextEditingController());
 final avatarURLControllerProvider = StateProvider<String>((ref) => '');
 
-String errorText = "";
-
 class EditProfileScreen extends HookWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final l10n = useL10n();
     final width = useWidth();
     final nameController = useProvider(nameControllerProvider);
     final twitterController = useProvider(twitterControllerProvider);
@@ -86,9 +86,16 @@ class EditProfileScreen extends HookWidget {
       onWillPop: () async {
         final name = nameController.state?.text;
         final biography = biographyController.state!.text;
-        final isNameValid = nameValidation(name: name, context: context);
-        final isBiographyValid =
-            biographyValidation(biography: biography, context: context);
+        final isNameValid = nameValidation(
+          name: name,
+          context: context,
+          l10n: l10n,
+        );
+        final isBiographyValid = biographyValidation(
+          biography: biography,
+          context: context,
+          l10n: l10n,
+        );
 
         return isNameValid && isBiographyValid;
       },
@@ -144,10 +151,11 @@ class EditProfileScreen extends HookWidget {
                               ),
                               onPressed: () {
                                 uploadImage(
-                                  "profileImage",
-                                  context,
-                                  auth.data!.value!.uid,
-                                  avatarURLController,
+                                  uploadTo: "profileImage",
+                                  context: context,
+                                  uid: auth.data!.value!.uid,
+                                  avatarURLController: avatarURLController,
+                                  l10n: l10n,
                                 );
                               },
                               style: ElevatedButton.styleFrom(
@@ -171,7 +179,7 @@ class EditProfileScreen extends HookWidget {
                       ),
                       const SizedBox(height: 12),
                       ProfileField(
-                        hintText: "@はいらないよ！",
+                        hintText: l10n.atUnnecessary,
                         controller: twitterController.state,
                         icon: const FaIcon(
                           FontAwesomeIcons.twitter,
@@ -181,7 +189,7 @@ class EditProfileScreen extends HookWidget {
                       ),
                       const SizedBox(height: 12),
                       ProfileField(
-                        hintText: "ユーザーネーム",
+                        hintText: l10n.userName,
                         controller: facebookController.state,
                         icon: const FaIcon(
                           FontAwesomeIcons.facebook,

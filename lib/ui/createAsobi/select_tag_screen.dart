@@ -6,26 +6,33 @@ import 'package:konoyubi/ui/createAsobi/create_asobi_screen_template.dart';
 import 'package:konoyubi/ui/theme/constants.dart';
 import 'package:konoyubi/ui/utility/primary_dialog.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
+import 'package:konoyubi/ui/utility/use_l10n.dart';
 import 'confirm_asobi_screen.dart';
 
 final selectedTagProvider = StateProvider<List<String>>((ref) => []);
-const List<String> asobiTagList = [
-  'カラオケ',
-  'カイモノ',
-  'スポーツ',
-  'オシャベリ',
-  'オチャ',
-  'オショクジ',
-];
 
 class SelectAsobiTagScreen extends HookWidget {
   const SelectAsobiTagScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final selectedTag = useProvider(selectedTagProvider);
+    final l10n = useL10n();
+
+    bool asobiTagValidation({
+      required List<String> selectedTag,
+      required BuildContext context,
+    }) {
+      final isBlank = selectedTag.isEmpty;
+      if (isBlank) {
+        showPrimaryDialog(
+            context: context, content: l10n.selectTagMoreThanZero);
+      }
+
+      return !isBlank;
+    }
 
     return CreateAsobiScreenTemplate(
-      title: 'タグを付ける',
+      title: l10n.addTag,
       body: const Body(),
       index: 4,
       onBack: () {
@@ -47,13 +54,23 @@ class SelectAsobiTagScreen extends HookWidget {
   }
 }
 
-class Body extends StatelessWidget {
+class Body extends HookWidget {
   const Body({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final l10n = useL10n();
+
+    List<String> asobiTagList = [
+      l10n.karaoke,
+      l10n.shopping,
+      l10n.sport,
+      l10n.talk,
+      l10n.havingTea,
+      l10n.meal,
+    ];
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Center(
@@ -95,16 +112,4 @@ void toggleTag({
   if (!selectedTag.remove(key)) {
     selectedTag.add(key);
   }
-}
-
-bool asobiTagValidation({
-  required List<String> selectedTag,
-  required BuildContext context,
-}) {
-  final isBlank = selectedTag.isEmpty;
-  if (isBlank) {
-    showPrimaryDialog(context: context, content: '1つ以上タグを選んでね！');
-  }
-
-  return !isBlank;
 }

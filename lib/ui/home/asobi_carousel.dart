@@ -9,6 +9,7 @@ import 'package:konoyubi/ui/createAsobi/input_name_screen.dart';
 import 'package:konoyubi/ui/theme/constants.dart';
 import 'package:konoyubi/ui/theme/height_width.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
+import 'package:konoyubi/ui/utility/use_l10n.dart';
 import 'asobi_detail_screen.dart';
 
 class AsobiCarousel extends HookWidget {
@@ -97,6 +98,7 @@ class AsobiEmptyCard extends HookWidget {
     final currentUser = useProvider(firebaseAuthProvider);
     final isSignedIn = currentUser.data?.value != null;
     final width = useWidth();
+    final l10n = useL10n();
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -112,9 +114,9 @@ class AsobiEmptyCard extends HookWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Body1('募集しているアソビが無いよ！', color: Colors.white),
+            Body1(l10n.noYourAsobi, color: Colors.white),
             ActionText(
-              'アソビを作ろう！',
+              l10n.letsCreateAsobi,
               onPressed: () {
                 if (!isSignedIn) {
                   promptSignIn(context);

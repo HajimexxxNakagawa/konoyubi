@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:konoyubi/data/model/asobi.dart';
+import 'package:flutter_gen/gen_l10n/l10n.dart';
+
 import 'typography.dart';
 
-class AsobiDescriptionCard extends StatelessWidget {
+class AsobiDescriptionCard extends HookWidget {
   const AsobiDescriptionCard({
     Key? key,
     required this.asobi,
@@ -14,6 +17,7 @@ class AsobiDescriptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = L10n.of(context)!;
     return Card(
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
       shape: RoundedRectangleBorder(
@@ -61,11 +65,13 @@ class AsobiDescriptionCard extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('ハジマリ：' + asobi.start.toString().substring(0, 16)),
-                    Text('シメキリ：' + asobi.end.toString().substring(0, 16)),
+                    Text('${l10n.start}：' +
+                        asobi.start.toString().substring(0, 16)),
+                    Text(
+                        '${l10n.end}：' + asobi.end.toString().substring(0, 16)),
                   ],
                 ),
-                ActionText('アソビに行く！', onPressed: () {}),
+                ActionText(l10n.goToAsobi, onPressed: () {}),
               ],
             )
           ],
