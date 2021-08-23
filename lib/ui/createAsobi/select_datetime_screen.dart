@@ -108,27 +108,86 @@ class Body extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = useL10n();
-    return Center(
+    final startTime = start.state == initialDateTime
+        ? l10n.undecided
+        : start.state.toString().substring(0, 16);
+    final endTime = end.state == initialDateTime
+        ? l10n.undecided
+        : end.state.toString().substring(0, 16);
+
+    return Container(
+      padding: const EdgeInsets.all(20),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ElevatedButton(
-              onPressed: () {
-                dateTimePicker(context: context, timeState: start);
-              },
-              child: Text(l10n.decideStart)),
-          Text(start.state == initialDateTime
-              ? l10n.undecided
-              : start.state.toString().substring(0, 16)),
-          ElevatedButton(
-              onPressed: () {
-                dateTimePicker(context: context, timeState: end);
-              },
-              child: Text(l10n.decideEnd)),
-          Text(end.state == initialDateTime
-              ? l10n.undecided
-              : end.state.toString().substring(0, 16)),
+          const Spacer(flex: 4),
+          Component(
+            title: l10n.decideStart,
+            time: startTime,
+            onSelect: () {
+              dateTimePicker(context: context, timeState: start);
+            },
+          ),
+          const Spacer(),
+          Component(
+            title: l10n.decideEnd,
+            time: endTime,
+            onSelect: () {
+              dateTimePicker(context: context, timeState: end);
+            },
+          ),
+          const Spacer(flex: 6),
         ],
       ),
+    );
+  }
+}
+
+class Component extends StatelessWidget {
+  const Component({
+    Key? key,
+    required this.title,
+    required this.time,
+    required this.onSelect,
+  }) : super(key: key);
+
+  final String title;
+  final String time;
+  final void Function()? onSelect;
+
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
+    return Column(
+      children: [
+        Text(title),
+        const SizedBox(height: 8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16),
+              margin: EdgeInsets.only(left: width * 0.1),
+              width: width * 0.6,
+              decoration: BoxDecoration(color: Colors.grey[200]),
+              child: Text(
+                time,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: width * 0.052),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: onSelect,
+              child: const Icon(Icons.edit, color: Colors.white),
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(8),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
