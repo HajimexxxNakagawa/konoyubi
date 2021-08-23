@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:konoyubi/auth/google_sign_in.dart';
 import 'package:konoyubi/auth/facebook_sign_in.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
@@ -13,39 +14,67 @@ class SignInIcons extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        const Spacer(flex: 3),
         ElevatedButton(
           onPressed: () async {
             await signInWithFacebook().then((value) => addUser(value));
             await fadeAndReplacePage(context: context);
           },
-          child: const Icon(Icons.apps_outlined),
+          child: const Icon(
+            FontAwesomeIcons.facebook,
+            size: 32,
+          ),
           style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.all(20),
             shape: const CircleBorder(),
           ),
         ),
+        const Spacer(),
         ElevatedButton(
           onPressed: () async {
             await signInWithGoogle().then((value) => addUser(value));
             await fadeAndReplacePage(context: context);
           },
-          child: const Icon(Icons.g_mobiledata),
+          child: const Icon(
+            Icons.g_mobiledata,
+            size: 32,
+          ),
           style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.all(20),
             shape: const CircleBorder(),
           ),
-        )
+        ),
+        const Spacer(),
+        ElevatedButton(
+          onPressed: () async {},
+          child: const Icon(
+            FontAwesomeIcons.apple,
+            size: 32,
+          ),
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.all(20),
+            shape: const CircleBorder(),
+          ),
+        ),
+        const Spacer(flex: 3),
       ],
     );
   }
 
-  Future<void> addUser(UserCredential user) {
+  Future<void> addUser(UserCredential user) async {
     CollectionReference users =
         FirebaseFirestore.instance.collection('userList');
-    return users.doc(user.user?.uid).set({
-      'name': user.user?.displayName ?? '',
-      'avatarURL': user.user?.photoURL,
-      'description': "",
-      'twitter': "",
-      'facebook': "",
+    final userDoc = users.doc(user.user?.uid);
+    userDoc.get().then((value) {
+      if (!value.exists) {
+        userDoc.set({
+          'name': user.user?.displayName ?? '',
+          'avatarURL': user.user?.photoURL,
+          'description': "",
+          'twitter': "",
+          'facebook': "",
+        });
+      }
     });
   }
 }
