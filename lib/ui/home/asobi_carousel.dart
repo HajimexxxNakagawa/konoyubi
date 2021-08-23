@@ -56,6 +56,7 @@ class AsobiCarouselCard extends HookWidget {
     final start = asobi.start.toString().substring(0, 16);
     final end = asobi.end.toString().substring(0, 16);
     final width = useWidth();
+    final l10n = useL10n(context);
 
     return GestureDetector(
       onTap: () {
@@ -81,8 +82,8 @@ class AsobiCarouselCard extends HookWidget {
               const SizedBox(height: 4),
               Column(
                 children: [
-                  Body1('ハジマリ：' + start),
-                  Body1('シメキリ：' + end),
+                  Body1(l10n.start + '：' + start),
+                  Body1(l10n.end + '：' + end),
                 ],
               )
             ],
@@ -122,6 +123,7 @@ class AsobiEmptyCard extends HookWidget {
     final isSignedIn = currentUser.data?.value != null;
     final width = useWidth();
     final l10n = useL10n(context);
+
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
