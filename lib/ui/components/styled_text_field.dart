@@ -5,14 +5,17 @@ class StyledTextField extends StatelessWidget {
   const StyledTextField({
     Key? key,
     required this.controller,
+    this.maxLines = 1,
   }) : super(key: key);
 
   final TextEditingController controller;
+  final int maxLines;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      maxLines: maxLines,
       decoration: const InputDecoration(
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(

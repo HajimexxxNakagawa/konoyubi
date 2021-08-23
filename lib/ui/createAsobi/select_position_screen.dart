@@ -57,9 +57,7 @@ class SelectAsobiPositionScreen extends HookWidget {
 }
 
 class Body extends HookWidget {
-  const Body({
-    Key? key,
-  }) : super(key: key);
+  const Body({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +65,20 @@ class Body extends HookWidget {
     final marker = useProvider(asobiMarkerProvider);
     final cameraPosition = useProvider(cameraPositionProvider);
 
-    _onMapCreated(GoogleMapController controller) {
+    void Function(GoogleMapController)? _onMapCreated(
+        GoogleMapController controller) {
       _mapController.value = controller;
+    }
+
+    Future<void Function(LatLng)?> _onTap(position) async {
+      final tappedPosition = CameraPosition(
+          target: position, zoom: await _mapController.value!.getZoomLevel());
+      marker.state = {
+        Marker(markerId: const MarkerId('unique'), position: position),
+      };
+      _mapController.value
+          ?.moveCamera(CameraUpdate.newCameraPosition(tappedPosition));
+      cameraPosition.state = tappedPosition;
     }
 
     return GoogleMap(
@@ -76,16 +86,7 @@ class Body extends HookWidget {
       markers: marker.state,
       mapType: MapType.normal,
       initialCameraPosition: cameraPosition.state,
-      onTap: (position) async {
-        final tappedPosition = CameraPosition(
-            target: position, zoom: await _mapController.value!.getZoomLevel());
-        marker.state = {
-          Marker(markerId: const MarkerId('unique'), position: position),
-        };
-        _mapController.value
-            ?.moveCamera(CameraUpdate.newCameraPosition(tappedPosition));
-        cameraPosition.state = tappedPosition;
-      },
+      onTap: _onTap,
     );
   }
 }
