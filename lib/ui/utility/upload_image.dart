@@ -8,9 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:konoyubi/ui/components/typography.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:konoyubi/ui/utility/use_l10n.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
-
 
 class ImageUpload {
   const ImageUpload(this.source,
@@ -50,7 +48,6 @@ Future<void> uploadImage({
   required StateController<String> avatarURLController,
   required L10n l10n,
 }) async {
-
   showCupertinoModalPopup<int>(
     context: context,
     builder: (BuildContext context) {

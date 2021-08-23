@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:konoyubi/ui/utility/primary_dialog.dart';
-import 'package:konoyubi/ui/utility/use_l10n.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
-
 
 bool nameValidation({
   required String? name,
@@ -34,9 +32,7 @@ bool biographyValidation({
   required String? biography,
   required BuildContext context,
   required L10n l10n,
-
 }) {
-  
   final isBiographyTooLong = biography!.length >= 10000;
 
   if (isBiographyTooLong) {
