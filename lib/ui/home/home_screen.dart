@@ -41,7 +41,7 @@ class HomeScreenView extends HookWidget {
   }) : super(key: key);
 
   final List<Asobi> entries;
-
+  
   static const snackbar = SnackBar(
     content: Body1('Welcome back!', color: Colors.white),
     behavior: SnackBarBehavior.floating,
