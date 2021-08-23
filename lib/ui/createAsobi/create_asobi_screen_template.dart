@@ -148,7 +148,7 @@ class StepIndicatorItem extends StatelessWidget {
       height: 16,
       margin: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: isColored ? Colors.black : Colors.grey,
+        color: isColored ? accentColor : Colors.grey,
         shape: BoxShape.circle,
       ),
     );
