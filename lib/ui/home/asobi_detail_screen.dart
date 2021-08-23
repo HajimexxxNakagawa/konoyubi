@@ -9,6 +9,7 @@ import 'package:konoyubi/ui/createAsobi/input_name_screen.dart';
 import 'package:konoyubi/ui/theme/constants.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
 import 'package:konoyubi/ui/utility/use_l10n.dart';
+import 'package:konoyubi/ui/utility/use_user_id.dart';
 
 class AsobiDetailScreen extends HookWidget {
   const AsobiDetailScreen(this.asobi, {Key? key}) : super(key: key);
@@ -17,6 +18,8 @@ class AsobiDetailScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = useL10n();
+    final userId = useUserId();
+
     final Set<Marker> _marker = {
       Marker(
         markerId: const MarkerId('unique'),
@@ -31,7 +34,7 @@ class AsobiDetailScreen extends HookWidget {
 
     showDeleteAsobiDialog({
       required BuildContext context,
-      required String docId,
+      required Asobi asobi,
     }) {
       showDialog(
         context: context,
@@ -47,7 +50,7 @@ class AsobiDetailScreen extends HookWidget {
               ElevatedButton(
                 child: const Text('OK'),
                 onPressed: () async {
-                  await deleteAsobi(docId: docId);
+                  await deleteAsobi(asobi: asobi, userId: userId!);
                   await Future(() {
                     Navigator.of(context).popUntil((route) => route.isFirst);
                   });
@@ -72,7 +75,7 @@ class AsobiDetailScreen extends HookWidget {
             child: InkWell(
               child: const Icon(Icons.delete),
               onTap: () {
-                showDeleteAsobiDialog(context: context, docId: asobi.id);
+                showDeleteAsobiDialog(context: context, asobi: asobi);
               },
             ),
           )
@@ -144,7 +147,25 @@ class AsobiDetailScreenView extends HookWidget {
 }
 
 Future<void> deleteAsobi({
-  required String docId,
+  required Asobi asobi,
+  required String userId,
 }) async {
-  return FirebaseFirestore.instance.collection("asobiList").doc(docId).delete();
+  // userList/asobiListから削除
+  FirebaseFirestore.instance
+      .collection('userList')
+      .doc(userId)
+      .collection('asobiList')
+      .doc(asobi.id)
+      .delete();
+
+  // asobiListから削除
+  // TODO: ちゃんとアソビを特定するすべを考えなければいけない。
+  FirebaseFirestore.instance
+      .collection("asobiList")
+      .where('createdAt', isEqualTo: Timestamp.fromDate(asobi.createdAt))
+      .get()
+      .then((value) => value.docs.first.id)
+      .then((docId) {
+    FirebaseFirestore.instance.collection("asobiList").doc(docId).delete();
+  });
 }
