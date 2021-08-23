@@ -103,10 +103,13 @@ class ConfirmAsobiScreen extends HookWidget {
                   ElevatedButton(
                     child: const Text('Cancel'),
                     onPressed: () => Navigator.pop(context),
-                    style: ElevatedButton.styleFrom(primary: Colors.grey),
+                    style: ElevatedButton.styleFrom(primary: Colors.grey[300]),
                   ),
                   ElevatedButton(
-                    child: const Text('OK'),
+                    child: const Text(
+                      'OK',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     onPressed: () async {
                       if (!isAbsorbing.state) {
                         isAbsorbing.state = true;

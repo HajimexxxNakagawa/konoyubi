@@ -100,7 +100,10 @@ class BottomNav extends StatelessWidget {
                   )
                 : ElevatedButton(
                     onPressed: onNext,
-                    child: const Text('Publish'),
+                    child: const Text(
+                      'Publish',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     style: ElevatedButton.styleFrom(primary: accentColor),
                   ),
           ],
