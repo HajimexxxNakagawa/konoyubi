@@ -1,11 +1,18 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:konoyubi/ui/components/typography.dart';
 import 'package:konoyubi/ui/theme/height_width.dart';
 
 class OnboardingCarousel extends HookWidget {
   const OnboardingCarousel({Key? key}) : super(key: key);
+
+  static const List<String> _onbordings = [
+    'マップからアソビを探そう！',
+    '主催者にリクエストを出そう！',
+    'チャットで予定を調整しよう！',
+    '楽しくアソビに出かけよう！',
+    '自分でアソビを募集してみよう！',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +29,7 @@ class OnboardingCarousel extends HookWidget {
               _current.value = index;
             },
           ),
-          items: [1, 2, 3].map((i) {
+          items: _onbordings.map((item) {
             return Builder(
               builder: (BuildContext context) {
                 return Container(
@@ -31,13 +38,10 @@ class OnboardingCarousel extends HookWidget {
                   margin:
                       const EdgeInsets.symmetric(vertical: 20, horizontal: 5.0),
                   child: Material(
-                    elevation: 10,
+                    color: Colors.white,
+                    elevation: 6,
                     borderRadius: BorderRadius.circular(16),
-                    child: Center(
-                      child: OnboardingItem(
-                        itemNumber: i,
-                      ),
-                    ),
+                    child: Center(child: Text(item)),
                   ),
                 );
               },
@@ -46,7 +50,7 @@ class OnboardingCarousel extends HookWidget {
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [1, 2, 3].asMap().entries.map((entry) {
+          children: _onbordings.asMap().entries.map((entry) {
             return GestureDetector(
               child: Container(
                 width: 12.0,
@@ -66,26 +70,5 @@ class OnboardingCarousel extends HookWidget {
         ),
       ],
     );
-  }
-}
-
-class OnboardingItem extends StatelessWidget {
-  const OnboardingItem({
-    Key? key,
-    required this.itemNumber,
-  }) : super(key: key);
-
-  final int itemNumber;
-
-  @override
-  Widget build(BuildContext context) {
-    switch (itemNumber) {
-      case 1:
-        return const H1("アカウントを作成しましょう！");
-      case 2:
-        return const H1("アソビを募集しましょう！");
-      default:
-        return const H1("オーナーにチャットしましょう！");
-    }
   }
 }

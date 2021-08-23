@@ -16,7 +16,7 @@ class OnboardingScreen extends StatelessWidget {
           const Spacer(flex: 2),
           const OnboardingCarousel(),
           const Spacer(),
-          const H1('Create your account'),
+          const Body1('Start Konoyubi with your account'),
           const Spacer(flex: 1),
           const SignInIcons(),
           const Spacer(flex: 1),
