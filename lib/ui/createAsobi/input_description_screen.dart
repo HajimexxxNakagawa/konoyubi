@@ -20,12 +20,12 @@ class InputAsobiDescriptionScreen extends HookWidget {
     final asobiDescriptionController =
         useProvider(asobiDescriptionControllerProvider);
 
-    bool asobiDescriptionValidation({
+    bool _validation({
       required String? description,
       required BuildContext context,
     }) {
       final isNotDescriptionEmpty = description != "";
-      final isDescriptionLengthNotOver = description!.length <= 30;
+      final isDescriptionLengthNotOver = description!.length <= 200;
       final isDescriptionContainsSpace =
           description.contains(" ") || description.contains("　");
       final isDescriptionNotOnlySpace = isDescriptionContainsSpace
@@ -55,9 +55,11 @@ class InputAsobiDescriptionScreen extends HookWidget {
         Navigator.pop(context);
       },
       onNext: () {
-        if (asobiDescriptionValidation(
-            description: asobiDescriptionController.state!.text,
-            context: context)) {
+        final isValid = _validation(
+          description: asobiDescriptionController.state!.text,
+          context: context,
+        );
+        if (isValid) {
           pageTransition(
             context: context,
             to: const SelectAsobiPositionScreen(),

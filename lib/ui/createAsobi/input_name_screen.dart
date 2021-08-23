@@ -19,7 +19,7 @@ class InputAsobiNameScreen extends HookWidget {
     final asobiNameController = useProvider(asobiNameControllerProvider);
     final l10n = useL10n();
 
-    bool _asobiNameValidation({
+    bool _validation({
       required String? name,
       required BuildContext context,
     }) {
@@ -52,8 +52,10 @@ class InputAsobiNameScreen extends HookWidget {
         Navigator.pop(context);
       },
       onNext: () {
-        final isValid = _asobiNameValidation(
-            name: asobiNameController.state!.text, context: context);
+        final isValid = _validation(
+          name: asobiNameController.state!.text,
+          context: context,
+        );
         if (isValid) {
           pageTransition(
             context: context,

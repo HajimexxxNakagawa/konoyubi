@@ -22,7 +22,7 @@ class SelectAsobiPositionScreen extends HookWidget {
     final marker = useProvider(asobiMarkerProvider);
     final l10n = useL10n();
 
-    bool asobiPositionValidation({
+    bool _validation({
       required BuildContext context,
       required Marker marker,
     }) {
@@ -41,7 +41,7 @@ class SelectAsobiPositionScreen extends HookWidget {
         Navigator.pop(context);
       },
       onNext: () {
-        final isValid = asobiPositionValidation(
+        final isValid = _validation(
           context: context,
           marker: marker.state.first,
         );

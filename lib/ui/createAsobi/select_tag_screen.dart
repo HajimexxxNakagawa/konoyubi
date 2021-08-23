@@ -18,7 +18,7 @@ class SelectAsobiTagScreen extends HookWidget {
     final selectedTag = useProvider(selectedTagProvider);
     final l10n = useL10n();
 
-    bool asobiTagValidation({
+    bool _validation({
       required List<String> selectedTag,
       required BuildContext context,
     }) {
@@ -39,7 +39,7 @@ class SelectAsobiTagScreen extends HookWidget {
         Navigator.pop(context);
       },
       onNext: () {
-        final isValid = asobiTagValidation(
+        final isValid = _validation(
           context: context,
           selectedTag: selectedTag.state,
         );

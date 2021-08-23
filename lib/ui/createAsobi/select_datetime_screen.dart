@@ -20,7 +20,7 @@ class SelectAsobiDatetimeScreen extends HookWidget {
     final startTime = useProvider(startTimeProvider);
     final endTime = useProvider(endTimeProvider);
 
-    bool timeValidation({
+    bool _validation({
       required BuildContext context,
       required DateTime start,
       required DateTime end,
@@ -51,7 +51,7 @@ class SelectAsobiDatetimeScreen extends HookWidget {
         Navigator.pop(context);
       },
       onNext: () {
-        final isValid = timeValidation(
+        final isValid = _validation(
           context: context,
           start: startTime.state,
           end: endTime.state,

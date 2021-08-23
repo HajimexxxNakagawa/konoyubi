@@ -57,7 +57,7 @@ class ConfirmAsobiScreen extends HookWidget {
       Navigator.of(context).popUntil((route) => route.isFirst);
     }
 
-    Future<void> addAsobiToFirestore() async {
+    Future<void> _addAsobiToFirestore() async {
       final lat = marker.state.first.position.latitude;
       final lng = marker.state.first.position.longitude;
       final createdAt = DateTime.now();
@@ -76,6 +76,27 @@ class ConfirmAsobiScreen extends HookWidget {
       userAsobiList.add(newAsobi);
     }
 
+    Future<void> _showConfirmDialog() async {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AbsorbPointer(
+            absorbing: isAbsorbing.state,
+            child: ConfirmDialg(
+              content: l10n.startAsobi,
+              onConfirm: () async {
+                if (!isAbsorbing.state) {
+                  isAbsorbing.state = true;
+                  await _addAsobiToFirestore();
+                  await _initialize(context);
+                }
+              },
+            ),
+          );
+        },
+      );
+    }
+
     return CreateAsobiScreenTemplate(
       title: l10n.confirm,
       body: Body(
@@ -91,39 +112,8 @@ class ConfirmAsobiScreen extends HookWidget {
       onBack: () {
         Navigator.pop(context);
       },
-      onNext: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AbsorbPointer(
-              absorbing: isAbsorbing.state,
-              child: AlertDialog(
-                content: Body1(l10n.startAsobi),
-                actions: <Widget>[
-                  ElevatedButton(
-                    child: const Text('Cancel'),
-                    onPressed: () => Navigator.pop(context),
-                    style: ElevatedButton.styleFrom(primary: Colors.grey[300]),
-                  ),
-                  ElevatedButton(
-                    child: const Text(
-                      'OK',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () async {
-                      if (!isAbsorbing.state) {
-                        isAbsorbing.state = true;
-                        await addAsobiToFirestore();
-                        await _initialize(context);
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(primary: accentColor),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
+      onNext: () async {
+        await _showConfirmDialog();
       },
     );
   }
@@ -180,5 +170,38 @@ class Body extends HookWidget {
         child: AsobiDescriptionCard(asobi: mockNewAsobi, canPop: false),
       )
     ]);
+  }
+}
+
+class ConfirmDialg extends StatelessWidget {
+  const ConfirmDialg({
+    Key? key,
+    required this.content,
+    this.onConfirm,
+  }) : super(key: key);
+
+  final String content;
+  final void Function()? onConfirm;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      content: Body1(content),
+      actions: <Widget>[
+        ElevatedButton(
+          child: const Text('Cancel'),
+          onPressed: () => Navigator.pop(context),
+          style: ElevatedButton.styleFrom(primary: Colors.grey[300]),
+        ),
+        ElevatedButton(
+          child: const Text(
+            'OK',
+            style: TextStyle(color: Colors.white),
+          ),
+          onPressed: onConfirm,
+          style: ElevatedButton.styleFrom(primary: accentColor),
+        ),
+      ],
+    );
   }
 }
