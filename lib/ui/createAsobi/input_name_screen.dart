@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:konoyubi/ui/components/styled_text_field.dart';
+import 'package:konoyubi/ui/components/typography.dart';
 import 'package:konoyubi/ui/createAsobi/create_asobi_screen_template.dart';
 import 'package:konoyubi/ui/utility/primary_dialog.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
@@ -73,9 +75,17 @@ class Body extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: TextField(
-        controller: controller,
+    return Container(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Spacer(flex: 4),
+          const H1("魅力的なナマエを付けよう！"),
+          const SizedBox(height: 16),
+          StyledTextField(controller: controller),
+          const Spacer(flex: 5),
+        ],
       ),
     );
   }
