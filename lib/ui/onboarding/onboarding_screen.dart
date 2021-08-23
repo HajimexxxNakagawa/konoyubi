@@ -13,20 +13,20 @@ class OnboardingScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          const Spacer(flex: 4),
+          const Spacer(flex: 2),
           const OnboardingCarousel(),
-          const Spacer(flex: 3),
+          const Spacer(),
           const H1('Create your account'),
           const Spacer(flex: 1),
           const SignInIcons(),
-          const Spacer(flex: 3),
+          const Spacer(flex: 1),
           ActionText(
             'Skip now',
             onPressed: () {
               fadeAndReplacePage(context: context);
             },
           ),
-          const Spacer(flex: 6),
+          const Spacer(flex: 4),
         ],
       ),
     );

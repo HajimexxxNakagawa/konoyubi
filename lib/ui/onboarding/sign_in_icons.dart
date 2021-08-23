@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:konoyubi/auth/google_sign_in.dart';
 import 'package:konoyubi/auth/facebook_sign_in.dart';
+import 'package:konoyubi/ui/theme/constants.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
 
 class SignInIcons extends StatelessWidget {
@@ -23,10 +24,13 @@ class SignInIcons extends StatelessWidget {
           child: const Icon(
             FontAwesomeIcons.facebook,
             size: 32,
+            color: Colors.white,
           ),
           style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(12),
             shape: const CircleBorder(),
+            primary: accentColor,
+            elevation: 4,
           ),
         ),
         const Spacer(),
@@ -37,11 +41,14 @@ class SignInIcons extends StatelessWidget {
           },
           child: const Icon(
             Icons.g_mobiledata,
-            size: 32,
+            size: 48,
+            color: Colors.white,
           ),
           style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(4),
             shape: const CircleBorder(),
+            primary: accentColor,
+            elevation: 4,
           ),
         ),
         const Spacer(),
@@ -50,10 +57,13 @@ class SignInIcons extends StatelessWidget {
           child: const Icon(
             FontAwesomeIcons.apple,
             size: 32,
+            color: Colors.white,
           ),
           style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(12),
             shape: const CircleBorder(),
+            primary: accentColor,
+            elevation: 4,
           ),
         ),
         const Spacer(flex: 3),
