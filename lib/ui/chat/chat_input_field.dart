@@ -107,18 +107,25 @@ Future<void> sendMessage({
     'createdBy': userId,
     'message': controller.text,
   };
-
-  await FirebaseFirestore.instance
+  final collection = FirebaseFirestore.instance
       .collection('chatList')
       .doc(chatId)
-      .collection('messages')
-      .get()
-      .then((value) {
+      .collection('messages');
+
+  await collection.get().then((value) {
     final doc = value.docs.last;
+    final docIdNum = int.parse(doc.id);
     final messages = doc.data()["messageList"] as List;
-    doc.reference.update({
-      'messageList': [...messages, newMessage]
-    });
+
+    if (messages.length == 1000) {
+      collection.doc('${docIdNum + 1}').set({
+        'messageList': [newMessage]
+      });
+    } else {
+      doc.reference.update({
+        'messageList': [...messages, newMessage]
+      });
+    }
   });
   await Future(() => controller.text = '');
 }
