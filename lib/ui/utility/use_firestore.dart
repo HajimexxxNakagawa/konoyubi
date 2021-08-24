@@ -55,9 +55,9 @@ AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>?> useChat(chatId) {
       .collection('chatList')
       .doc(chatId)
       .collection('messages')
-      .get;
+      .snapshots;
   final memoData = useMemoized(messagesData);
-  final messages = useFuture(memoData);
+  final messages = useStream(memoData);
 
   return messages;
 }

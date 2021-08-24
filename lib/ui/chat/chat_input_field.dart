@@ -1,16 +1,22 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:konoyubi/ui/utility/use_auth_info.dart';
 
-class ChatInputField extends StatelessWidget {
+class ChatInputField extends HookWidget {
   const ChatInputField({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _messageController = TextEditingController();
+    final userId = useUserId();
+
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
-        vertical: 20 / 2,
+        vertical: 12,
       ),
       decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
@@ -27,7 +33,7 @@ class ChatInputField extends StatelessWidget {
             const SizedBox(width: 20),
             Expanded(
                 child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20 * 0.75),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.05),
                   borderRadius: BorderRadius.circular(40)),
@@ -41,23 +47,17 @@ class ChatInputField extends StatelessWidget {
                         .color!
                         .withOpacity(0.64),
                   ),
-                  const SizedBox(width: 20 / 4),
-                  const Expanded(
-                      child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Type messages...',
-                      border: InputBorder.none,
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: TextField(
+                      controller: _messageController,
+                      decoration: const InputDecoration(
+                        hintText: 'Type messages...',
+                        border: InputBorder.none,
+                      ),
                     ),
-                  )),
-                  Icon(
-                    Icons.attach_file,
-                    color: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .color!
-                        .withOpacity(0.64),
                   ),
-                  const SizedBox(width: 20 / 4),
+                  const SizedBox(width: 8),
                   Icon(
                     Icons.camera_alt_outlined,
                     color: Theme.of(context)
@@ -65,6 +65,26 @@ class ChatInputField extends StatelessWidget {
                         .bodyText1!
                         .color!
                         .withOpacity(0.64),
+                  ),
+                  const SizedBox(width: 8),
+                  GestureDetector(
+                    onTap: () {
+                      if (_messageController.text != '') {
+                        sendMessage(
+                          controller: _messageController,
+                          chatId: '190641111-339471421',
+                          userId: userId!,
+                        );
+                      }
+                    },
+                    child: Icon(
+                      Icons.send,
+                      color: Theme.of(context)
+                          .textTheme
+                          .bodyText1!
+                          .color!
+                          .withOpacity(0.64),
+                    ),
                   ),
                 ],
               ),
@@ -74,4 +94,31 @@ class ChatInputField extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> sendMessage({
+  required TextEditingController controller,
+  required String chatId,
+  required String userId,
+}) async {
+  final newMessage = {
+    'type': 0,
+    'createdAt': Timestamp.now(),
+    'createdBy': userId,
+    'message': controller.text,
+  };
+
+  await FirebaseFirestore.instance
+      .collection('chatList')
+      .doc(chatId)
+      .collection('messages')
+      .get()
+      .then((value) {
+    final doc = value.docs.last;
+    final messages = doc.data()["messageList"] as List;
+    doc.reference.update({
+      'messageList': [...messages, newMessage]
+    });
+  });
+  await Future(() => controller.text = '');
 }
