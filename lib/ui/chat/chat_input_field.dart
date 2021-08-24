@@ -6,7 +6,12 @@ import 'package:konoyubi/ui/utility/use_auth_info.dart';
 class ChatInputField extends HookWidget {
   const ChatInputField({
     Key? key,
+    required this.chatId,
+    required this.scrollController,
   }) : super(key: key);
+
+  final String chatId;
+  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +77,7 @@ class ChatInputField extends HookWidget {
                       if (_messageController.text != '') {
                         sendMessage(
                           controller: _messageController,
-                          chatId: '190641111-339471421',
+                          chatId: chatId,
                           userId: userId!,
                         );
                       }
@@ -94,38 +99,41 @@ class ChatInputField extends HookWidget {
       ),
     );
   }
-}
 
-Future<void> sendMessage({
-  required TextEditingController controller,
-  required String chatId,
-  required String userId,
-}) async {
-  final newMessage = {
-    'type': 0,
-    'createdAt': Timestamp.now(),
-    'createdBy': userId,
-    'message': controller.text,
-  };
-  final collection = FirebaseFirestore.instance
-      .collection('chatList')
-      .doc(chatId)
-      .collection('messages');
+  Future<void> sendMessage({
+    required TextEditingController controller,
+    required String chatId,
+    required String userId,
+  }) async {
+    final newMessage = {
+      'type': 0,
+      'createdAt': Timestamp.now(),
+      'createdBy': userId,
+      'message': controller.text,
+    };
+    final collection = FirebaseFirestore.instance
+        .collection('chatList')
+        .doc(chatId)
+        .collection('messages');
 
-  await collection.get().then((value) {
-    final doc = value.docs.last;
-    final docIdNum = int.parse(doc.id);
-    final messages = doc.data()["messageList"] as List;
+    await collection.get().then((value) {
+      final doc = value.docs.last;
+      final docIdNum = int.parse(doc.id);
+      final messages = doc.data()["messageList"] as List;
 
-    if (messages.length == 1000) {
-      collection.doc('${docIdNum + 1}').set({
-        'messageList': [newMessage]
-      });
-    } else {
-      doc.reference.update({
-        'messageList': [...messages, newMessage]
-      });
-    }
-  });
-  await Future(() => controller.text = '');
+      if (messages.length == 1000) {
+        collection.doc('${docIdNum + 1}').set({
+          'messageList': [newMessage]
+        });
+      } else {
+        doc.reference.update({
+          'messageList': [...messages, newMessage]
+        });
+      }
+    });
+    await Future(() {
+      controller.text = '';
+      scrollController.jumpTo(scrollController.position.maxScrollExtent);
+    });
+  }
 }

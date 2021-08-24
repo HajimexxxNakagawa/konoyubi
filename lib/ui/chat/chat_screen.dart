@@ -62,31 +62,48 @@ class ChatScreen extends HookWidget {
             ],
           ),
         ),
-        body: Body(messageList: messageList),
+        body: Body(messageList: messageList, chatId: chatId),
       );
     }
   }
 }
 
-class Body extends StatelessWidget {
-  const Body({Key? key, required this.messageList}) : super(key: key);
+class Body extends HookWidget {
+  const Body({
+    Key? key,
+    required this.messageList,
+    required this.chatId,
+  }) : super(key: key);
 
   final List<ChatMessage> messageList;
+  final String chatId;
+
   @override
   Widget build(BuildContext context) {
+    final _scrollController = ScrollController();
+
+    useEffect(() {
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        if (_scrollController.hasClients) {
+          _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+        }
+      });
+    }, const []);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
           Expanded(
             child: ListView.builder(
+              controller: _scrollController,
               itemCount: messageList.length,
               itemBuilder: (context, index) => Message(
                 message: messageList[index],
               ),
             ),
           ),
-          const ChatInputField(),
+          ChatInputField(chatId: chatId, scrollController: _scrollController),
         ],
       ),
     );
