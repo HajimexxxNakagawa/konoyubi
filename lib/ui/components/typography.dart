@@ -24,7 +24,7 @@ class H1 extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-        fontSize: width * 0.05,
+        fontSize: width * 0.056,
         fontWeight: FontWeight.bold,
         color: color,
       ),
@@ -34,15 +34,51 @@ class H1 extends StatelessWidget {
   }
 }
 
+class H2 extends StatelessWidget {
+  const H2(
+    this.text, {
+    Key? key,
+    this.maxLines = 1,
+    this.textAlign,
+    this.overflow,
+    this.isBold = false,
+    this.color = bodyColor,
+  }) : super(key: key);
+
+  final String text;
+  final int maxLines;
+  final TextAlign? textAlign;
+  final TextOverflow? overflow;
+  final Color color;
+  final bool isBold;
+
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
+    return Text(
+      text,
+      style: TextStyle(
+        fontSize: width * 0.048,
+        fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+        color: color,
+      ),
+      maxLines: 1,
+      textAlign: textAlign,
+    );
+  }
+}
+
 class Body1 extends StatelessWidget {
-  const Body1(this.text,
-      {Key? key,
-      this.maxLines,
-      this.textAlign,
-      this.overflow,
-      this.isBold = false,
-      this.color = bodyColor})
-      : super(key: key);
+  const Body1(
+    this.text, {
+    Key? key,
+    this.maxLines,
+    this.textAlign,
+    this.overflow,
+    this.isBold = false,
+    this.color = bodyColor,
+  }) : super(key: key);
 
   final String text;
   final int? maxLines;

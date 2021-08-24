@@ -27,7 +27,7 @@ class ChatScreen extends StatelessWidget {
             BackButton(),
             NICircleAvatar(imageUrl: guchiwoImage, size: 36),
             SizedBox(width: 20),
-            Body1(name),
+            H2(name, isBold: true),
           ],
         ),
       ),
