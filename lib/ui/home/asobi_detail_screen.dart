@@ -9,7 +9,7 @@ import 'package:konoyubi/ui/createAsobi/input_name_screen.dart';
 import 'package:konoyubi/ui/theme/constants.dart';
 import 'package:konoyubi/ui/utility/transition.dart';
 import 'package:konoyubi/ui/utility/use_l10n.dart';
-import 'package:konoyubi/ui/utility/use_user_id.dart';
+import 'package:konoyubi/ui/utility/use_auth_info.dart';
 
 class AsobiDetailScreen extends HookWidget {
   const AsobiDetailScreen(this.asobi, {Key? key}) : super(key: key);

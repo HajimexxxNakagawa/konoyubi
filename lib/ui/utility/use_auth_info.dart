@@ -7,3 +7,10 @@ String? useUserId() {
 
   return userId;
 }
+
+bool useSignInState() {
+  final currentUser = useProvider(firebaseAuthProvider);
+  final isSignedIn = currentUser.data?.value != null;
+
+  return isSignedIn;
+}

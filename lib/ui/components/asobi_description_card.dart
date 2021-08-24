@@ -1,7 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:konoyubi/auth/user.dart';
 import 'package:konoyubi/data/model/asobi.dart';
+import 'package:konoyubi/ui/chat/chat_screen.dart';
+import 'package:konoyubi/ui/utility/transition.dart';
 import 'package:konoyubi/ui/utility/use_l10n.dart';
+import 'package:konoyubi/ui/utility/use_auth_info.dart';
 
 import 'typography.dart';
 
@@ -18,6 +23,9 @@ class AsobiDescriptionCard extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = useL10n(context);
+    final userId = useUserId();
+    final isSignedIn = useSignInState();
+
     return Card(
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
       shape: RoundedRectangleBorder(
@@ -70,7 +78,18 @@ class AsobiDescriptionCard extends HookWidget {
                         '${l10n.end}：' + asobi.end.toString().substring(0, 16)),
                   ],
                 ),
-                ActionText(l10n.goToAsobi, onPressed: () {}),
+                if (asobi.owner != userId)
+                  ActionText(l10n.goToAsobi, onPressed: () async {
+                    if (isSignedIn) {
+                      createChatRoom(
+                        asobi: asobi,
+                        userId: userId!,
+                        context: context,
+                      );
+                    } else {
+                      promptSignIn(context);
+                    }
+                  }),
               ],
             )
           ],
@@ -78,4 +97,33 @@ class AsobiDescriptionCard extends HookWidget {
       ),
     );
   }
+}
+
+Future<void> createChatRoom({
+  required BuildContext context,
+  required Asobi asobi,
+  required String userId,
+}) async {
+  final CollectionReference chatList =
+      FirebaseFirestore.instance.collection('chatList');
+  final myId = userId.hashCode;
+  final ownerId = asobi.owner.hashCode;
+  final chatId = myId <= ownerId ? '$myId-$ownerId' : '$ownerId-$myId';
+  final chatRoom = chatList.doc(chatId);
+
+  await chatRoom.get().then((room) async {
+    if (!room.exists) {
+      // まずドキュメントを追加
+      await chatRoom.set({
+        'id': chatId,
+      });
+      // 次に、ドキュメントの中にコレクションを追加
+      await chatRoom.collection('messages').doc('0').set({
+        'messageList': [{}]
+      });
+    }
+  });
+  await Future(() {
+    pageTransition(context: context, to: ChatScreen(chatId: chatId));
+  });
 }

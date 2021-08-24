@@ -49,3 +49,15 @@ AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>?> useUserInfo() {
 
   return userInfo;
 }
+
+AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>?> useChat(chatId) {
+  final messagesData = FirebaseFirestore.instance
+      .collection('chatList')
+      .doc(chatId)
+      .collection('messages')
+      .get;
+  final memoData = useMemoized(messagesData);
+  final messages = useFuture(memoData);
+
+  return messages;
+}

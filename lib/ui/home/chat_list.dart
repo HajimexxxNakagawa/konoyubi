@@ -22,7 +22,9 @@ class ChatList extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         return InkWell(
           onTap: () {
-            pageTransition(context: context, to: const ChatScreen());
+            pageTransition(
+                context: context,
+                to: ChatScreen(chatId: '190641111-339471421'));
           },
           borderRadius: BorderRadius.circular(16),
           child: Column(

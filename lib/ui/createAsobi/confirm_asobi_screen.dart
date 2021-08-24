@@ -36,12 +36,12 @@ class ConfirmAsobiScreen extends HookWidget {
     final userId = currentUser.data?.value?.uid;
     final isAbsorbing = useProvider(absorbStateProvider);
 
-    CollectionReference userAsobiList = FirebaseFirestore.instance
+    final CollectionReference userAsobiList = FirebaseFirestore.instance
         .collection('userList')
         .doc(userId)
         .collection('asobiList');
 
-    CollectionReference generalAsobiList =
+    final CollectionReference generalAsobiList =
         FirebaseFirestore.instance.collection('asobiList');
 
     Future<void> _initialize(BuildContext context) async {
